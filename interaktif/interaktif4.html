@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BASİS</title>
+
+  <link rel="stylesheet" href="style.css">
+  <link rel="shortcut icon" type="png" href="resimler/basis.png"> 
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Responsive Interaktif Harita</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: start;
+      height: 100vh;
+ 
+      background-image: url("bg.jpg");
+   
+    }
+    .button-container {
+      display: flex;
+      gap: 10px;
+      margin-top: 10px;
+    }
+    .image-button {
+      width: 100px;
+      height: auto;
+      cursor: pointer;
+    }
+    .container {
+      position: relative;
+      width: 100%;
+      /* max-width: 800px; resm*/
+      margin-top: 10px;
+    }
+    img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+    svg {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+    }
+    polygon {
+      fill: rgba(255, 0, 0, 0.3);
+      stroke: rgba(255, 0, 0, 0.5);
+      stroke-width: 2;
+      cursor: pointer;
+      pointer-events: all;
+    }
+    polygon:hover {
+      fill: rgba(0, 255, 0, 0.3);
+    }
+    text {
+      font-size: 14px;
+      fill: rgb(255, 253, 253);
+      font-weight: bold;
+      text-anchor: middle;
+      pointer-events: none;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="button-container">
+    <img src="myo/susurluk.png" alt="Buton 1" class="image-button" onclick="buttonAction(1)">
+    <img src="myo/edincik.png" alt="Buton 2" class="image-button" onclick="buttonAction(2)">
+    <img src="myo/bandirmadenizcilik.png" alt="Buton 2" class="image-button" onclick="buttonAction(2)">
+    <img src="myo/erdek.png" alt="Buton 2" class="image-button" onclick="buttonAction(2)">
+    <img src="myo/manyas.png" alt="Buton 2" class="image-button" onclick="buttonAction(2)">
+    <img src="myo/gonen.png" alt="Buton 2" class="image-button" onclick="buttonAction(2)">
+    <img src="myo/saglik.png" alt="Buton 2" class="image-button" onclick="buttonAction(2)">
+  </div>
+
+<div class="container">
+  <img src="kroki_koyu.png" alt="Kroki" id="krokiImage">
+  <svg id="mapSvg"></svg>
+</div>
+
+<script>
+  const hotspots = [
+  
+    { name: "SPOR STADYUMU", coords: [156, 590, 169, 497, 277, 424, 485, 530, 462, 657, 382, 712, 245, 677], href: "https://drive.google.com/drive/folders/1fuJlOv0wUs1FuxvWsjhw4KvpLSu8CX6fiV9FnR83QOF35Tp9FvHw_-tIyI5PVamJ9jzF7QSp" },
+    { name: "KAPALI SPOR SALONU", coords: [551, 552, 699, 535, 726, 685, 566, 697], href: "https://drive.google.com/drive/folders/1N-rdUOu98ZSLd_WJLMNd5332qGAJ8HOdDTdRn1qOZ6DfTUgtUb4AuvnbdKUovc19ow1vNtcF" },
+    { name: "SPOR AKADEMİSİ", coords: [543, 361, 558, 477, 678, 470, 670, 346], href: "https://drive.google.com/drive/folders/1dLwbe0hBNFASEfx6U_FgmF8KB5lp2pKJX-sgyIUj0RFe803SpiUVP71v28oZbrTHkzfEHot6" },
+    { name: "MERKEZİ DERSLİK", coords: [1115, 337, 1140, 515, 1428, 484, 1400, 301], href: "https://drive.google.com/drive/folders/1r06zRd6eEISG9I326JGR2QL4bbxManul_U9jBU3dY7IWpLqFuezVePQ9odOYrJogy_ortKB9" },
+    { name: "REKTÖRLÜK", coords: [1799, 394, 1681, 374, 1578, 382, 1505, 430, 1495, 498, 1618, 517, 1624, 482, 1782, 517, 1799, 459], href: "https://drive.google.com/drive/folders/1843LTVIrIDvvBholUqK34vJ1YNVD1gWvnSS-NMJmcFRvOAbAM1c_awRyRxg41YQpoUdafR6a" },
+    { name: "ÖYM", coords: [1475, 258, 1485, 313, 1619, 292, 1603, 174, 1566, 179, 1553, 128, 1448, 141, 1453, 176, 1388, 186, 1398, 266], href: "https://drive.google.com/drive/folders/1843LTVIrIDvvBholUqK34vJ1YNVD1gWvnSS-NMJmcFRvOAbAM1c_awRyRxg41YQpoUdafR6a" },
+    { name: "MÜHENDİSLİK", coords: [1757, 150, 1769, 218, 1741, 264, 1664, 271, 1656, 228, 1727, 218, 1721, 155], href: "https://drive.google.com/drive/folders/1uB4ockbREFNf6CcssejK9mD6PAs9IfAdI3Ux7Svk2Nep9gmdG7c6-9Ltv126R0v9lbgteRzl" },
+    { name: "MÜHENDİSLİK LAB", coords: [1741, 43, 1754, 98, 1673, 110, 1674, 86, 1712, 78, 1709, 47, 1727, 45], href: "https://drive.google.com/drive/folders/1bgWYCbNqtLbAUy-SE_2JB9aDyMXZDY2cvJg09xjuKJZpIpLhuRzsv3BvE6j3dnWCoJensB0B" },
+    { name: "NİZAMİYELER", coords: [1460, 793, 1465, 835, 1573, 830, 1566, 788], href: "https://drive.google.com/drive/folders/1zqqeHVUV7rTb8tQ_8n7ZbG10Y4idNLPV6FYvkbli4a2KYmyp3rV1tT8rGM59pSGHjvyhuMk-" },
+    { name: "YENİ DENİZCİLİK", coords: [673, 783, 675, 863, 789, 866, 789, 785], href: "https://drive.google.com/drive/folders/1ZYsVVhI4hydIBoVo1W_J-VoJa5fo7XQ_3jV6TsN7XfM1cWRnRysoUkenNsRLjsUfauAmDerP" },
+    { name: "CAMİ", coords: [], href: "" }
+
+  ];
+
+  function createHotspots() {
+    const image = document.getElementById('krokiImage');
+    const svg = document.getElementById('mapSvg');
+    svg.innerHTML = '';
+
+    const originalWidth = image.naturalWidth;
+    const originalHeight = image.naturalHeight;
+    const currentWidth = image.clientWidth;
+    const currentHeight = image.clientHeight;
+
+    hotspots.forEach(hotspot => {
+      const scaledCoords = hotspot.coords.map((coord, index) => {
+        return index % 2 === 0
+          ? (coord / originalWidth) * currentWidth
+          : (coord / originalHeight) * currentHeight;
+      });
+
+      const polygon = document.createElementNS("http://www.w3.org/2000/svg", "polygon");
+      polygon.setAttribute("points", scaledCoords.join(" "));
+      polygon.addEventListener('click', () => {
+        window.location.href = hotspot.href;
+      });
+      svg.appendChild(polygon);
+
+      const text = document.createElementNS("http://www.w3.org/2000/svg", "text");
+      let xSum = 0, ySum = 0;
+      for (let i = 0; i < scaledCoords.length; i += 2) {
+        xSum += scaledCoords[i];
+        ySum += scaledCoords[i + 1];
+      }
+      const centerX = xSum / (scaledCoords.length / 2);
+      const centerY = ySum / (scaledCoords.length / 2);
+
+      text.setAttribute("x", centerX);
+      text.setAttribute("y", centerY);
+      text.textContent = hotspot.name;
+      svg.appendChild(text);
+    });
+  }
+
+  function buttonAction(buttonId) {
+    if (buttonId === 1) {
+      alert("Buton 1'e tıklandı!");
+    } else if (buttonId === 2) {
+      alert("Buton 2'ye tıklandı!");
+    }
+  }
+
+  window.addEventListener('load', createHotspots);
+  window.addEventListener('resize', createHotspots);
+</script>
+
+</body>
+</html>
