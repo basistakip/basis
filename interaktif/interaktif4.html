@@ -6,6 +6,21 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Responsive Interaktif Harita</title>
   <style>
+        /* Portrait modda uyarı mesajı */
+    #orientation-warning {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.9);
+      color: white;
+      font-size: 24px;
+      text-align: center;
+      padding-top: 20%;
+      z-index: 10000;
+    }
     body {
       font-family: Arial, sans-serif;
       margin: 0;
@@ -96,6 +111,27 @@
   </div>
 
   <script>
+    // Yön tespiti ve uyarı mesajı
+    function checkOrientation() {
+      const orientationWarning = document.getElementById('orientation-warning');
+      const isPortrait = window.innerHeight > window.innerWidth;
+
+      if (isPortrait) {
+        orientationWarning.style.display = 'block';
+      } else {
+        orientationWarning.style.display = 'none';
+      }
+    }
+
+    // Sayfa yüklendiğinde ve yön değiştiğinde kontrol et
+    window.addEventListener('load', checkOrientation);
+    window.addEventListener('resize', checkOrientation);
+    window.addEventListener('orientationchange', checkOrientation);
+
+
+    
+    
+    
     const hotspots = [
       { name: "SPOR STADYUMU", coords: [156, 590, 169, 497, 277, 424, 485, 530, 462, 657, 382, 712, 245, 677], href: "https://drive.google.com/drive/folders/1fuJlOv0wUs1FuxvWsjhw4KvpLSu8CX6fiV9FnR83QOF35Tp9FvHw_-tIyI5PVamJ9jzF7QSp" },
       { name: "KAPALI SPOR SALONU", coords: [551, 552, 699, 535, 713, 675, 566, 697], href: "https://drive.google.com/drive/folders/1N-rdUOu98ZSLd_WJLMNd5332qGAJ8HOdDTdRn1qOZ6DfTUgtUb4AuvnbdKUovc19ow1vNtcF" },
@@ -164,7 +200,8 @@
 
         text.setAttribute("x", centerX);
         text.setAttribute("y", centerY);
-        text.setAttribute("transform", `rotate(-45, ${centerX}, ${centerY})`);
+        /* altdaki yazının eğimi */
+        text.setAttribute("transform", `rotate(-35, ${centerX}, ${centerY})`);
         text.setAttribute("text-anchor", "middle");
         text.textContent = hotspot.name;
         svg.appendChild(text);
