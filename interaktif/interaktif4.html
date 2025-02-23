@@ -16,10 +16,14 @@
       justify-content: start;
       height: 100vh;
       width: 100%;
+      overflow: hidden;
     }
 
     #tooltip-container {
-      position: absolute;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
       background: white;
       border: 1px solid #ccc;
       padding: 10px;
@@ -137,12 +141,10 @@
         });
 
         // Mouse üzerine gelince resmi göster
-        polygon.addEventListener('mouseover', (event) => {
+        polygon.addEventListener('mouseover', () => {
           if (hotspot.image) {
             tooltipImage.src = hotspot.image;
             tooltipContainer.style.display = 'block';
-            tooltipContainer.style.left = `${event.clientX + 10}px`;
-            tooltipContainer.style.top = `${event.clientY + 10}px`;
           }
         });
 
@@ -164,7 +166,6 @@
 
         text.setAttribute("x", centerX);
         text.setAttribute("y", centerY);
-        /* altdaki yazının eğimi */
         text.setAttribute("transform", `rotate(-35, ${centerX}, ${centerY})`);
         text.setAttribute("text-anchor", "middle");
         text.textContent = hotspot.name;
