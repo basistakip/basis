@@ -60,12 +60,13 @@ body {
 <input type="text" id="searchBar" placeholder="Buton ismi yazın (Örnek: Buton 1)" oninput="filterButtons()">
 
 <!-- Submenü (gizli butonlar) -->
+<!-- Butonlar -->
 <div id="subMenu">
   <a href="https://www.example.com/buton1" target="_blank">
-    <img src="ana.png" alt="Buton 1 Icon"> Binalar
+    <img src="https://i.hizliresim.com/aems1lo.png" alt="Buton 1 Icon"> Binalar
   </a>
   <a href="https://www.example.com/buton2" target="_blank">
-    <img src="jenerator.png" alt="Buton 2 Icon"> Jenerator
+    <img src="https://i.hizliresim.com/13ostcw.png" alt="Buton 2 Icon"> Jenerator
   </a>
   <a href="https://www.example.com/buton3" target="_blank">
     <img src="ups.png" alt="Buton 3 Icon"> Buton 3
