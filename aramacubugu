@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+/* Search bar stil */
+#searchBar {
+  width: 100%;
+  font-size: 18px;
+  padding: 12px;
+  border: 1px solid #ddd;
+  box-sizing: border-box;
+}
+
+/* Butonların gizlenmesi */
+#subMenu {
+  display: none;
+  flex-direction: column;
+  margin-top: 10px;
+}
+
+/* Buton stil */
+#subMenu a {
+  padding: 12px;
+  font-size: 16px;
+  text-align: left;
+  border: none;
+  background-color: #f1f1f1;
+  cursor: pointer;
+  margin-bottom: 5px;
+  text-decoration: none; /* Link alt çizgisini kaldır */
+  color: black; /* Link rengi */
+  display: flex; /* Flexbox ile resim ve metni yan yana hizala */
+  align-items: center; /* Dikeyde ortala */
+}
+
+#subMenu a:hover {
+  background-color: #ddd;
+}
+
+/* Resim stil */
+#subMenu a img {
+  width: 44px; /* Resim genişliği */
+  height: 44px; /* Resim yüksekliği */
+  margin-right: 10px; /* Resim ile metin arası boşluk */
+}
+</style>
+</head>
+<body>
+
+<h2>Search Bar ve Gizli Butonlar</h2>
+
+<!-- Search bar -->
+<input type="text" id="searchBar" placeholder="Buton ismi yazın (Örnek: Buton 1)" oninput="filterButtons()">
+
+<!-- Submenü (gizli butonlar) -->
+<div id="subMenu">
+  <a href="https://www.example.com/buton1" target="_blank">
+    <img src="ana.png" alt="Buton 1 Icon"> Binalar
+  </a>
+  <a href="https://www.example.com/buton2" target="_blank">
+    <img src="jenerator.png" alt="Buton 2 Icon"> Jenerator
+  </a>
+  <a href="https://www.example.com/buton3" target="_blank">
+    <img src="ups.png" alt="Buton 3 Icon"> Buton 3
+  </a>
+</div>
+
+<script>
+function filterButtons() {
+  var input, filter, subMenu, links, i, txtValue;
+  input = document.getElementById("searchBar");
+  filter = input.value.toUpperCase();
+  subMenu = document.getElementById("subMenu");
+  links = subMenu.getElementsByTagName("a");
+
+  // Search bar boşsa butonları gizle
+  if (filter.length === 0) {
+    subMenu.style.display = "none";
+    return;
+  }
+
+  // Butonları filtrele
+  for (i = 0; i < links.length; i++) {
+    txtValue = links[i].textContent || links[i].innerText;
+    if (txtValue.toUpperCase().indexOf(filter) > -1) {
+      links[i].style.display = "flex"; /* Flexbox ile hizala */
+    } else {
+      links[i].style.display = "none";
+    }
+  }
+
+  // Submenüyü göster
+  subMenu.style.display = "flex";
+}
+</script>
+
+</body>
+</html>
