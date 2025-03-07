@@ -174,7 +174,7 @@ body {
 function filterButtons() {
   var input, filter, subMenu, links, i, txtValue;
   input = document.getElementById("searchBar");
-  filter = input.value.toUpperCase();
+  filter = input.value.toLocaleUpperCase('tr-TR');
   subMenu = document.getElementById("subMenu");
   links = subMenu.getElementsByTagName("a");
 
@@ -187,7 +187,7 @@ function filterButtons() {
   // Butonları filtrele
   for (i = 0; i < links.length; i++) {
     txtValue = links[i].textContent || links[i].innerText;
-    if (txtValue.toUpperCase().indexOf(filter) > -1) {
+    if (txtValue.toLocaleUpperCase('tr-TR').indexOf(filter) > -1) {
       links[i].style.display = "flex"; /* Flexbox ile hizala */
     } else {
       links[i].style.display = "none";
