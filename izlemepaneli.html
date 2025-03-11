@@ -7,7 +7,49 @@
     <link rel="stylesheet" href="style.css">
     <link rel="shortcut icon" type="png" href="resimler/basis.png"> 
 </head>
+<!-- Google API JavaScript kütüphanesi -->
+  <script src="https://apis.google.com/js/api.js"></script>
+  <script>
+    // Google API'yi yükle ve OAuth 2.0 işlemlerini başlat
+    function initClient() {
+      gapi.client.init({
+        'clientId': '387277586108-8m32c8tdfb0oemnr5kuv2fao6rtm35c0.apps.googleusercontent.com', // Google API Konsolundan aldığınız Client ID
+        'scope': 'profile email', // Kullanıcının profil bilgilerine erişim izni
+      }).then(function () {
+        // OAuth butonunu oluştur
+        const authButton = document.createElement('button');
+        authButton.textContent = 'Google ile Giriş Yap';
+        authButton.onclick = handleAuthClick;
+        document.getElementById('oauth-button').appendChild(authButton);
+      });
+    }
 
+    // Kullanıcı giriş yaptığında çağrılacak fonksiyon
+    function handleAuthClick() {
+      gapi.auth2.getAuthInstance().signIn().then(function () {
+        // Giriş başarılı olduğunda profil bilgilerini al
+        const profile = gapi.auth2.getAuthInstance().currentUser.get().getBasicProfile();
+        showProfileInfo(profile);
+      });
+    }
+
+    // Profil bilgilerini göster
+    function showProfileInfo(profile) {
+      const profilePic = profile.getImageUrl();
+      const profileName = profile.getName();
+      const profileEmail = profile.getEmail();
+
+      document.getElementById('profile-pic').src = profilePic;
+      document.getElementById('profile-name').textContent = profileName;
+      document.getElementById('profile-email').textContent = profileEmail;
+
+      // Profil bilgilerini göster
+      document.getElementById('profile-info').style.display = 'block';
+    }
+
+    // Google API'yi yükle ve OAuth 2.0 işlemlerini başlat
+    gapi.load('client:auth2', initClient);
+  </script>
 
 <header class="dashboard-header">
   
@@ -139,3 +181,6 @@
   <iframe src="https://docs.google.com/spreadsheets/d/e/2PACX-1vTogEMhE6x1XDkT0r-ZSCGo-JMvJRW11uLiQuSil_nkFT0p0dCDXUaHBjJ9aXUoQ0smWwOP7Tmu8RW2/pubhtml?gid=1128563714&single=true" width="100%" height="700" />
   Footer
 </footer>
+
+
+
