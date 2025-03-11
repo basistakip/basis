@@ -8,12 +8,24 @@
 
 body {
     font-family: 'Poppins', sans-serif;
-  background-color:red;
+    background-color: red;
     background-image: url("resimler/bg.jpg");
     background-size: cover;
+    min-block-size: 100vh;
+    min-block-size: 100dvh;
+    display: grid;
+    grid-template-columns: 1rem 1fr;
+    grid-template-rows: auto 1fr auto;
+    grid-template-areas:
+        "sidebar header"
+        "sidebar main"
+        "sidebar footer";
+    transition: grid-template-columns 0.3s ease;
 }
 
-
+body.sb-expand {
+    grid-template-columns: 12.5rem 1fr;
+}
 
 .container {
     width: 100%;
@@ -66,105 +78,4 @@ nav .menu {
 nav .menu .menu-button {
     color: #0ba2c0;
     text-decoration: none;
-    background-color: rgba(255, 255, 255, 0.08);
-    padding: 12px 24px;
-    border-radius: 56px;
-    transition: all .25s ease;
-}
-
-nav .menu .menu-button:hover {
-    background-color: #0ba2c0;
-    color: white;
-}
-
-/*! header end */
-
-/*! section start  */
-.content {
-    color: white;
-    height: calc(100vh - 100px);
-    padding-top: 1px;/*!üst taraf ile butonların arsındaki mesafe */
-}
-
-.content h1 {
-    font-size: 60px;
-    text-align: center;
-}
-
-.content p {
-    font-size: 24px;
-    text-align: center;
-    margin-top: 32px;
-}
-
-.content .links {
-    display: flex;
-    justify-content: center;
-    margin-top: 10px;
-   /*! En üst butonların en üst ile mesafesi  */
-    column-gap: 5px;
-}   /*! Butonların biririne mesafe yakınlık */
-
-.content .links a {
-    background-color: white;
-    padding: 10px;
-   /*! Butonların dikey uzunluğu */
-    width: 150px;
-   /*! Butonların yatay kalınlığı */
-    color: black;
-    text-align: center;
-    font-size: 18px;
-    text-decoration: none;
-    border-radius: 56px;
-    transition: all .25s ease-in;
-}
-
-.content .links a:hover {
-    background-color: #0ba2c0;
-    color: white;
-}
-
-/*! section end  */
-
-/*! responsive start */
-@media(max-width:576px) {
-    .container {
-        width: 100%;
-        padding-left: 12px;
-        padding-right: 12px;
-    }
-
-    .menu ul {
-        column-gap: 20px;
-    }
-
-    .menu .menu-button {
-        display: none;
-    }
-
-    .content {
-        padding-top: 50px;
-       /*! ekran küçülünce en üste mesafesi */
-    }
-
-    .content h1 {
-        font-size: 36px;
-    }
-
-    .content p {
-        font-size: 16px;
-    }
-
-    .content .links {
-        flex-direction: column;
-        align-items: center;
-        row-gap: 1rem;
-    }
-
-    .content .links a {
-        padding: 14px;
-        width: 90%;
-    }
-}
-
-/*! responsive end */
+    background-color: rgba(255, 255, 255, 0.08
