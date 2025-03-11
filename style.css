@@ -1,168 +1,177 @@
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
 body {
-    font-family: 'Poppins', sans-serif;
-  background-color:red;
-    background-image: url("resimler/bg.jpg");
-    background-size: cover;
+  font-family: system-ui, sans-serif;
+  font-size: 1rem;
+  line-height: 1.7;
+  color: #161616;
+  background-color: #252954;
+
+  min-block-size: 100vh;
+  min-block-size: 100dvh;
+  display: grid;
+  grid-template-columns: 1rem 1fr;
+  grid-template-rows: auto 1fr auto;
+  grid-template-areas:
+    "sidebar header"
+    "sidebar main"
+    "sidebar footer";
+  transition: grid-template-columns 0.3s ease;
 }
 
-
-
-.container {
-    width: 100%;
-    margin: auto;
+body.sb-expand {
+  grid-template-columns: 12.5rem 1fr;
 }
 
-/*! header start */
-
-header {
-    height: 100px;
-    border-bottom: 2px solid rgba(255, 255, 255, 0.06);
+h1 {
+  font-size: 1.25rem;
+  line-height: 1.25;
 }
 
-header nav {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    height: 100%;
+h2 {
+  font-size: 0.875rem;
 }
 
-header nav .logo a {
-    color: white;
-    text-decoration: none;
-    font-weight: 700;
-    font-size: 20px;
+.dashboard-header {
+  grid-area: header;
+  background-color: #fff;
+  padding: 1.25rem;
 }
 
-nav ul {
-    list-style: none;
-    display: flex;
-    column-gap: 30px;
+.dashboard-footer {
+  grid-area: footer;
+  background-color: #fff;
+  padding: 1.25rem;
 }
 
-nav ul li a {
-    color: white;
-    text-decoration: none;
-    transition: color .25s ease;
+.dashboard-sidebar {
+  position: relative;
+  color: #fff;
+  background-color: #1d1d29;
 }
 
-nav ul li a:hover {
-    color: #0ba2c0;
+.dashboard-sidebar button {
+  position: absolute;
+  inset: 4.5rem -0.75rem auto auto;
+  width: 1.5rem;
+  aspect-ratio: 1;
+  background-color: #fff;
+  border: transparent;
+  border-radius: 50%;
+  cursor: pointer;
 }
 
-nav .menu {
-    display: flex;
-    align-items: center;
-    column-gap: 48px;
+.logo {
+  display: flex;
+  justify-content: center;
+  font-size: 3rem;
+  line-height: 1.3;
 }
 
-nav .menu .menu-button {
-    color: #0ba2c0;
-    text-decoration: none;
-    background-color: rgba(255, 255, 255, 0.08);
-    padding: 12px 24px;
-    border-radius: 56px;
-    transition: all .25s ease;
+.dashboard-main {
+  grid-area: main;
+  padding: 1.25rem;
+  display: grid;
+  gap: 1rem;
 }
 
-nav .menu .menu-button:hover {
-    background-color: #0ba2c0;
-    color: white;
+@media (width >= 768px) {
+  .dashboard-main {
+    grid-template-columns: repeat(4, 1fr);
+  }
 }
 
-/*! header end */
+.card {
+  padding: 1rem;
+  min-block-size: 7rem;
+  background-color: #fff;
+  border-radius: 0.5rem;
+}
 
-/*! section start  */
+.card-1 {
+  background-image: linear-gradient(62deg, #fbab7e 0%, #9b9ca7 100%);
+}
+
+@media (width >= 768px) {
+  .card {
+    grid-column: span 2;
+  }
+
+  .card-1 {
+    grid-column: span 4;
+  }
+}
+
+@media (width >= 992px) {
+  .card-2,
+  .card-3 {
+    grid-area: auto;
+  }
+
+  .card-4 {
+    grid-area: 3 / 1 / 4 / 2;
+  }
+
+  .card-5 {
+    grid-area: 3 / 2 / 4 / 3;
+  }
+
+  .card-6,
+  .card-7 {
+    grid-area: span 2 / auto;
+  }
+
+  .card-8,
+  .card-9 {
+    min-block-size: 32rem;
+  }
+
+  .card-10,
+  .card-11,
+  .card-12,
+  .card-13 {
+    grid-column: auto;
+  }
+}
+
+/* Eklenen CSS */
 .content {
-    color: white;
-    height: calc(100vh - 100px);
-    padding-top: 1px;/*!üst taraf ile butonların arsındaki mesafe */
+  text-align: center;
 }
 
-.content h1 {
-    font-size: 60px;
-    text-align: center;
+.links {
+  display: flex;
+  gap: 8px;
 }
 
-.content p {
-    font-size: 24px;
-    text-align: center;
-    margin-top: 32px;
+.links a {
+  text-decoration: none;
+  color: #000;
+  background-color: #fff;
+     padding: 2px 5px;
+    border-radius: 5px;
+  transition: background-color 0.3s ease;
 }
 
-.content .links {
-    display: flex;
-    justify-content: center;
-    margin-top: 10px;
-   /*! En üst butonların en üst ile mesafesi  */
-    column-gap: 5px;
-}   /*! Butonların biririne mesafe yakınlık */
-
-.content .links a {
-    background-color: white;
-    padding: 10px;
-   /*! Butonların dikey uzunluğu */
-    width: 150px;
-   /*! Butonların yatay kalınlığı */
-    color: black;
-    text-align: center;
-    font-size: 18px;
-    text-decoration: none;
-    border-radius: 56px;
-    transition: all .25s ease-in;
+.links a:hover {
+  background-color: #0ba2c0;
+  color: #fff;
 }
 
-.content .links a:hover {
-    background-color: #0ba2c0;
-    color: white;
+.links img {
+    width: 82px;
+    height: 92px;
+    display: block;
+    margin-bottom: 1px;
 }
 
-/*! section end  */
 
-/*! responsive start */
-@media(max-width:576px) {
-    .container {
-        width: 100%;
-        padding-left: 12px;
-        padding-right: 12px;
-    }
 
-    .menu ul {
-        column-gap: 20px;
-    }
 
-    .menu .menu-button {
-        display: none;
-    }
 
-    .content {
-        padding-top: 50px;
-       /*! ekran küçülünce en üste mesafesi */
-    }
 
-    .content h1 {
-        font-size: 36px;
-    }
 
-    .content p {
-        font-size: 16px;
-    }
-
-    .content .links {
-        flex-direction: column;
-        align-items: center;
-        row-gap: 1rem;
-    }
-
-    .content .links a {
-        padding: 14px;
-        width: 90%;
-    }
-}
-
-/*! responsive end */
