@@ -31,6 +31,16 @@
     #oauth-button button:hover {
       background-color: #357ABD;
     }
+    #logout-button {
+      display: none;
+      margin-top: 10px;
+      background-color: red;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
   </style>
 </head>
 <body>
@@ -52,10 +62,12 @@
         data-size="large">
       </div>
     </div>
+
     <div id="profile-info" class="profile-info" style="display: none;">
       <img id="profile-pic" src="" alt="Profil Resmi">
       <p id="profile-name"></p>
       <p id="profile-email"></p>
+      <button id="logout-button" onclick="logout()">Çıkış Yap</button>
     </div>
   </div>
 
@@ -63,7 +75,7 @@
   <script src="https://accounts.google.com/gsi/client" async defer></script>
   <script>
     function handleCredentialResponse(response) {
-      // JWT Token'ı çözümle
+      // Kullanıcıdan gelen token'ı işle
       const data = parseJwt(response.credential);
 
       // Kullanıcı bilgilerini göster
@@ -71,6 +83,15 @@
       document.getElementById('profile-name').textContent = data.name;
       document.getElementById('profile-email').textContent = data.email;
       document.getElementById('profile-info').style.display = 'block';
+
+      // Giriş butonunu gizle
+      document.getElementById('oauth-button').style.display = 'none';
+
+      // Çıkış butonunu göster
+      document.getElementById('logout-button').style.display = 'block';
+
+      // Kullanıcı bilgilerini localStorage içine kaydet
+      localStorage.setItem('googleUser', JSON.stringify(data));
     }
 
     function parseJwt(token) {
@@ -82,6 +103,37 @@
 
       return JSON.parse(jsonPayload);
     }
+
+    function checkLogin() {
+      // Daha önce giriş yapmış kullanıcı var mı?
+      const storedUser = localStorage.getItem('googleUser');
+      if (storedUser) {
+        const data = JSON.parse(storedUser);
+
+        // Kullanıcı bilgilerini göster
+        document.getElementById('profile-pic').src = data.picture;
+        document.getElementById('profile-name').textContent = data.name;
+        document.getElementById('profile-email').textContent = data.email;
+        document.getElementById('profile-info').style.display = 'block';
+
+        // Giriş butonunu gizle
+        document.getElementById('oauth-button').style.display = 'none';
+
+        // Çıkış butonunu göster
+        document.getElementById('logout-button').style.display = 'block';
+      }
+    }
+
+    function logout() {
+      // Kullanıcı oturumunu kapat
+      localStorage.removeItem('googleUser');
+
+      // Sayfayı yenileyerek oturumu sıfırla
+      window.location.reload();
+    }
+
+    // Sayfa yüklendiğinde oturum kontrolü yap
+    window.onload = checkLogin;
   </script>
 </body>
 </html>
