@@ -1,91 +1,130 @@
-<!DOCTYPE html>
-<html lang="tr">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Google OAuth 2.0 Entegrasyonu</title>
-  <style>
-    .card {
-      border: 1px solid #ccc;
-      padding: 20px;
-      margin: 20px;
-      border-radius: 10px;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    }
-    .profile-info {
-      margin-top: 20px;
-    }
-    .profile-info img {
-      border-radius: 50%;
-      width: 50px;
-      height: 50px;
-    }
-    #oauth-button button {
-      background-color: #4285F4;
-      color: white;
-      border: none;
-      padding: 10px 20px;
-      border-radius: 5px;
-      cursor: pointer;
-    }
-    #oauth-button button:hover {
-      background-color: #357ABD;
-    }
-  </style>
+ <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BASİS</title>
+
+    <link rel="stylesheet" href="style.css">
+    <link rel="shortcut icon" type="png" href="resimler/basis.png"> 
 </head>
-<body>
-  <div class="card card-2">
-    <h2>Google ile Giriş Yap</h2>
-    <div id="oauth-button"></div> <!-- OAuth butonu burada gösterilecek -->
-    <div id="profile-info" class="profile-info" style="display: none;">
-      <img id="profile-pic" src="" alt="Profil Resmi">
-      <p id="profile-name"></p>
-      <p id="profile-email"></p>
-    </div>
+
+<header class="dashboard-header">
+  
+  <h1>CSS Grid - Dashboard Layout 
+      haftalık prog   <iframe name="interaktififrame"src="https://basistakip.github.io/basis/aramacubugu2.html" width="100%" height="100%" /></iframe>
+   </h1>
+  
+  
+</header>
+
+<main class="dashboard-main">
+  <div class="card card-1">
+
+<h2>Welcome John Doe!</h2>
+    
+    
+    
+          <div class="links">
+            
+             <a href="index.html" target="_blank">
+                <img src="https://i.hizliresim.com/13ostcw.png" alt="Basis">
+            </a>
+            <a href="index.html" target="_blank">
+                <img src="https://i.hizliresim.com/aems1lo.png" alt="Basis">
+            </a>
+        </div>
+    
+    
+    
   </div>
 
-  <!-- Google API JavaScript kütüphanesi -->
-  <script src="https://apis.google.com/js/api.js"></script>
-  <script>
-    // Google API'yi yükle ve OAuth 2.0 işlemlerini başlat
-    function initClient() {
-      gapi.client.init({
-        'clientId': '387277586108-8m32c8tdfb0oemnr5kuv2fao6rtm35c0.apps.googleusercontent.com', // Client ID'niz buraya eklendi
-        'scope': 'profile email', // Kullanıcının profil bilgilerine erişim izni
-      }).then(function () {
-        // OAuth butonunu oluştur
-        const authButton = document.createElement('button');
-        authButton.textContent = 'Google ile Giriş Yap';
-        authButton.onclick = handleAuthClick;
-        document.getElementById('oauth-button').appendChild(authButton);
-      });
-    }
+  <div class="card card-2">
+    <h2>Orders - 2(Arama cubugu gelecek)</h2>
+  </div>
 
-    // Kullanıcı giriş yaptığında çağrılacak fonksiyon
-    function handleAuthClick() {
-      gapi.auth2.getAuthInstance().signIn().then(function () {
-        // Giriş başarılı olduğunda profil bilgilerini al
-        const profile = gapi.auth2.getAuthInstance().currentUser.get().getBasicProfile();
-        showProfileInfo(profile);
-      });
-    }
+  <div class="card card-3">
+    <h2>Shipped - 3</h2>
+    <iframe src="https://calendar.google.com/calendar/embed?src=yapiisleribanu%40gmail.com&ctz=Europe%2FIstanbul" width="100%" height="100%" /></iframe>
 
-    // Profil bilgilerini göster
-    function showProfileInfo(profile) {
-      const profilePic = profile.getImageUrl();
-      const profileName = profile.getName();
-      const profileEmail = profile.getEmail();
+  </div>
 
-      document.getElementById('profile-pic').src = profilePic;
-      document.getElementById('profile-name').textContent = profileName;
-      document.getElementById('profile-email').textContent = profileEmail;
+  <div class="card card-4">
+    <h2>Pending - 4</h2>
+  </div>
 
-      // Profil bilgilerini göster
-      document.getElementById('profile-info').style.display = 'block';
-    }
+  <div class="card card-5">
+    <h2>Revenue - 5</h2>
+  </div>
 
-    // Google API'yi yükle ve OAuth 2.0 işlemlerini başlat
-    gapi.load('client:auth2', initClient);
-  </script>
-</body>
-</html>
+  <div class="card card-6">
+    <h2>Users - 6</h2>
+<iframe src="https://docs.google.com/spreadsheets/d/e/2PACX-1vQEIBBnHB-j2tPS5ZKhTTvF_TYDIRUTr2cSQHi4s7cWOLK65u5zlYB8OtPllATyvQzzDTPZlEs49gAX/pubhtml?gid=765625353&amp;single=true&amp;widget=true&amp;headers=false"></iframe>
+  </div>
+
+  <div class="card card-7">
+    <h2>Subscriptions - 7</h2>
+    <a class="weatherwidget-io" href="https://forecast7.com/tr/40d3527d97/bandirma/" data-label_1="BANDIRMA" data-label_2="WEATHER" data-mode="Forecast" data-days="3" data-theme="original">BANDIRMA WEATHER</a>
+    <script>
+      ! function(d, s, id) {
+        var js, fjs = d.getElementsByTagName(s)[0];
+        if (!d.getElementById(id)) {
+          js = d.createElement(s);
+          js.id = id;
+          js.src = 'https://weatherwidget.io/js/widget.min.js';
+          fjs.parentNode.insertBefore(js, fjs);
+        }
+      }(document, 'script', 'weatherwidget-io-js');
+    </script>
+  </div>
+
+  <div class="card card-8">
+    <h2>Analytics - 8</h2>
+        <a href="https://example.com/buton1" target="interaktififrame" ><button>Buton 1</button></a>
+        <a href="https://example.com/buton2" target="interaktififrame"><button>Buton 2</button></a>
+    <iframe name="interaktififrame"src="https://basistakip.github.io/basis/interaktif/interaktif4.html" width="100%" height="100%" /></iframe>
+
+    
+    
+  </div>
+
+  <div class="card card-9">
+    <h2>Inbox - 9</h2>
+       <a href="https://example.com/buton1" target="interaktififrame" ><button>Buton 1</button></a>
+        <a href="https://example.com/buton2" target="interaktififrame"><button>Buton 2</button></a>
+    <iframe name="interaktififrame"src="https://basistakip.github.io/basis/interaktif/interaktif4.html" width="100%" height="100%" /></iframe>
+
+
+
+
+  </div>
+
+
+
+
+  <div class="card card-10">
+    <h2>Calendar - 10</h2>
+    
+    
+ 
+</div>
+    
+    
+ 
+
+  <div class="card card-11">
+    <h2>User Activity - 11</h2>
+  </div>
+
+  <div class="card card-12">
+    <h2>Sales Dynamics - 12</h2>
+  </div>
+
+  <div class="card card-13">
+    <h2>Tasks - 13</h2>
+  </div>
+</main>
+
+<footer class="dashboard-footer">
+  <iframe src="https://docs.google.com/spreadsheets/d/e/2PACX-1vTogEMhE6x1XDkT0r-ZSCGo-JMvJRW11uLiQuSil_nkFT0p0dCDXUaHBjJ9aXUoQ0smWwOP7Tmu8RW2/pubhtml?gid=1128563714&single=true" width="100%" height="700" />
+  Footer
+</footer>
