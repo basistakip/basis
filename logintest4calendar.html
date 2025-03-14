@@ -73,6 +73,7 @@
       "izinli3@example.com"
     ];
 
+    // Google Identity Services ile giriş yap
     window.onload = () => {
       google.accounts.id.initialize({
         client_id: "387277586108-8m32c8tdfb0oemnr5kuv2fao6rtm35c0.apps.googleusercontent.com",
@@ -95,6 +96,7 @@
       }
     };
 
+    // Kullanıcı giriş yaptığında çalışır
     function handleCredentialResponse(response) {
       const user = parseJwt(response.credential);
 
@@ -107,6 +109,7 @@
       }
     }
 
+    // JWT token'ını parse et
     function parseJwt(token) {
       const base64Url = token.split('.')[1];
       const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
@@ -116,6 +119,7 @@
       return JSON.parse(jsonPayload);
     }
 
+    // Kullanıcı bilgilerini göster
     function displayUserInfo(user) {
       document.getElementById("profile-pic").src = user.picture;
       document.getElementById("profile-name").textContent = user.name;
@@ -125,22 +129,34 @@
       document.getElementById("logout-button").style.display = "block";
     }
 
+    // Erişim reddedildi mesajını göster
     function showAccessDenied() {
       document.getElementById("access-denied").style.display = "block";
     }
 
+    // Google API istemcisini başlat
     function initGapiClient() {
-      gapi.load("client", () => {
+      gapi.load("client:auth2", () => {
         gapi.client.init({
           apiKey: "AIzaSyDFCb2Rjt--IcOuhZoxcbuRlUow_xBnXjQ",
           discoveryDocs: ["https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest"],
+          clientId: "387277586108-8m32c8tdfb0oemnr5kuv2fao6rtm35c0.apps.googleusercontent.com",
           scope: "https://www.googleapis.com/auth/calendar.readonly"
         }).then(() => {
-          fetchCalendarEvents();
+          // Kullanıcı oturumunu kontrol et
+          if (gapi.auth2.getAuthInstance().isSignedIn.get()) {
+            fetchCalendarEvents();
+          } else {
+            // Kullanıcı oturum açmamışsa oturum açmasını iste
+            gapi.auth2.getAuthInstance().signIn();
+          }
+        }, (error) => {
+          console.error("Google API başlatma hatası:", error);
         });
       });
     }
 
+    // Takvim etkinliklerini al
     function fetchCalendarEvents() {
       const now = new Date();
       const nextWeek = new Date();
@@ -167,11 +183,17 @@
         } else {
           eventsList.innerHTML = "Bu hafta için etkinlik yok.";
         }
+      }, (error) => {
+        console.error("Takvim etkinlikleri alınırken hata:", error);
       });
     }
 
+    // Çıkış yap
     function logout() {
       localStorage.removeItem("googleUser");
+      if (gapi.auth2.getAuthInstance()) {
+        gapi.auth2.getAuthInstance().signOut();
+      }
       window.location.reload();
     }
   </script>
