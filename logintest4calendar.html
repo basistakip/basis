@@ -88,7 +88,7 @@
         const user = JSON.parse(storedUser);
         if (allowedEmails.includes(user.email)) {
           displayUserInfo(user);
-          requestCalendarAccess();
+          initGapiClient();
         } else {
           showAccessDenied();
         }
@@ -101,7 +101,7 @@
       if (allowedEmails.includes(user.email)) {
         localStorage.setItem("googleUser", JSON.stringify(user));
         displayUserInfo(user);
-        requestCalendarAccess();
+        initGapiClient();
       } else {
         showAccessDenied();
       }
@@ -129,12 +129,15 @@
       document.getElementById("access-denied").style.display = "block";
     }
 
-    function requestCalendarAccess() {
+    function initGapiClient() {
       gapi.load("client", () => {
         gapi.client.init({
           apiKey: "AIzaSyDFCb2Rjt--IcOuhZoxcbuRlUow_xBnXjQ",
           discoveryDocs: ["https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest"],
-        }).then(fetchCalendarEvents);
+          scope: "https://www.googleapis.com/auth/calendar.readonly"
+        }).then(() => {
+          fetchCalendarEvents();
+        });
       });
     }
 
