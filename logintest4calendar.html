@@ -46,6 +46,9 @@
       color: red;
       margin-top: 20px;
     }
+    #calendar-events {
+      margin-top: 20px;
+    }
   </style>
 </head>
 <body>
@@ -77,6 +80,11 @@
 
     <div id="access-denied">
       <p>Bu sayfaya erişim izniniz yok.</p>
+    </div>
+
+    <div id="calendar-events">
+      <h3>Haftalık Takvim Etkinlikleri</h3>
+      <ul id="events-list"></ul>
     </div>
   </div>
 
@@ -113,6 +121,9 @@
 
         // Kullanıcı bilgilerini localStorage içine kaydet
         localStorage.setItem('googleUser', JSON.stringify(data));
+
+        // Google Calendar API'ye erişim izni iste
+        requestCalendarAccess(response.credential);
       } else {
         // E-posta adresi izin verilenler listesinde değilse erişim reddedildi mesajını göster
         document.getElementById('access-denied').style.display = 'block';
@@ -159,6 +170,9 @@
 
           // Erişim reddedildi mesajını gizle
           document.getElementById('access-denied').style.display = 'none';
+
+          // Google Calendar API'ye erişim izni iste
+          requestCalendarAccess(localStorage.getItem('googleToken'));
         } else {
           // E-posta adresi izin verilenler listesinde değilse erişim reddedildi mesajını göster
           document.getElementById('access-denied').style.display = 'block';
@@ -174,9 +188,53 @@
       }
     }
 
+    function requestCalendarAccess(token) {
+      // Google Calendar API'ye erişim izni iste
+      gapi.load('client', () => {
+        gapi.client.init({
+          'apiKey': 'YOUR_API_KEY',
+          'discoveryDocs': ['https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest'],
+          'clientId': 'YOUR_CLIENT_ID',
+          'scope': 'https://www.googleapis.com/auth/calendar.readonly'
+        }).then(() => {
+          gapi.auth.setToken({ access_token: token });
+          fetchCalendarEvents();
+        });
+      });
+    }
+
+    function fetchCalendarEvents() {
+      // Google Calendar API'den etkinlikleri al
+      gapi.client.calendar.events.list({
+        'calendarId': 'primary',
+        'timeMin': (new Date()).toISOString(),
+        'showDeleted': false,
+        'singleEvents': true,
+        'maxResults': 10,
+        'orderBy': 'startTime'
+      }).then(response => {
+        const events = response.result.items;
+        const eventsList = document.getElementById('events-list');
+        eventsList.innerHTML = '';
+
+        if (events.length > 0) {
+          events.forEach(event => {
+            const eventItem = document.createElement('li');
+            eventItem.textContent = event.summary + ' - ' + event.start.dateTime;
+            eventsList.appendChild(eventItem);
+          });
+        } else {
+          const noEvents = document.createElement('li');
+          noEvents.textContent = 'Hiç etkinlik bulunamadı.';
+          eventsList.appendChild(noEvents);
+        }
+      });
+    }
+
     function logout() {
       // Kullanıcı oturumunu kapat
       localStorage.removeItem('googleUser');
+      localStorage.removeItem('googleToken');
 
       // Sayfayı yenileyerek oturumu sıfırla
       window.location.reload();
