@@ -1,0 +1,95 @@
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: start;
+  height: 100vh;
+  width: 100%;
+  overflow: hidden;
+}
+
+#tooltip-container {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: white;
+  border: 1px solid #ccc;
+  padding: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+  display: none;
+}
+
+.container {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+}
+
+img {
+  width: 100%;
+  height: 100vh;
+  display: block;
+}
+
+svg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+polygon {
+  fill: rgba(255, 0, 0, 0.3);
+  stroke: rgba(255, 0, 0, 0.5);
+  stroke-width: 2;
+  cursor: pointer;
+  pointer-events: all;
+  transition: fill 0.3s ease, stroke 0.3s ease;
+}
+
+polygon:hover {
+  fill: rgba(0, 55, 0, 0.3);
+}
+
+text {
+  font-size: 14px;
+  fill: black;
+  font-weight: bold;
+  text-anchor: end;
+  pointer-events: none;
+  transition: fill 0.3s ease;
+  position: absolute;
+  z-index: 1000;
+  background: rgba(0, 0, 0, 0.5);
+  padding: 2px 5px;
+  border-radius: 3px;
+}
+
+.highlight {
+  fill: blue;
+}
+
+polygon:hover + text {
+  fill: blue;
+}
+
+@media (max-width: 768px) {
+  .container {
+    height: auto;
+  }
+
+  img {
+    height: auto;
+  }
+
+  text {
+    font-size: 12px;
+  }
+}
