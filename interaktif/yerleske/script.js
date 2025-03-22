@@ -1,7 +1,7 @@
 const hotspots = [
   
    {"name": "", "coords": [1619, 435], "href": "1"},
-    {"name": "DM (EY1)", "coords": [1518, 416, 1620, 416, 1620, 448.71, 1518, 448.71], "href": "1", "image": "/ey1.jpg"},
+    {"name": "DM (EY1)", "coords": [1518, 416, 1620, 416, 1620, 448.71, 1518, 448.71], "href": "1", "image": "https://basistakip.github.io/basis/interaktif/yerleske/ey1.jpg"},
     {"name": "1-YÜK AYIRICI GİRİŞ ÇIKIŞ", "coords": [1518, 456, 1620, 456, 1620, 488.71, 1518, 488.71], "href": "1", "image": "https://i.hizliresim.com/74p9dkk.jpeg"},
     {"name": "2-YURTA GİDEN", "coords": [1518, 488.71, 1620, 488.71, 1620, 521.43, 1518, 521.43], "href": "", "image": ""},
     {"name": "3-AKIM GERİLİM ÖLÇÜM", "coords": [1518, 521.43, 1620, 521.43, 1620, 554.14, 1518, 554.14], "href": "2", "image": ""},
