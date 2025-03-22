@@ -8,7 +8,7 @@ const hotspots = [
     {"name": "4-İÇ İHTİYAÇ", "coords": [1518, 554.14, 1620, 554.14, 1620, 586.86, 1518, 586.86], "href": "", "image": ""},
     {"name": "5-2500kVA(EY4 GiDN(MRKZİ DRSLK)Kesicili Giriş Çıkış", "coords": [1518, 586.86, 1620, 586.86, 1620, 619.57, 1518, 619.57], "href": "", "image": ""},
     {"name": "6-1250KVA REKTÖRLÜK İBFF ÇIKIŞ", "coords": [1518, 619.57, 1620, 619.57, 1620, 652.29, 1518, 652.29], "href": "", "image": ""},
-    {"name": "7-2500KVA ÇIKIŞ YEDEK", "coords": [1518, 652.29, 1620, 652.29, 1620, 680, 1518, 680], "href": "", "image": ""},
+    {"name": "7-2500KVA ÇIKIŞ YEDEK", "coords": [1518, 652.29, 1620, 652.29, 1620, 680, 1518, 680], "href": "", "image": "ey1.jpg""},
   
   
     {"name": "TM1(EY2)", "coords": [1740, 551, 1815, 551, 1815, 619.67, 1740, 619.67], "href": "1", "image": "https://i.hizliresim.com/74p9dkk.jpeg"},
