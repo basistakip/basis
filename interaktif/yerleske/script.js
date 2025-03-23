@@ -11,45 +11,19 @@ const hotspots = [
     {"name": "7-2500KVA ÇIKIŞ YEDEK", "coords": [1518, 652.29, 1620, 652.29, 1620, 680, 1518, 680], "href": "", "image": "ey1.jpg"},
   
   
-    {"name": "TM1(EY2)", "coords": [1740, 551, 1815, 551, 1815, 619.67, 1740, 619.67], "href": "1", "image": "https://i.hizliresim.com/74p9dkk.jpeg"},
+    {"name": "TM1(EY2)", "coords": [1740, 551, 1815, 551, 1815, 619.67, 1740, 619.67], "href": "1", "image":"yerleske/ey2.jpg"},
     {"name": "° 1 Yük Ayırıcı Giriş Çıkış", "coords": [1740, 591, 1815, 591, 1815, 659.67, 1740, 659.67], "href": "", "image": ""},
     {"name": "° 2 Giriş Çıkış Ayırıcı Kesici", "coords": [1740, 659.67, 1815, 659.67, 1815, 728.34, 1740, 728.34], "href": "", "image": ""},
     {"name": "° T-1 TRAFO 1250VA", "coords": [1740, 728.34, 1815, 728.34, 1815, 767, 1740, 767], "href": "", "image": ""},
   
   
  
-    {"name": "ADP-1(EY3)", "coords": [1740, 286, 1815, 286, 1815, 334.67, 1740, 334.67]
-
-
-
-
-
-
-
-
-
-
-
-
-
-, "href": "1"},
+    {"name": "ADP-1(EY3)", "coords": [1740, 286, 1815, 286, 1815, 334.67, 1740, 334.67], "href": "1", "image":"yerleske/ey3.jpg"},
     {"name": "°ADP+Jeneratör Trnsf", "coords": [1735, 340, 1815, 340, 1815, 421.5, 1735, 421.5], "href": "", "image": "https://i.hizliresim.com/74p9dkk.jpeg"},
     {"name": "° K1 KOMPANZASYON", "coords": [1735, 421.5, 1815, 421.5, 1815, 503, 1735, 503], "href": "", "image": ""}
 ,
  
-    {"name": "TM2+ADP2(EY4)", "coords": [1113, 165, 1299, 165, 1299, 185.25, 1113, 185.25]
-
-
-
-
-
-
-
-
-
-
-
-, "href": "1"},
+    {"name": "TM2+ADP2(EY4)", "coords": [1113, 165, 1299, 165, 1299, 185.25, 1113, 185.25], "href": "1", "image":"yerleske/ey4.jpg"},
   
   
     {"name": "° ADP2+ JENERATÖR TRANSFER", "coords": [1085, 187, 1116.71, 187, 1116.71, 298, 1085, 298], "href": "https://drive.google.com/drive/folders/1ENDDvy4TniyCErR6AHEax8g8ZdsrnJaYgZLRNGxrwHH-jlh7RzaHgBnsTmioswmd93S6J7yw?usp=drive_link", "image": "https://i.hizliresim.com/74p9dkk.jpeg"},
