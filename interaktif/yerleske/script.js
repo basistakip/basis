@@ -13,7 +13,7 @@ const hotspots = [
   
   
     
-    {"name": "TM1(EY2)", "coords": [1740, 551, 1815, 551, 1815, 619.67, 1740, 619.67], "href": "1", "image":"yerleske/ey2.jpg"},
+      {"name": "TM1(EY2)", "coords": [1740, 551, 1815, 551, 1815, 590, 1740, 590], "href": "1", "image":"yerleske/ey2.jpg"},
   
     {"name": "° 1 Yük Ayırıcı Giriş Çıkış", "coords": [1740, 591, 1815, 591, 1815, 659.67, 1740, 659.67], "href": "", "image": ""},
     {"name": "° 2 Giriş Çıkış Ayırıcı Kesici", "coords": [1740, 659.67, 1815, 659.67, 1815, 728.34, 1740, 728.34], "href": "", "image": ""},
