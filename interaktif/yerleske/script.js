@@ -1,29 +1,35 @@
 const hotspots = [
   
    {"name": "", "coords": [1619, 435], "href": "1"},
-    {"name": "DM (EY1)", "coords": [1518, 416, 1620, 416, 1620, 448.71, 1518, 448.71], "href": "1", "image":"yerleske/ey1.jpg"},
+     {"name": "DM (EY1)", "coords": [1518, 416, 1620, 416, 1620, 448.71, 1518, 448.71], "href": "1", "image":"yerleske/ey1.jpg"},
+    
     {"name": "1-YÜK AYIRICI GİRİŞ ÇIKIŞ", "coords": [1518, 456, 1620, 456, 1620, 488.71, 1518, 488.71], "href": "1", "image": "https://i.hizliresim.com/74p9dkk.jpeg"},
-    {"name": "2-YURTA GİDEN", "coords": [1518, 488.71, 1620, 488.71, 1620, 521.43, 1518, 521.43], "href": "", "image": "https://basistakip.github.io/basis/interaktif/yerleske/ey1.jpg"},
-    {"name": "3-AKIM GERİLİM ÖLÇÜM", "coords": [1518, 521.43, 1620, 521.43, 1620, 554.14, 1518, 554.14], "href": "2", "image": "/yerleske/ey1.jpg"},
+    {"name": "2-YURTA GİDEN", "coords": [1518, 488.71, 1620, 488.71, 1620, 521.43, 1518, 521.43], "href": "", "image": ""},
+    {"name": "3-AKIM GERİLİM ÖLÇÜM", "coords": [1518, 521.43, 1620, 521.43, 1620, 554.14, 1518, 554.14], "href": "2", "image": ""},
     {"name": "4-İÇ İHTİYAÇ", "coords": [1518, 554.14, 1620, 554.14, 1620, 586.86, 1518, 586.86], "href": "", "image": ""},
     {"name": "5-2500kVA(EY4 GiDN(MRKZİ DRSLK)Kesicili Giriş Çıkış", "coords": [1518, 586.86, 1620, 586.86, 1620, 619.57, 1518, 619.57], "href": "", "image": ""},
     {"name": "6-1250KVA REKTÖRLÜK İBFF ÇIKIŞ", "coords": [1518, 619.57, 1620, 619.57, 1620, 652.29, 1518, 652.29], "href": "", "image": ""},
-    {"name": "7-2500KVA ÇIKIŞ YEDEK", "coords": [1518, 652.29, 1620, 652.29, 1620, 680, 1518, 680], "href": "", "image": "ey1.jpg"},
+    {"name": "7-2500KVA ÇIKIŞ YEDEK", "coords": [1518, 652.29, 1620, 652.29, 1620, 680, 1518, 680], "href": "", "image": ""},
   
   
+    
     {"name": "TM1(EY2)", "coords": [1740, 551, 1815, 551, 1815, 619.67, 1740, 619.67], "href": "1", "image":"yerleske/ey2.jpg"},
+  
     {"name": "° 1 Yük Ayırıcı Giriş Çıkış", "coords": [1740, 591, 1815, 591, 1815, 659.67, 1740, 659.67], "href": "", "image": ""},
     {"name": "° 2 Giriş Çıkış Ayırıcı Kesici", "coords": [1740, 659.67, 1815, 659.67, 1815, 728.34, 1740, 728.34], "href": "", "image": ""},
     {"name": "° T-1 TRAFO 1250VA", "coords": [1740, 728.34, 1815, 728.34, 1815, 767, 1740, 767], "href": "", "image": ""},
   
   
- 
-    {"name": "ADP-1(EY3)", "coords": [1740, 286, 1815, 286, 1815, 334.67, 1740, 334.67], "href": "1", "image":"yerleske/ey3.jpg"},
+  
+  {"name": "ADP-1(EY3)", "coords": [1740, 286, 1815, 286, 1815, 334.67, 1740, 334.67], "href": "1", "image":"yerleske/ey3.jpg"},
+
+  
+  
     {"name": "°ADP+Jeneratör Trnsf", "coords": [1735, 340, 1815, 340, 1815, 421.5, 1735, 421.5], "href": "", "image": "https://i.hizliresim.com/74p9dkk.jpeg"},
     {"name": "° K1 KOMPANZASYON", "coords": [1735, 421.5, 1815, 421.5, 1815, 503, 1735, 503], "href": "", "image": ""}
 ,
  
-    {"name": "TM2+ADP2(EY4)", "coords": [1113, 165, 1299, 165, 1299, 185.25, 1113, 185.25], "href": "1", "image":"yerleske/ey4.jpg"},
+    {"name": "TM2+ADP2(EY4)", "coords": [1113, 165, 1299, 165,  1299, 186, 1113, 186], "href": "1", "image":"yerleske/ey4.jpg"},
   
   
     {"name": "° ADP2+ JENERATÖR TRANSFER", "coords": [1085, 187, 1116.71, 187, 1116.71, 298, 1085, 298], "href": "https://drive.google.com/drive/folders/1ENDDvy4TniyCErR6AHEax8g8ZdsrnJaYgZLRNGxrwHH-jlh7RzaHgBnsTmioswmd93S6J7yw?usp=drive_link", "image": "https://i.hizliresim.com/74p9dkk.jpeg"},
@@ -38,8 +44,7 @@ const hotspots = [
     {
         "name": "ADP-3(EY5)",
         "coords": [1566, 216, 1659, 216, 1659, 236.25, 1566, 236.25],
-        "href": "1",
-        "image": "https://i.hizliresim.com/74p9dkk.jpeg"
+        "href": "1", "image":"yerleske/ey5.jpg"
     },
     {
         "name": "K-3 KOMPANZASYON",
@@ -59,7 +64,8 @@ const hotspots = [
 
 
 
-, "href": "1", "image": "https://i.hizliresim.com/74p9dkk.jpeg"},
+, "href": "1", "image":"yerleske/ey6.jpg"},
+  
     {"name": "1)Yük Ayırıcılı Giriş Çıkış", "coords": [1566, 35, 1659, 35, 1659, 75.25, 1566, 75.25], "href": "", "image": ""},
     {"name": "2)Kesicili Giriş Çıkış", "coords": [1566, 75.25, 1659, 75.25, 1659, 115.5, 1566, 115.5], "href": "", "image": ""},
     {"name": "3)Kesicili Trafo Koruma", "coords": [1566, 115.5, 1659, 115.5, 1659, 155.75, 1566, 155.75], "href": "", "image": ""},
@@ -67,7 +73,7 @@ const hotspots = [
   
   
     {"name": "TM4(EY7)", "coords": [439, 355, 521, 355, 521, 375, 439, 375]
-, "href": "1"},
+, "href": "1", "image":"yerleske/ey7.jpg"},
     
     {"name": "T4-TRAFO 800kVA", "coords": [439, 385, 521, 385, 521, 422, 439, 422], "href": "", "image": ""},
     {"name": "3-Kesici Trafo koruma 800kVA", "coords": [439, 422, 521, 422, 521, 459, 439, 459], "href": "", "image": ""},
@@ -76,7 +82,7 @@ const hotspots = [
   
   
        {"name": "TM-ADP4(EY8)", "coords": [439, 160, 521, 160, 521, 187, 439, 187]
-, "href": "1"},
+, "href": "1", "image":"yerleske/ey8.jpg"},
     {"name": "ADP4+JENERATÖR TRANS", "coords": [440, 186, 521, 186, 521, 262.5, 440, 262.5], "href": "", "image": ""},
     {"name": "K4 KOMPANZASYON", "coords": [440, 262.5, 521, 262.5, 521, 339, 440, 339], "href": "", "image": ""},
     
@@ -84,7 +90,7 @@ const hotspots = [
 
    {"name": "TM5-ADP5(EY9)", "coords": [583.8, 505, 682.2, 505, 682.2, 528.1, 583.8, 528.1]
 
-, "href": "1"},
+, "href": "1", "image":"yerleske/ey9.jpg"},
     {"name": "° 1)Yük Ayırıcılı Giriş Hücresi", "coords": [579, 532, 618.67, 532, 618.67, 601, 579, 601], "href": "", "image": "https://i.hizliresim.com/74p9dkk.jpeg"},
     {"name": "° 2)Trafo Koruma 1250kVA", "coords": [618.67, 532, 658.34, 532, 658.34, 601, 618.67, 601], "href": "", "image": "https://i.hizliresim.com/74p9dkk.jpeg"},
     {"name": "° T5-TRAFO 1250kVA", "coords": [658.34, 532, 698, 532, 698, 601, 658.34, 601], "href": "", "image": "https://i.hizliresim.com/74p9dkk.jpeg"}
@@ -222,7 +228,7 @@ const pathCoords1 = [[1600, 1000],
 ];
 // renk bordo ey2 ey3 giriş
 const pathCoords2 = [
-    [1540, 638], [1770, 607], [1770, 760], [1850, 760] ,[1850, 400] ,[1790, 400] ,[1790, 480],[1790, 310], [1700, 450]
+    [1540, 638], [1770, 607], [1770, 760], [1850, 760] ,[1850, 400] ,[1790, 400] ,[1790, 480],[1790, 400], [1700, 450]
 ];
 // renk sarı ey4 giriş
 const pathCoords3 = [
@@ -241,7 +247,7 @@ const pathCoords6 = [[490, 480],[550, 480],[550, 580],[690, 580],[600, 680]];
 // renk green ey 5 den çıkış
 const pathCoords7 = [[1630, 315],[1520, 190]];
 // renk merkezi dersliğe giriş
-const pathCoords8 = [[1290, 200],[1290, 150],[1100, 150],[1100, 310],[1160, 350]];
+const pathCoords8 = [[1290, 200],[1290, 150],[1100, 150],[1100, 220],[1130, 220],[1100, 220],[1100, 310],[1160, 350]];
 
 
 window.addEventListener('load', () => {
