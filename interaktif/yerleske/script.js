@@ -3,7 +3,7 @@ const hotspots = [
    {"name": "", "coords": [1619, 435], "href": "1"},
      {"name": "DM (EY1)", "coords": [1518, 416, 1620, 416, 1620, 448.71, 1518, 448.71], "href": "1", "image":"yerleske/ey1.jpg"},
     
-    {"name": "1-YÜK AYIRICI GİRİŞ ÇIKIŞ", "coords": [1518, 456, 1620, 456, 1620, 488.71, 1518, 488.71], "href": "1", "image": "https://i.hizliresim.com/74p9dkk.jpeg"},
+    {"name": "1-YÜK AYIRICI GİRİŞ ÇIKIŞ", "coords": [1518, 456, 1620, 456, 1620, 488.71, 1518, 488.71], "href": "1", "image": ""},
     {"name": "2-YURTA GİDEN", "coords": [1518, 488.71, 1620, 488.71, 1620, 521.43, 1518, 521.43], "href": "", "image": ""},
     {"name": "3-AKIM GERİLİM ÖLÇÜM", "coords": [1518, 521.43, 1620, 521.43, 1620, 554.14, 1518, 554.14], "href": "2", "image": ""},
     {"name": "4-İÇ İHTİYAÇ", "coords": [1518, 554.14, 1620, 554.14, 1620, 586.86, 1518, 586.86], "href": "", "image": ""},
@@ -25,20 +25,20 @@ const hotspots = [
 
   
   
-    {"name": "°ADP+Jeneratör Trnsf", "coords": [1735, 340, 1815, 340, 1815, 421.5, 1735, 421.5], "href": "", "image": "https://i.hizliresim.com/74p9dkk.jpeg"},
+    {"name": "°ADP+Jeneratör Trnsf", "coords": [1735, 340, 1815, 340, 1815, 421.5, 1735, 421.5], "href": "", "image": ""},
     {"name": "° K1 KOMPANZASYON", "coords": [1735, 421.5, 1815, 421.5, 1815, 503, 1735, 503], "href": "", "image": ""}
 ,
  
     {"name": "TM2+ADP2(EY4)", "coords": [1113, 165, 1299, 165,  1299, 186, 1113, 186], "href": "1", "image":"yerleske/ey4.jpg"},
   
   
-    {"name": "° ADP2+ JENERATÖR TRANSFER", "coords": [1085, 187, 1116.71, 187, 1116.71, 298, 1085, 298], "href": "https://drive.google.com/drive/folders/1ENDDvy4TniyCErR6AHEax8g8ZdsrnJaYgZLRNGxrwHH-jlh7RzaHgBnsTmioswmd93S6J7yw?usp=drive_link", "image": "https://i.hizliresim.com/74p9dkk.jpeg"},
-    {"name": "° K-2 KOMPANZASYON", "coords": [1116.71, 187, 1148.42, 187, 1148.42, 298, 1116.71, 298], "href": "https://drive.google.com/drive/folders/1ENDDvy4TniyCErR6AHEax8g8ZdsrnJaYgZLRNGxrwHH-jlh7RzaHgBnsTmioswmd93S6J7yw?usp=drive_link", "image": "https://i.hizliresim.com/74p9dkk.jpeg"},
-    {"name": "° 1-Yük Ayırıcılı Giriş/Çıkış 2500kVA", "coords": [1148.42, 187, 1180.13, 187, 1180.13, 298, 1148.42, 298], "href": "https://drive.google.com/drive/folders/1ENDDvy4TniyCErR6AHEax8g8ZdsrnJaYgZLRNGxrwHH-jlh7RzaHgBnsTmioswmd93S6J7yw?usp=drive_link", "image": "https://i.hizliresim.com/74p9dkk.jpeg"},
-    {"name": "° 2-Kesicili Giriş Çıkış ÖYM", "coords": [1180.13, 187, 1211.84, 187, 1211.84, 298, 1180.13, 298], "href": "https://drive.google.com/drive/folders/1ENDDvy4TniyCErR6AHEax8g8ZdsrnJaYgZLRNGxrwHH-jlh7RzaHgBnsTmioswmd93S6J7yw?usp=drive_link", "image": "https://i.hizliresim.com/74p9dkk.jpeg"},
-    {"name": "° 3-Kesicili Trafo Koruma Spor Akademi Giriş/Çıkış", "coords": [1211.84, 187, 1243.55, 187, 1243.55, 298, 1211.84, 298], "href": "https://drive.google.com/drive/folders/1ENDDvy4TniyCErR6AHEax8g8ZdsrnJaYgZLRNGxrwHH-jlh7RzaHgBnsTmioswmd93S6J7yw?usp=drive_link", "image": "https://i.hizliresim.com/74p9dkk.jpeg"},
-    {"name": "° 4-Çıkış_2500kva", "coords": [1243.55, 187, 1275.26, 187, 1275.26, 298, 1243.55, 298], "href": "https://drive.google.com/drive/folders/1ENDDvy4TniyCErR6AHEax8g8ZdsrnJaYgZLRNGxrwHH-jlh7RzaHgBnsTmioswmd93S6J7yw?usp=drive_link", "image": "https://i.hizliresim.com/74p9dkk.jpeg"},
-    {"name": "° 5)T-2 TRAFO 2500kVA", "coords": [1275.26, 187, 1307, 187, 1307, 298, 1275.26, 298], "href": "https://drive.google.com/drive/folders/1ENDDvy4TniyCErR6AHEax8g8ZdsrnJaYgZLRNGxrwHH-jlh7RzaHgBnsTmioswmd93S6J7yw?usp=drive_link", "image": "https://i.hizliresim.com/74p9dkk.jpeg"},
+    {"name": "° ADP2+ JENERATÖR TRANSFER", "coords": [1085, 187, 1116.71, 187, 1116.71, 298, 1085, 298], "href": "https://drive.google.com/drive/folders/1ENDDvy4TniyCErR6AHEax8g8ZdsrnJaYgZLRNGxrwHH-jlh7RzaHgBnsTmioswmd93S6J7yw?usp=drive_link", "image": ""},
+    {"name": "° K-2 KOMPANZASYON", "coords": [1116.71, 187, 1148.42, 187, 1148.42, 298, 1116.71, 298], "href": "https://drive.google.com/drive/folders/1ENDDvy4TniyCErR6AHEax8g8ZdsrnJaYgZLRNGxrwHH-jlh7RzaHgBnsTmioswmd93S6J7yw?usp=drive_link", "image": ""},
+    {"name": "° 1-Yük Ayırıcılı Giriş/Çıkış 2500kVA", "coords": [1148.42, 187, 1180.13, 187, 1180.13, 298, 1148.42, 298], "href": "https://drive.google.com/drive/folders/1ENDDvy4TniyCErR6AHEax8g8ZdsrnJaYgZLRNGxrwHH-jlh7RzaHgBnsTmioswmd93S6J7yw?usp=drive_link", "image": ""},
+    {"name": "° 2-Kesicili Giriş Çıkış ÖYM", "coords": [1180.13, 187, 1211.84, 187, 1211.84, 298, 1180.13, 298], "href": "https://drive.google.com/drive/folders/1ENDDvy4TniyCErR6AHEax8g8ZdsrnJaYgZLRNGxrwHH-jlh7RzaHgBnsTmioswmd93S6J7yw?usp=drive_link", "image": ""},
+    {"name": "° 3-Kesicili Trafo Koruma Spor Akademi Giriş/Çıkış", "coords": [1211.84, 187, 1243.55, 187, 1243.55, 298, 1211.84, 298], "href": "https://drive.google.com/drive/folders/1ENDDvy4TniyCErR6AHEax8g8ZdsrnJaYgZLRNGxrwHH-jlh7RzaHgBnsTmioswmd93S6J7yw?usp=drive_link", "image": ""},
+    {"name": "° 4-Çıkış_2500kva", "coords": [1243.55, 187, 1275.26, 187, 1275.26, 298, 1243.55, 298], "href": "https://drive.google.com/drive/folders/1ENDDvy4TniyCErR6AHEax8g8ZdsrnJaYgZLRNGxrwHH-jlh7RzaHgBnsTmioswmd93S6J7yw?usp=drive_link", "image": ""},
+    {"name": "° 5)T-2 TRAFO 2500kVA", "coords": [1275.26, 187, 1307, 187, 1307, 298, 1275.26, 298], "href": "https://drive.google.com/drive/folders/1ENDDvy4TniyCErR6AHEax8g8ZdsrnJaYgZLRNGxrwHH-jlh7RzaHgBnsTmioswmd93S6J7yw?usp=drive_link", "image": ""},
     
   
     {
