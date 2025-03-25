@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Drive'dan Rastgele Resim
+  
+  
+  /*
+
+
+Doğrudan görüntüleme bağlantısını oluşturun:
+
+Paylaşım bağlantısı şuna benzer:
+
+Copy
+https://drive.google.com/file/d/1XyZ.../view?usp=sharing
+Bu bağlantıyı, doğrudan resim URL'sine dönüştürün:
+
+Copy
+https://drive.google.com/uc?export=view&id=1V1CzXlu5CeBuWkrFcCIoId0LF2jr52ld
+DOSYA_ID, Drive URL'sindeki d/ ile /view arasındaki kısımdır (örneğin: 1XyZ...).
+
+
+*/
+  </title>
+  <script>
+    const driveImages = [
+      { id: "1V1CzXlu5CeBuWkrFcCIoId0LF2jr52ld", alt: "Açıklama 1" },
+      { id: "D1V1CzXlu5CeBuWkrFcCIoId0LF2jr52ld", alt: "Açıklama 2" },
+      { id: "1V1CzXlu5CeBuWkrFcCIoId0LF2jr52ld", alt: "Açıklama 3" }
+    ];
+
+    function getRandomImage() {
+      const randomImg = driveImages[Math.floor(Math.random() * driveImages.length)];
+      document.getElementById("drive-image").src = `https://drive.google.com/uc?export=view&id=${randomImg.id}`;
+      document.getElementById("image-desc").textContent = randomImg.alt;
+    }
+
+    // Sayfa yüklendiğinde ve her 5 saniyede bir güncelle
+    window.onload = getRandomImage;
+    setInterval(getRandomImage, 5000);
+  </script>
+</head>
+<body>
+  <div style="border: 1px solid #ddd; padding: 10px; max-width: 300px;">
+    <h3>Drive'dan Rastgele Resim</h3>
+    <img src=""
+    <img id="drive-image" width="300" style="border-radius: 5px;" />
+    <p id="image-desc"></p>
+  </div>
+  
+  
+  
+</body>
+</html>
