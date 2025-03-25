@@ -1,54 +1,112 @@
 <!DOCTYPE html>
-<html>
+<html lang="tr">
 <head>
-  <title>Drive'dan Rastgele Resim
-  
-  
-  /*
-
-
-Doğrudan görüntüleme bağlantısını oluşturun:
-
-Paylaşım bağlantısı şuna benzer:
-
-Copy
-https://drive.google.com/file/d/1XyZ.../view?usp=sharing
-Bu bağlantıyı, doğrudan resim URL'sine dönüştürün:
-
-Copy
-https://drive.google.com/uc?export=view&id=1V1CzXlu5CeBuWkrFcCIoId0LF2jr52ld
-DOSYA_ID, Drive URL'sindeki d/ ile /view arasındaki kısımdır (örneğin: 1XyZ...).
-
-
-*/
-  </title>
-  <script>
-    const driveImages = [
-      { id: "1mjVanqhtDrgX1KIfGX7r1rInVMOMTYhH", alt: "Açıklama 1" },
-      { id: "1mjVanqhtDrgX1KIfGX7r1rInVMOMTYhH", alt: "Açıklama 2" },
-      { id: "1mjVanqhtDrgX1KIfGX7r1rInVMOMTYhH", alt: "Açıklama 3" }
-    ];
-
-    function getRandomImage() {
-      const randomImg = driveImages[Math.floor(Math.random() * driveImages.length)];
-      document.getElementById("drive-image").src = `https://drive.google.com/uc?export=view&id=${randomImg.id}`;
-      document.getElementById("image-desc").textContent = randomImg.alt;
-    }
-
-    // Sayfa yüklendiğinde ve her 5 saniyede bir güncelle
-    window.onload = getRandomImage;
-    setInterval(getRandomImage, 5000);
-  </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Drive'dan Rastgele Resimler</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            padding: 20px;
+            width: 90%;
+            max-width: 500px;
+            text-align: center;
+        }
+        #drive-image {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            margin: 15px 0;
+            border: 1px solid #eee;
+        }
+        button {
+            background-color: #4285F4;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #3367D6;
+        }
+        #image-desc {
+            margin: 15px 0;
+            color: #555;
+            font-size: 18px;
+        }
+    </style>
 </head>
 <body>
-  <div style="border: 1px solid #ddd; padding: 10px; max-width: 300px;">
-    <h3>Drive'dan Rastgele Resim</h3>
-    <img src=""
-    <img id="drive-image" width="300" style="border-radius: 5px;" />
-    <p id="image-desc"></p>
-  </div>
-  
-  
-  
+    <div class="container">
+        <h1>Drive'dan Rastgele Resim</h1>
+        <div id="image-container">
+            <img id="drive-image" alt="Resim yükleniyor...">
+            <p id="image-desc"></p>
+        </div>
+        <button onclick="getRandomImage()">Yeni Resim Getir</button>
+        <p style="margin-top: 20px; color: #777; font-size: 14px;">
+            Resimler Google Drive'dan yüklenmektedir
+        </p>
+    </div>
+
+    <script>
+        // KENDİ RESİMLERİNİZİ EKLEYİN (id ve açıklama)
+        const driveImages = [
+            { 
+                id: "1mjVanqhtDrgX1KIfGX7r1rInVMOMTYhH", 
+                alt: "Örnek Resim 1" 
+            },
+            { 
+                id: "1V1CzXlu5CeBuWkrFcCIoId0LF2jr52ld", 
+                alt: "Örnek Resim 2" 
+            },
+            { 
+                id: "1mZKY7hxXZ8XzQZQ7XQ9XqXQXQXQXQXQX", 
+                alt: "Örnek Resim 3" 
+            }
+        ];
+
+        function getRandomImage() {
+            if(driveImages.length === 0) {
+                document.getElementById("image-desc").textContent = "Resim bulunamadı";
+                return;
+            }
+
+            const randomIndex = Math.floor(Math.random() * driveImages.length);
+            const selectedImage = driveImages[randomIndex];
+            const imageUrl = `https://drive.google.com/uc?export=view&id=${selectedImage.id}`;
+            
+            const imgElement = document.getElementById("drive-image");
+            imgElement.src = imageUrl;
+            imgElement.alt = selectedImage.alt;
+            document.getElementById("image-desc").textContent = selectedImage.alt;
+            
+            // Hata durumunda
+            imgElement.onerror = function() {
+                this.src = "https://via.placeholder.com/500x300?text=Resim+Yüklenemedi";
+                document.getElementById("image-desc").textContent = "Resim yüklenirken hata oluştu";
+            };
+        }
+
+        // Sayfa yüklendiğinde ve her 10 saniyede bir rastgele resim göster
+        window.onload = function() {
+            getRandomImage();
+            setInterval(getRandomImage, 10000); // 10 saniyede bir otomatik değişsin
+        };
+    </script>
 </body>
 </html>
