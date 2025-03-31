@@ -1,4 +1,60 @@
 const hotspots = [
+
+   {
+        "name": " EY-LER",
+        "coords": [97, 57, 15],
+        "href": "https://drive.google.com/drive/folders/1L5odcO5nLoAjRGmiUaYsgdKnxJKM1w9NmXtfho5kcJT9ZDjpsce1Lu3ZJsbajZ6vzNnvxeqT?usp=drive_link",
+        "image": ""
+      },
+         {
+        "name": " JENERATÖRLER",
+        "coords": [97, 157, 15],
+        "href": "https://drive.google.com/drive/folders/1DEWbIhid2o-aX0FVe5f9Ei7viTUQRg7Z6bJwm06s0rrB_zlNzLhMZEXelP_O0F--vMdZjKBh?usp=drive_link",
+        "image": ""
+      },
+          {
+        "name": " BİNALAR",
+        "coords": [97, 257, 15],
+        "href": "https://drive.google.com/drive/folders/1DEWbIhid2o-aX0FVe5f9Ei7viTUQRg7Z6bJwm06s0rrB_zlNzLhMZEXelP_O0F--vMdZjKBh?usp=drive_link",
+        "image": ""
+      },
+        {
+        "name": " UPSLER",
+        "coords": [97, 357, 15],
+        "href": "https://drive.google.com/drive/folders/1DEWbIhid2o-aX0FVe5f9Ei7viTUQRg7Z6bJwm06s0rrB_zlNzLhMZEXelP_O0F--vMdZjKBh?usp=drive_link",
+        "image": ""
+      },
+        {
+        "name": " ASANSÖRLER",
+        "coords": [97, 457, 15],
+        "href": "https://drive.google.com/drive/folders/1DEWbIhid2o-aX0FVe5f9Ei7viTUQRg7Z6bJwm06s0rrB_zlNzLhMZEXelP_O0F--vMdZjKBh?usp=drive_link",
+        "image": ""
+      },
+        {
+        "name": " SAYAÇLAR",
+        "coords": [97, 557, 15],
+        "href": "https://drive.google.com/drive/folders/1DEWbIhid2o-aX0FVe5f9Ei7viTUQRg7Z6bJwm06s0rrB_zlNzLhMZEXelP_O0F--vMdZjKBh?usp=drive_link",
+        "image": ""
+      },
+         {
+        "name": " YANGIN",
+        "coords": [97, 657, 15],
+        "href": "https://drive.google.com/drive/folders/1DEWbIhid2o-aX0FVe5f9Ei7viTUQRg7Z6bJwm06s0rrB_zlNzLhMZEXelP_O0F--vMdZjKBh?usp=drive_link",
+        "image": ""
+      },
+       {
+        "name": " KAPILAR",
+        "coords": [97, 757, 15],
+        "href": "https://drive.google.com/drive/folders/1DEWbIhid2o-aX0FVe5f9Ei7viTUQRg7Z6bJwm06s0rrB_zlNzLhMZEXelP_O0F--vMdZjKBh?usp=drive_link",
+        "image": ""
+      },
+        {
+        "name": " YEDEK",
+        "coords": [97, 857, 15],
+        "href": "https://drive.google.com/drive/folders/1DEWbIhid2o-aX0FVe5f9Ei7viTUQRg7Z6bJwm06s0rrB_zlNzLhMZEXelP_O0F--vMdZjKBh?usp=drive_link",
+        "image": ""
+      },
+
   
    {"name": "", "coords": [1619, 435], "href": "1"},
      {"name": "DM (EY1)", "coords": [1518, 416, 1620, 416, 1620, 448.71, 1518, 448.71], "href": "https://drive.google.com/drive/folders/1tM2xKtbWNAeHKcsw6OeYet5QTL7zmuTJanrDeq1nFBcNz8opIY2zdoSy6n0JsRUQNuoC9pfw?usp=drive_link", "image":"ey1.jpg"},
