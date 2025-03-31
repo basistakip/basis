@@ -1,11 +1,5 @@
 const hotspots = [
-
-
-  
-   {"name": "", "coords": [1619, 435], "href": "1"},
-
-
-    {
+  {
     "name": "EY-LER",
     "coords": [60, 60, 130, 60, 130, 90, 60, 90],
     "href": "https://basistakip.github.io/basis/interaktif/yerleske/eyler.html",
@@ -59,8 +53,8 @@ const hotspots = [
         "href": "https://basistakip.github.io/basis/interaktif/yedek/yedek.html",
     "image": ""
   },
-    
-     {"name": "DM (EY1)", "coords": [1518, 416, 1620, 416, 1620, 448.71, 1518, 448.71], "href": "https://drive.google.com/drive/folders/1tM2xKtbWNAeHKcsw6OeYet5QTL7zmuTJanrDeq1nFBcNz8opIY2zdoSy6n0JsRUQNuoC9pfw?usp=drive_link", "image":"ey1.jpg"},
+   {"name": "", "coords": [1619, 435], "href": "1"},
+     {"name": "DM (EY1)", "coords": [1518, 416, 1620, 416, 1620, 448.71, 1518, 448.71], "href": "https://drive.google.com/drive/folders/1tM2xKtbWNAeHKcsw6OeYet5QTL7zmuTJanrDeq1nFBcNz8opIY2zdoSy6n0JsRUQNuoC9pfw?usp=drive_link", "image":"yerleske/ey1.jpg"},
     
     {"name": "1-YÜK AYIRICI GİRİŞ ÇIKIŞ", "coords": [1518, 456, 1620, 456, 1620, 488.71, 1518, 488.71], "href": "1", "image": ""},
     {"name": "2-YURTA GİDEN", "coords": [1518, 488.71, 1620, 488.71, 1620, 521.43, 1518, 521.43], "href": "", "image": ""},
@@ -72,7 +66,7 @@ const hotspots = [
   
   
     
-      {"name": "TM1(EY2)", "coords": [1740, 551, 1815, 551, 1815, 590, 1740, 590], "href": "https://drive.google.com/drive/folders/1DPw9taotn4yVBlGIhgIlAjR5Pyzu8VKr3WJwpnYRnUOYBk-Y1hcexUTRD_tocyQaPYA72nBz?usp=drive_link", "image":"ey2.jpg"},
+      {"name": "TM1(EY2)", "coords": [1740, 551, 1815, 551, 1815, 590, 1740, 590], "href": "https://drive.google.com/drive/folders/1DPw9taotn4yVBlGIhgIlAjR5Pyzu8VKr3WJwpnYRnUOYBk-Y1hcexUTRD_tocyQaPYA72nBz?usp=drive_link", "image":"yerleske/ey2.jpg"},
   
     {"name": "° 1 Yük Ayırıcı Giriş Çıkış", "coords": [1740, 591, 1815, 591, 1815, 659.67, 1740, 659.67], "href": "", "image": ""},
     {"name": "° 2 Giriş Çıkış Ayırıcı Kesici", "coords": [1740, 659.67, 1815, 659.67, 1815, 728.34, 1740, 728.34], "href": "", "image": ""},
@@ -80,7 +74,7 @@ const hotspots = [
   
   
   
-  {"name": "ADP-1(EY3)", "coords": [1740, 286, 1815, 286, 1815, 334.67, 1740, 334.67], "href": "https://drive.google.com/drive/folders/1kNW8LO9QpNn2KMkinKh-pCSQX_ZgCxNkGOFIZVRbt3vz5lrha-fRctyGQPv5XENFdDAjcLVB?usp=drive_link", "image":"ey3.jpg"},
+  {"name": "ADP-1(EY3)", "coords": [1740, 286, 1815, 286, 1815, 334.67, 1740, 334.67], "href": "https://drive.google.com/drive/folders/1kNW8LO9QpNn2KMkinKh-pCSQX_ZgCxNkGOFIZVRbt3vz5lrha-fRctyGQPv5XENFdDAjcLVB?usp=drive_link", "image":"yerleske/ey3.jpg"},
 
   
   
@@ -88,7 +82,7 @@ const hotspots = [
     {"name": "° K1 KOMPANZASYON", "coords": [1735, 421.5, 1815, 421.5, 1815, 503, 1735, 503], "href": "", "image": ""}
 ,
  
-    {"name": "TM2+ADP2(EY4)", "coords": [1113, 165, 1299, 165,  1299, 186, 1113, 186], "href": "https://drive.google.com/drive/folders/1ENDDvy4TniyCErR6AHEax8g8ZdsrnJaYgZLRNGxrwHH-jlh7RzaHgBnsTmioswmd93S6J7yw?usp=drive_link", "image":"ey4.jpg"},
+    {"name": "TM2+ADP2(EY4)", "coords": [1113, 165, 1299, 165,  1299, 186, 1113, 186], "href": "https://drive.google.com/drive/folders/1ENDDvy4TniyCErR6AHEax8g8ZdsrnJaYgZLRNGxrwHH-jlh7RzaHgBnsTmioswmd93S6J7yw?usp=drive_link", "image":"yerleske/ey4.jpg"},
   
   
     {"name": "° ADP2+ JENERATÖR TRANSFER", "coords": [1085, 187, 1116.71, 187, 1116.71, 298, 1085, 298], "href": "https://drive.google.com/drive/folders/1ENDDvy4TniyCErR6AHEax8g8ZdsrnJaYgZLRNGxrwHH-jlh7RzaHgBnsTmioswmd93S6J7yw?usp=drive_link", "image": ""},
@@ -103,7 +97,7 @@ const hotspots = [
     {
         "name": "ADP-3(EY5)",
         "coords": [1566, 216, 1659, 216, 1659, 236.25, 1566, 236.25],
-        "href": "https://drive.google.com/drive/folders/1pRLCeIARYZ5G32oAiHHxPw4-6DMelN3Ycr7UCoKP7IE_z2pQDr2aeaVz2rs8jcefpfDOVaOv?usp=drive_link", "image":"ey5.jpg"
+        "href": "https://drive.google.com/drive/folders/1pRLCeIARYZ5G32oAiHHxPw4-6DMelN3Ycr7UCoKP7IE_z2pQDr2aeaVz2rs8jcefpfDOVaOv?usp=drive_link", "image":"yerleske/ey5.jpg"
     },
     {
         "name": "K-3 KOMPANZASYON",
@@ -123,7 +117,7 @@ const hotspots = [
 
 
 
-, "href": "https://drive.google.com/drive/folders/1Xgdj1qYqE7YMBAWnvCGH6rRtrMsrOYHutZtssKUcGFdQnT_jGQH2tywPU1OWVgpdtkgFhkqT?usp=drive_link", "image":"ey6.jpg"},
+, "href": "https://drive.google.com/drive/folders/1Xgdj1qYqE7YMBAWnvCGH6rRtrMsrOYHutZtssKUcGFdQnT_jGQH2tywPU1OWVgpdtkgFhkqT?usp=drive_link", "image":"yerleske/ey6.jpg"},
   
     {"name": "1)Yük Ayırıcılı Giriş Çıkış", "coords": [1566, 35, 1659, 35, 1659, 75.25, 1566, 75.25], "href": "", "image": ""},
     {"name": "2)Kesicili Giriş Çıkış", "coords": [1566, 75.25, 1659, 75.25, 1659, 115.5, 1566, 115.5], "href": "", "image": ""},
@@ -132,7 +126,7 @@ const hotspots = [
   
   
     {"name": "TM4(EY7)", "coords": [439, 355, 521, 355, 521, 375, 439, 375]
-, "href": "https://drive.google.com/drive/folders/16Xdp5ZO4Yr-WbasIbNz1hJRPg_GQtr-RMJVZpUuepDbhm3d_Gw4pEyookDggc_a4q9Mbtv5o?usp=drive_link", "image":"ey7.jpg"},
+, "href": "https://drive.google.com/drive/folders/16Xdp5ZO4Yr-WbasIbNz1hJRPg_GQtr-RMJVZpUuepDbhm3d_Gw4pEyookDggc_a4q9Mbtv5o?usp=drive_link", "image":"yerleske/ey7.jpg"},
     
     {"name": "T4-TRAFO 800kVA", "coords": [439, 385, 521, 385, 521, 422, 439, 422], "href": "", "image": ""},
     {"name": "3-Kesici Trafo koruma 800kVA", "coords": [439, 422, 521, 422, 521, 459, 439, 459], "href": "", "image": ""},
@@ -141,7 +135,7 @@ const hotspots = [
   
   
        {"name": "TM-ADP4(EY8)", "coords": [439, 160, 521, 160, 521, 187, 439, 187]
-, "href": "https://drive.google.com/drive/folders/17O5or5Wnd5Fk7OjQTlDDQ0GZiwgl0U4RgEE8jeBzz1HhpSEw7NlJLhcuSmq_9k6vx_umtR2u?usp=drive_link", "image":"ey8.jpg"},
+, "href": "https://drive.google.com/drive/folders/17O5or5Wnd5Fk7OjQTlDDQ0GZiwgl0U4RgEE8jeBzz1HhpSEw7NlJLhcuSmq_9k6vx_umtR2u?usp=drive_link", "image":"yerleske/ey8.jpg"},
     {"name": "ADP4+JENERATÖR TRANS", "coords": [440, 186, 521, 186, 521, 262.5, 440, 262.5], "href": "", "image": ""},
     {"name": "K4 KOMPANZASYON", "coords": [440, 262.5, 521, 262.5, 521, 339, 440, 339], "href": "", "image": ""},
     
@@ -149,10 +143,11 @@ const hotspots = [
 
    {"name": "TM5-ADP5(EY9)", "coords": [583.8, 505, 682.2, 505, 682.2, 528.1, 583.8, 528.1]
 
-, "href": "https://drive.google.com/drive/folders/18AK77dJK-2J81nhikS9L7ZWsYIdZn88TPZN-vrCrq7pGVorNpcf2HWk7KCz018KUw1-MZtaG?usp=drive_link", "image":"ey9.jpg"},
+, "href": "https://drive.google.com/drive/folders/18AK77dJK-2J81nhikS9L7ZWsYIdZn88TPZN-vrCrq7pGVorNpcf2HWk7KCz018KUw1-MZtaG?usp=drive_link", "image":"yerleske/ey9.jpg"},
     {"name": "° 1)Yük Ayırıcılı Giriş Hücresi", "coords": [579, 532, 618.67, 532, 618.67, 601, 579, 601], "href": "", "image": "https://i.hizliresim.com/74p9dkk.jpeg"},
     {"name": "° 2)Trafo Koruma 1250kVA", "coords": [618.67, 532, 658.34, 532, 658.34, 601, 618.67, 601], "href": "", "image": "https://i.hizliresim.com/74p9dkk.jpeg"},
-    {"name": "° T5-TRAFO 1250kVA", "coords": [658.34, 532, 698, 532, 698, 601, 658.34, 601], "href": "", "image": "https://i.hizliresim.com/74p9dkk.jpeg"}
+    {"name": "° T5-TRAFO 1250kVA", "coords": [658.34, 532, 698, 532, 698, 601, 658.34, 601], "href": "", "image": "https://i.hizliresim.com/74p9dkk.jpeg"},
+  
 ];
 
 function createHotspots() {
