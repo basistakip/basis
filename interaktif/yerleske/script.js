@@ -1,5 +1,10 @@
 const hotspots = [
 
+
+  
+   {"name": "", "coords": [1619, 435], "href": "1"},
+
+
     {
     "name": "EY-LER",
     "coords": [60, 60, 130, 60, 130, 90, 60, 90],
@@ -54,9 +59,7 @@ const hotspots = [
         "href": "https://basistakip.github.io/basis/interaktif/yedek/yedek.html",
     "image": ""
   },
-
-  
-   {"name": "", "coords": [1619, 435], "href": "1"},
+    
      {"name": "DM (EY1)", "coords": [1518, 416, 1620, 416, 1620, 448.71, 1518, 448.71], "href": "https://drive.google.com/drive/folders/1tM2xKtbWNAeHKcsw6OeYet5QTL7zmuTJanrDeq1nFBcNz8opIY2zdoSy6n0JsRUQNuoC9pfw?usp=drive_link", "image":"ey1.jpg"},
     
     {"name": "1-YÜK AYIRICI GİRİŞ ÇIKIŞ", "coords": [1518, 456, 1620, 456, 1620, 488.71, 1518, 488.71], "href": "1", "image": ""},
