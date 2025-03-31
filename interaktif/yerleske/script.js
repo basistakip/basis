@@ -1,59 +1,59 @@
 const hotspots = [
 
-   {
-        "name": " EY-LER",
-        "coords": [97, 57, 15],
-        "href": "https://drive.google.com/drive/folders/1L5odcO5nLoAjRGmiUaYsgdKnxJKM1w9NmXtfho5kcJT9ZDjpsce1Lu3ZJsbajZ6vzNnvxeqT?usp=drive_link",
-        "image": ""
-      },
-         {
-        "name": " JENERATÖRLER",
-        "coords": [97, 157, 15],
-        "href": "https://drive.google.com/drive/folders/1DEWbIhid2o-aX0FVe5f9Ei7viTUQRg7Z6bJwm06s0rrB_zlNzLhMZEXelP_O0F--vMdZjKBh?usp=drive_link",
-        "image": ""
-      },
-          {
-        "name": " BİNALAR",
-        "coords": [97, 257, 15],
-        "href": "https://drive.google.com/drive/folders/1DEWbIhid2o-aX0FVe5f9Ei7viTUQRg7Z6bJwm06s0rrB_zlNzLhMZEXelP_O0F--vMdZjKBh?usp=drive_link",
-        "image": ""
-      },
-        {
-        "name": " UPSLER",
-        "coords": [97, 357, 15],
-        "href": "https://drive.google.com/drive/folders/1DEWbIhid2o-aX0FVe5f9Ei7viTUQRg7Z6bJwm06s0rrB_zlNzLhMZEXelP_O0F--vMdZjKBh?usp=drive_link",
-        "image": ""
-      },
-        {
-        "name": " ASANSÖRLER",
-        "coords": [97, 457, 15],
-        "href": "https://drive.google.com/drive/folders/1DEWbIhid2o-aX0FVe5f9Ei7viTUQRg7Z6bJwm06s0rrB_zlNzLhMZEXelP_O0F--vMdZjKBh?usp=drive_link",
-        "image": ""
-      },
-        {
-        "name": " SAYAÇLAR",
-        "coords": [97, 557, 15],
-        "href": "https://drive.google.com/drive/folders/1DEWbIhid2o-aX0FVe5f9Ei7viTUQRg7Z6bJwm06s0rrB_zlNzLhMZEXelP_O0F--vMdZjKBh?usp=drive_link",
-        "image": ""
-      },
-         {
-        "name": " YANGIN",
-        "coords": [97, 657, 15],
-        "href": "https://drive.google.com/drive/folders/1DEWbIhid2o-aX0FVe5f9Ei7viTUQRg7Z6bJwm06s0rrB_zlNzLhMZEXelP_O0F--vMdZjKBh?usp=drive_link",
-        "image": ""
-      },
-       {
-        "name": " KAPILAR",
-        "coords": [97, 757, 15],
-        "href": "https://drive.google.com/drive/folders/1DEWbIhid2o-aX0FVe5f9Ei7viTUQRg7Z6bJwm06s0rrB_zlNzLhMZEXelP_O0F--vMdZjKBh?usp=drive_link",
-        "image": ""
-      },
-        {
-        "name": " YEDEK",
-        "coords": [97, 857, 15],
-        "href": "https://drive.google.com/drive/folders/1DEWbIhid2o-aX0FVe5f9Ei7viTUQRg7Z6bJwm06s0rrB_zlNzLhMZEXelP_O0F--vMdZjKBh?usp=drive_link",
-        "image": ""
-      },
+    {
+    "name": "EY-LER",
+    "coords": [60, 60, 130, 60, 130, 90, 60, 90],
+    "href": "https://basistakip.github.io/basis/interaktif/yerleske/eyler.html",
+    "image": ""
+  },
+  {
+    "name": "JENERATÖRLER",
+    "coords": [60, 160, 210, 160, 210, 190, 60, 190],
+    "href": "https://basistakip.github.io/basis/interaktif/jen/jeneratorler.html",
+    "image": ""
+  },
+  {
+    "name": "BİNALAR",
+    "coords": [60, 260, 150, 260, 150, 290, 60, 290],
+    "href": "https://basistakip.github.io/basis/interaktif/binalar/binalar.html",
+    "image": ""
+  },
+  {
+    "name": "UPSLER",
+    "coords": [60, 360, 140, 360, 140, 390, 60, 390],
+    "href": "https://basistakip.github.io/basis/interaktif/upsler/upsler.html",
+    "image": ""
+  },
+  {
+    "name": "ASANSÖRLER",
+    "coords": [60, 460, 190, 460, 190, 490, 60, 490],
+     "href": "https://basistakip.github.io/basis/interaktif/asansorler/asansorler.html",
+    "image": ""
+  },
+  {
+    "name": "SAYAÇLAR",
+    "coords": [60, 560, 160, 560, 160, 590, 60, 590],
+    "href": "https://basistakip.github.io/basis/interaktif/sayaclar/sayaclar.html",
+    "image": ""
+  },
+  {
+    "name": "YANGIN",
+    "coords": [60, 660, 130, 660, 130, 690, 60, 690],
+    "href": "https://basistakip.github.io/basis/interaktif/yangin/yangin.html",
+    "image": ""
+  },
+  {
+    "name": "KAPILAR",
+    "coords": [60, 760, 140, 760, 140, 790, 60, 790],
+     "href": "https://basistakip.github.io/basis/interaktif/kapilar/kapilar.html",
+    "image": ""
+  },
+  {
+    "name": "YEDEK",
+    "coords": [60, 860, 120, 860, 120, 890, 60, 890],
+        "href": "https://basistakip.github.io/basis/interaktif/yedek/yedek.html",
+    "image": ""
+  },
 
   
    {"name": "", "coords": [1619, 435], "href": "1"},
