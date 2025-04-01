@@ -47,12 +47,18 @@ const hotspots = [
      "href": "https://basistakip.github.io/basis/interaktif/kapilar/kapilar.html",
     "image": ""
   },
+  
   {
     "name": "YEDEK",
     "coords": [60, 860, 120, 860, 120, 890, 60, 890],
         "href": "https://basistakip.github.io/basis/interaktif/yedek/yedek.html",
     "image": ""
   },
+
+   {"name": "9 Yerleşke / 24 Hücre / 5 Trafo / ", "coords": [500, 850, 500, 850, ]},
+
+
+  
    {"name": "", "coords": [1619, 435], "href": "1"},
      {"name": "DM (EY1)", "coords": [1518, 416, 1620, 416, 1620, 448.71, 1518, 448.71], "href": "https://drive.google.com/drive/folders/1tM2xKtbWNAeHKcsw6OeYet5QTL7zmuTJanrDeq1nFBcNz8opIY2zdoSy6n0JsRUQNuoC9pfw?usp=drive_link", "image":"yerleske/ey1.jpg"},
     
