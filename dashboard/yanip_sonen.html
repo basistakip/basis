@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GÜNLÜK YANIP SÖNEN BUTONLAR</title>
+  <link rel="stylesheet" href="style.css">
+    <style>
+       /* AŞAĞISI GÜNLÜK YANIP SÖNEN BUTONLAR DİZİNİ */
+ .gunlukyanipsonenler {
+            display: flex;
+            gap: 8px;
+        }
+
+        .gunlukyanipsonenler a {
+            text-decoration: none;
+            color: #000;
+            background-color: #fff;
+            padding: 2px 5px;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        .gunlukyanipsonenler a:hover {
+            background-color: #0ba2c0;
+            color: #fff;
+        }
+
+        .gunlukyanipsonenler img {
+            width: 82px;
+            height: 92px;
+            display: block;
+            margin-bottom: 1px;
+        }
+
+        /* Yanıp sönme efekti */
+        .blink {
+            animation: blink-animation 1s infinite alternate;
+        }
+
+        @keyframes blink-animation {
+            0% {
+                background-color: #fff;
+                color: #000;
+            }
+            100% {
+                background-color: #0ba2c0;
+                color: #fff;
+            }
+        }
+/* YUKARISI GÜNLÜK YANIP SÖNEN BUTONLAR DİZİNİ */
+    </style>
+</head>
+<body>
+
+<div class="gunlukyanipsonenler" id="linkContainer">
+    <a href="index.html" target="_blank">
+        <img src="https://i.hizliresim.com/13ostcw.png" alt="Basis">
+    </a>
+    <a href="index.html" target="_blank">
+        <img src="https://i.hizliresim.com/aems1lo.png" alt="Basis">
+    </a>
+    <a href="index.html" target="_blank">
+        <img src="https://i.hizliresim.com/aems1lo.png" alt="Basis">
+    </a>
+</div>
+
+<script>
+    // Sayfa ilk açıldığında tüm butonlara yanıp sönme efekti ekle
+    document.addEventListener("DOMContentLoaded", function () {
+        const links = document.querySelectorAll(".gunlukyanipsonenler a");
+        links.forEach(link => link.classList.add("blink"));
+
+        // Hangi butona basıldıysa sadece onun efekti dursun
+        links.forEach(link => {
+            link.addEventListener("click", function () {
+                link.classList.remove("blink");
+            });
+        });
+    });
+</script>
+
+</body>
+</html>
