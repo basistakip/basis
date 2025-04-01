@@ -1,0 +1,829 @@
+
+
+
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rektörlük Yangın -B blok bodrum eksik hatalı yeniden yapılacak </title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .search-container {
+            margin-bottom: 20px;
+        }
+        #searchInput {
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+        }
+        #results {
+            border: 1px solid #ddd;
+            min-height: 20px;
+            max-width:45%;
+            padding: 10px;
+        }
+        .result-item {
+            padding: 8px;
+            cursor: pointer;
+            border-bottom: 1px solid #eee;
+        }
+        .result-item:hover {
+            background-color: #f5f5f5;
+        }
+        select {
+            padding:  8px;
+            margin-right: 10px;
+        }
+        .input-group {
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Rektörlük Yangın Nokta Arama</h1>
+    
+    <div class="search-container">
+        <div class="input-group">
+          
+          
+                  
+            
+            <select id="prefix1">
+                 <option value="1P">Panel 1</option>
+                <option value="2P">Panel 2</option>
+            </select>
+          
+          <select id="prefix2">
+               <option value="1Ç">Çevrim 01</option>
+               <option value="2Ç">Çevrim 02</option>
+            </select>
+            
+   <input 
+    type="number" 
+    id="numberInput" 
+    placeholder="Adres" 
+    style="padding: 8px;" 
+    min="0" 
+    max="999" 
+    maxlength="3" 
+    oninput="this.value=this.value.replace(/[^0-9]/g,''); if(this.value.length > 3) this.value = this.value.slice(0, 3);"
+>
+
+          
+            
+        </div>
+      
+      
+        <button onclick="searchItem()">Ara</button>
+    </div>
+    
+    <div id="results"></div>
+    
+    <script>
+        // Data structure for the items
+        const items = {
+    "A BLOK 1.KAT": [
+        "2P. 2Ç. 22",
+        "2P. 2Ç. 23",
+        "2P. 2Ç. 24",
+        "2P. 2Ç. 25",
+        "2P. 2Ç. 26",
+        "2P. 2Ç. 27",
+        "2P. 2Ç. 28",
+        "2P. 2Ç. 29",
+        "2P. 2Ç. 30",
+        "2P. 2Ç. 31",
+        "2P. 2Ç. 32",
+        "2P. 2Ç. 33",
+        "2P. 2Ç. 34",
+        "2P. 2Ç. 35",
+        "2P. 2Ç. 36",
+        "2P. 2Ç. 37",
+        "2P. 2Ç. 38",
+        "2P. 2Ç. 39",
+        "2P. 2Ç. 40",
+        "2P. 2Ç. 41"
+    ],
+    "A BLOK 2.KAT": [
+        "2P. 2Ç. 42",
+        "2P. 2Ç. 43",
+        "2P. 2Ç. 44",
+        "2P. 2Ç. 45",
+        "2P. 2Ç. 46",
+        "2P. 2Ç. 47",
+        "2P. 2Ç. 48",
+        "2P. 2Ç. 49",
+        "2P. 2Ç. 50",
+        "2P. 2Ç. 51",
+        "2P. 2Ç. 52",
+        "2P. 2Ç. 53",
+        "2P. 2Ç. 54",
+        "2P. 2Ç. 55",
+        "2P. 2Ç. 57",
+        "2P. 2Ç. 58",
+        "2P. 2Ç. 59"
+    ],
+    "A BLOK 3.KAT": [
+        "2P. 2Ç. 60",
+        "2P. 2Ç. 61",
+        "2P. 2Ç. 62",
+        "2P. 2Ç. 63",
+        "2P. 2Ç. 64",
+        "2P. 2Ç. 65",
+        "2P. 2Ç. 66",
+        "2P. 2Ç. 67",
+        "2P. 2Ç. 68",
+        "2P. 2Ç. 69",
+        "2P. 2Ç. 70",
+        "2P. 2Ç. 71",
+        "2P. 2Ç. 72",
+        "2P. 2Ç. 73",
+        "2P. 2Ç. 74",
+        "2P. 2Ç. 75",
+        "2P. 2Ç. 76",
+        "2P. 2Ç. 77",
+        "2P. 2Ç. 78",
+        "2P. 2Ç. 79",
+        "2P. 2Ç. 135"
+    ],
+    "A BLOK 4.KAT": [
+        "2P. 2Ç. 80",
+        "2P. 2Ç. 81",
+        "2P. 2Ç. 82",
+        "2P. 2Ç. 83",
+        "2P. 2Ç. 84",
+        "2P. 2Ç. 85",
+        "2P. 2Ç. 86",
+        "2P. 2Ç. 87",
+        "2P. 2Ç. 88",
+        "2P. 2Ç. 89",
+        "2P. 2Ç. 90",
+        "2P. 2Ç. 91",
+        "2P. 2Ç. 92",
+        "2P. 2Ç. 93",
+        "2P. 2Ç. 94",
+        "2P. 2Ç. 95",
+        "2P. 2Ç. 96",
+        "2P. 2Ç. 97",
+        "2P. 2Ç. 98",
+        "2P. 2Ç. 136"
+    ],
+    "A BLOK 5.KAT": [
+        "2P. 2Ç. 137",
+        "2P. 2Ç. 138",
+        "2P. 2Ç. 140",
+        "2P. 2Ç. 139",
+        "2P. 2Ç. 141",
+        "2P. 2Ç. 142",
+        "2P. 2Ç. 143"
+    ],
+    "A BLOK BODRUM": [
+        "1P. 1Ç. 211",
+        "1P. 1Ç. 204",
+        "1P. 1Ç. 203",
+        "1P. 1Ç. 213",
+        "1P. 1Ç. 212",
+        "1P. 1Ç. 210",
+        "1P. 1Ç. 209",
+        "1P. 1Ç. 208",
+        "1P. 1Ç. 207",
+        "1P. 1Ç. 206",
+        "1P. 1Ç. 200",
+        "1P. 1Ç. 201",
+        "1P. 1Ç. 202",
+        "1P. 1Ç. 205"
+    ],
+    "A BLOK ZEMİN": [
+        "2P. 2Ç. 18",
+        "2P. 2Ç. 19",
+        "2P. 2Ç. 1",
+        "2P. 2Ç. 20",
+        "2P. 2Ç. 6",
+        "2P. 2Ç. 5",
+        "2P. 2Ç. 7",
+        "2P. 2Ç. 8",
+        "2P. 2Ç. 9",
+        "2P. 2Ç. 16",
+        "2P. 2Ç. 14",
+        "2P. 2Ç. 13",
+        "2P. 2Ç. 4",
+        "2P. 2Ç. 3",
+        "2P. 2Ç. 11",
+        "2P. 2Ç. 10",
+        "2P. 2Ç. 12",
+        "2P. 2Ç. 13"
+    ],
+              "B BLOK BODRUM": [
+        "1P. 1Ç. 1",
+        "1P. 1Ç. 2",
+        "1P. 1Ç. 3",
+        "1P. 1Ç. 4",
+        "1P. 1Ç. 5",
+        "1P. 1Ç. 6",
+        "1P. 1Ç. 7",
+        "1P. 1Ç. 8",
+        "1P. 1Ç. 9",
+        "1P. 1Ç. 10",
+        "1P. 1Ç. 11",
+        "1P. 1Ç. 12",
+        "1P. 1Ç. 13",
+        "1P. 1Ç. 14",
+        "1P. 1Ç. 15",
+        "1P. 1Ç. 16",
+        "1P. 1Ç. 17",
+        "1P. 1Ç. 18",
+        "1P. 1Ç. 19",
+        "1P. 1Ç. 20",
+        "1P. 1Ç. 21",
+        "1P. 1Ç. 22",
+        "1P. 1Ç. 23",
+        "1P. 1Ç. 24",
+        "1P. 1Ç. 25",
+        "1P. 1Ç. 26"
+    ],
+        "B BLOK 1.KAT": [
+        "2P. 2Ç. 99",
+        "2P. 2Ç. 100",
+        "2P. 2Ç. 101",
+        "2P. 2Ç. 102",
+        "2P. 2Ç. 103",
+        "2P. 2Ç. 104",
+        "2P. 2Ç. 105",
+        "2P. 2Ç. 106",
+        "2P. 2Ç. 107",
+        "2P. 2Ç. 108",
+        "2P. 2Ç. 109",
+        "2P. 2Ç. 100",
+        "2P. 2Ç. 110",
+        "2P. 2Ç. 111",
+        "2P. 2Ç. 112",
+        "2P. 2Ç. 113",
+        "2P. 2Ç. 114",
+        "2P. 2Ç. 115",
+        "2P. 2Ç. 116"
+    ],
+        "B BLOK 2.KAT": [
+        "2P. 2Ç. 117",
+        "2P. 2Ç. 118",
+        "2P. 2Ç. 119",
+        "2P. 2Ç. 120",
+        "2P. 2Ç. 121",
+        "2P. 2Ç. 122",
+        "2P. 2Ç. 123",
+        "2P. 2Ç. 124",
+        "2P. 2Ç. 125",
+        "2P. 2Ç. 126",
+        "2P. 2Ç. 127",
+        "2P. 2Ç. 128",
+        "2P. 2Ç. 129",
+        "2P. 2Ç. 130",
+        "2P. 2Ç. 131",
+        "2P. 2Ç. 132",
+        "2P. 2Ç. 133",
+        "2P. 2Ç. 134"
+    ],
+        "B BLOK ZEMİN": [
+        "1P. 1Ç. 73",
+        "1P. 1Ç. 72",
+        "1P. 1Ç. 79",
+        "1P. 1Ç. 71",
+        "1P. 1Ç. 70",
+        "1P. 1Ç. 74",
+        "1P. 1Ç. 68",
+        "1P. 1Ç. 88",
+        "1P. 1Ç. 208",
+        "1P. 1Ç. 256",
+        "1P. 1Ç. 257",
+        "1P. 1Ç. 69",
+        "1P. 1Ç. 222",
+        "1P. 1Ç. 233",
+        "1P. 1Ç. 67",
+        "1P. 1Ç. 64",
+        "1P. 1Ç. 240",
+        "1P. 1Ç. 239",
+        "1P. 1Ç. 255",
+        "1P. 1Ç. 66",
+        "1P. 1Ç. 44",
+        "1P. 1Ç. 46",
+        "1P. 1Ç. 69",
+        "1P. 1Ç. 222",
+        "1P. 1Ç. 233",
+        "1P. 1Ç. 46"
+    ],
+          "C BLOK 1.KAT": [
+        "2P. 1Ç. 153",
+        "2P. 1Ç. 154",
+        "2P. 1Ç. 158",
+        "2P. 1Ç. 159",
+        "2P. 1Ç. 152",
+        "2P. 1Ç. 156",
+        "2P. 1Ç. 160",
+        "2P. 1Ç. 162",
+        "2P. 1Ç. 163",
+        "2P. 1Ç. 164",
+        "2P. 1Ç. 155",
+        "2P. 1Ç. 157",
+        "2P. 1Ç. 161",
+        "2P. 1Ç. 165",
+        "2P. 1Ç. 151",
+        "2P. 1Ç. 149",
+        "2P. 1Ç. 132",
+        "2P. 1Ç. 133",
+        "2P. 1Ç. 134",
+        "2P. 1Ç. 135",
+        "2P. 1Ç. 143",
+        "2P. 1Ç. 150",
+        "2P. 1Ç. 136",
+        "2P. 1Ç. 137",
+        "2P. 1Ç. 144",
+        "2P. 1Ç. 145",
+        "2P. 1Ç. 147",
+        "2P. 1Ç. 148",
+        "2P. 1Ç. 142",
+        "2P. 1Ç. 138",
+        "2P. 1Ç. 139",
+        "2P. 1Ç. 140",
+        "2P. 1Ç. 141",
+        "2P. 1Ç. 146"
+    ],
+    "C BLOK 2.KAT": [
+        "2P. 1Ç. 197",
+        "2P. 1Ç. 198",
+        "2P. 1Ç. 199",
+        "2P. 1Ç. 200",
+        "2P. 1Ç. 201",
+        "2P. 1Ç. 203",
+        "2P. 1Ç. 204",
+        "2P. 1Ç. 205",
+        "2P. 1Ç. 206",
+        "2P. 1Ç. 207",
+        "2P. 1Ç. 208",
+        "2P. 1Ç. 209",
+        "2P. 1Ç. 210",
+        "2P. 1Ç. 211",
+        "2P. 1Ç. 212",
+        "2P. 1Ç. 213",
+        "2P. 1Ç. 215",
+        "2P. 1Ç. 216",
+        "2P. 1Ç. 217",
+        "2P. 1Ç. 218",
+        "2P. 1Ç. 219",
+        "2P. 1Ç. 220",
+        "2P. 1Ç. 221",
+        "2P. 1Ç. 222",
+        "2P. 1Ç. 223",
+        "2P. 1Ç. 224",
+        "2P. 1Ç. 225",
+        "2P. 1Ç. 226",
+        "2P. 1Ç. 227",
+        "2P. 1Ç. 228",
+        "2P. 1Ç. 229"
+    ],
+    "C BLOK BODRUM": [
+        "1P. 1Ç. 27",
+        "1P. 1Ç. 28",
+        "1P. 1Ç. 29",
+        "1P. 1Ç. 30",
+        "1P. 1Ç. 31",
+        "1P. 1Ç. 32",
+        "1P. 1Ç. 33",
+        "1P. 1Ç. 34",
+        "1P. 1Ç. 35",
+        "1P. 1Ç. 36",
+        "1P. 1Ç. 37",
+        "1P. 1Ç. 38",
+        "1P. 1Ç. 41",
+        "1P. 1Ç. 42",
+        "1P. 1Ç. 43",
+        "1P. 1Ç. 44",
+        "1P. 1Ç. 45",
+        "1P. 1Ç. 46",
+        "1P. 1Ç. 47",
+        "1P. 1Ç. 48",
+        "1P. 1Ç. 49",
+        "1P. 1Ç. 50",
+        "1P. 1Ç. 51",
+        "1P. 1Ç. 52",
+        "1P. 1Ç. 53",
+        "1P. 1Ç. 54",
+        "1P. 1Ç. 55",
+        "1P. 1Ç. 56",
+        "1P. 1Ç. 57",
+        "1P. 1Ç. 58",
+        "1P. 1Ç. 59",
+        "1P. 1Ç. 60",
+        "1P. 1Ç. 61",
+        "1P. 1Ç. 62",
+        "1P. 1Ç. 63",
+        "1P. 1Ç. 64",
+        "1P. 1Ç. 65",
+        "1P. 1Ç. 66",
+        "1P. 1Ç. 67",
+        "1P. 1Ç. 68",
+        "1P. 1Ç. 69",
+        "1P. 1Ç. 70",
+        "1P. 1Ç. 71",
+        "1P. 1Ç. 72",
+        "1P. 1Ç. 74",
+        "1P. 1Ç. 75",
+        "1P. 1Ç. 76"
+    ],
+    "C BLOK ZEMİN": [
+        "2P. 1Ç. 97",
+        "2P. 1Ç. 98",
+        "2P. 1Ç. 99",
+        "2P. 1Ç. 100",
+        "2P. 1Ç. 50",
+        "2P. 1Ç. 52",
+        "2P. 1Ç. 231",
+        "2P. 1Ç. 101",
+        "2P. 1Ç. 55",
+        "2P. 1Ç. 56",
+        "2P. 1Ç. 57",
+        "2P. 1Ç. 53",
+        "2P. 1Ç. 49",
+        "2P. 1Ç. 47",
+        "2P. 1Ç. 59",
+        "2P. 1Ç. 58",
+        "2P. 1Ç. 48",
+        "2P. 1Ç. 54",
+        "2P. 1Ç. 51",
+        "2P. 1Ç. 89",
+        "2P. 1Ç. 77",
+        "2P. 1Ç. 76",
+        "2P. 1Ç. 75",
+        "2P. 1Ç. 74"
+    ],
+        "D BLOK ZEMİN": [
+        "1P. 1Ç. 159",
+        "1P. 1Ç. 160",
+        "1P. 1Ç. 161",
+        "1P. 1Ç. 162",
+        "1P. 1Ç. 163",
+        "1P. 1Ç. 164",
+        "1P. 1Ç. 165",
+        "1P. 1Ç. 166",
+        "1P. 1Ç. 167",
+        "1P. 1Ç. 168",
+        "1P. 1Ç. 169",
+        "1P. 1Ç. 170",
+        "1P. 1Ç. 171",
+        "1P. 1Ç. 172",
+        "1P. 1Ç. 173",
+        "1P. 1Ç. 174",
+        "1P. 1Ç. 175",
+        "1P. 1Ç. 176",
+        "1P. 1Ç. 177",
+        "1P. 1Ç. 178",
+        "1P. 1Ç. 179",
+        "1P. 1Ç. 180",
+        "1P. 1Ç. 181",
+        "1P. 1Ç. 182",
+        "1P. 1Ç. 183",
+        "1P. 1Ç. 184",
+        "1P. 1Ç. 185",
+        "1P. 1Ç. 186",
+        "1P. 1Ç. 187",
+        "1P. 1Ç. 188",
+        "1P. 1Ç. 189",
+        "1P. 1Ç. 190",
+        "1P. 1Ç. 191",
+        "1P. 1Ç. 192",
+        "1P. 1Ç. 193",
+        "1P. 1Ç. 194",
+        "1P. 1Ç. 195",
+        "1P. 1Ç. 196",
+        "1P. 1Ç. 197",
+        "1P. 1Ç. 198",
+        "1P. 1Ç. 199"
+    ],
+    "D BLOK BODRUM": [
+        "1P. 1Ç. 119",
+        "1P. 1Ç. 120",
+        "1P. 1Ç. 121",
+        "1P. 1Ç. 122",
+        "1P. 1Ç. 123",
+        "1P. 1Ç. 124",
+        "1P. 1Ç. 126",
+        "1P. 1Ç. 127",
+        "1P. 1Ç. 128",
+        "1P. 1Ç. 129",
+        "1P. 1Ç. 130",
+        "1P. 1Ç. 131",
+        "1P. 1Ç. 132",
+        "1P. 1Ç. 133",
+        "1P. 1Ç. 134",
+        "1P. 1Ç. 135",
+        "1P. 1Ç. 136",
+        "1P. 1Ç. 137",
+        "1P. 1Ç. 138",
+        "1P. 1Ç. 139",
+        "1P. 1Ç. 140",
+        "1P. 1Ç. 142",
+        "1P. 1Ç. 143",
+        "1P. 1Ç. 144",
+        "1P. 1Ç. 145",
+        "1P. 1Ç. 146",
+        "1P. 1Ç. 148",
+        "1P. 1Ç. 149",
+        "1P. 1Ç. 150",
+        "1P. 1Ç. 151",
+        "1P. 1Ç. 152",
+        "1P. 1Ç. 153",
+        "1P. 1Ç. 154",
+        "1P. 1Ç. 155",
+        "1P. 1Ç. 156",
+        "1P. 1Ç. 157",
+        "1P. 1Ç. 158"
+    ],
+          "E BLOK (Konferans Sal.) BODRUM KAT": [
+        "2P. 1Ç. 90",
+        "2P. 1Ç. 91",
+        "2P. 1Ç. 92",
+        "2P. 1Ç. 93",
+        "2P. 1Ç. 94",
+        "2P. 1Ç. 95",
+        "2P. 1Ç. 96"
+    ],
+    "E BLOK(Konferans Sal.)ZEMİN KAT": [
+        "2P. 1Ç. 79",
+        "2P. 1Ç. 80",
+        "2P. 1Ç. 81",
+        "2P. 1Ç. 82",
+        "2P. 1Ç. 83",
+        "2P. 1Ç. 84",
+        "2P. 1Ç. 85",
+        "2P. 1Ç. 86",
+        "2P. 1Ç. 87",
+        "2P. 1Ç. 88"
+    ],
+             "F BLOK 1.KAT": [
+        "2P. 1Ç. 119",
+        "2P. 1Ç. 120",
+        "2P. 1Ç. 121",
+        "2P. 1Ç. 122",
+        "2P. 1Ç. 123",
+        "2P. 1Ç. 124",
+        "2P. 1Ç. 125",
+        "2P. 1Ç. 126",
+        "2P. 1Ç. 127",
+        "2P. 1Ç. 128",
+        "2P. 1Ç. 129",
+        "2P. 1Ç. 130",
+        "2P. 1Ç. 131"
+    ],
+    "F BLOK 2.KAT": [
+        "2P. 1Ç. 185",
+        "2P. 1Ç. 186",
+        "2P. 1Ç. 187",
+        "2P. 1Ç. 188",
+        "2P. 1Ç. 189",
+        "2P. 1Ç. 190",
+        "2P. 1Ç. 191",
+        "2P. 1Ç. 192",
+        "2P. 1Ç. 193",
+        "2P. 1Ç. 194",
+        "2P. 1Ç. 195",
+        "2P. 1Ç. 196"
+    ],
+    "F BLOK BODRUM KAT": [
+        "1P. 1Ç. 77",
+        "1P. 1Ç. 78",
+        "1P. 1Ç. 79",
+        "1P. 1Ç. 80",
+        "1P. 1Ç. 81",
+        "1P. 1Ç. 86",
+        "1P. 1Ç. 83",
+        "1P. 1Ç. 84",
+        "1P. 1Ç. 85",
+        "1P. 1Ç. 87",
+        "1P. 1Ç. 88",
+        "1P. 1Ç. 89",
+        "1P. 1Ç. 90",
+        "1P. 1Ç. 91",
+        "1P. 1Ç. 92",
+        "1P. 1Ç. 93",
+        "1P. 1Ç. 82"
+    ],
+    "F BLOK ZEMİN KAT": [
+        "2P. 1Ç. 34",
+        "2P. 1Ç. 35",
+        "2P. 1Ç. 36",
+        "2P. 1Ç. 37",
+        "2P. 1Ç. 38",
+        "2P. 1Ç. 39",
+        "2P. 1Ç. 40",
+        "2P. 1Ç. 41",
+        "2P. 1Ç. 42",
+        "2P. 1Ç. 43",
+        "2P. 1Ç. 44",
+        "2P. 1Ç. 45",
+        "2P. 1Ç. 46"
+    ],
+            "G BLOK 1.KAT": [
+        "2P. 1Ç. 102",
+        "2P. 1Ç. 103",
+        "2P. 1Ç. 104",
+        "2P. 1Ç. 105",
+        "2P. 1Ç. 106",
+        "2P. 1Ç. 107",
+        "2P. 1Ç. 108",
+        "2P. 1Ç. 109",
+        "2P. 1Ç. 110",
+        "2P. 1Ç. 111",
+        "2P. 1Ç. 112",
+        "2P. 1Ç. 113",
+        "2P. 1Ç. 114",
+        "2P. 1Ç. 115",
+        "2P. 1Ç. 116",
+        "2P. 1Ç. 117",
+        "2P. 1Ç. 118"
+    ],
+    "G BLOK 2.KAT": [
+        "2P. 1Ç. 166",
+        "2P. 1Ç. 167",
+        "2P. 1Ç. 168",
+        "2P. 1Ç. 169",
+        "2P. 1Ç. 170",
+        "2P. 1Ç. 171",
+        "2P. 1Ç. 172",
+        "2P. 1Ç. 173",
+        "2P. 1Ç. 174",
+        "2P. 1Ç. 175",
+        "2P. 1Ç. 176",
+        "2P. 1Ç. 177",
+        "2P. 1Ç. 178",
+        "2P. 1Ç. 179",
+        "2P. 1Ç. 180",
+        "2P. 1Ç. 181",
+        "2P. 1Ç. 182",
+        "2P. 1Ç. 183",
+        "2P. 1Ç. 184"
+    ],
+    "G BLOK BODRUM KAT": [
+        "1P. 1Ç. 94",
+        "1P. 1Ç. 95",
+        "1P. 1Ç. 96",
+        "1P. 1Ç. 97",
+        "1P. 1Ç. 98",
+        "1P. 1Ç. 99",
+        "1P. 1Ç. 100",
+        "1P. 1Ç. 101",
+        "1P. 1Ç. 102",
+        "1P. 1Ç. 103",
+        "1P. 1Ç. 104",
+        "1P. 1Ç. 105",
+        "1P. 1Ç. 106",
+        "1P. 1Ç. 107",
+        "1P. 1Ç. 108",
+        "1P. 1Ç. 109",
+        "1P. 1Ç. 110",
+        "1P. 1Ç. 111",
+        "1P. 1Ç. 112",
+        "1P. 1Ç. 113",
+        "1P. 1Ç. 114",
+        "1P. 1Ç. 115",
+        "1P. 1Ç. 116",
+        "1P. 1Ç. 117",
+        "1P. 1Ç. 118"
+    ],
+    "G BLOK ZEMİN KAT": [
+        "2P. 1Ç. 1",
+        "2P. 1Ç. 2",
+        "2P. 1Ç. 3",
+        "2P. 1Ç. 4",
+        "2P. 1Ç. 5",
+        "2P. 1Ç. 6",
+        "2P. 1Ç. 7",
+        "2P. 1Ç. 8",
+        "2P. 1Ç. 9",
+        "2P. 1Ç. 10",
+        "2P. 1Ç. 11",
+        "2P. 1Ç. 12",
+        "2P. 1Ç. 13",
+        "2P. 1Ç. 14",
+        "2P. 1Ç. 15",
+        "2P. 1Ç. 16",
+        "2P. 1Ç. 17",
+        "2P. 1Ç. 18",
+        "2P. 1Ç. 19",
+        "2P. 1Ç. 20",
+        "2P. 1Ç. 21",
+        "2P. 1Ç. 22",
+        "2P. 1Ç. 23",
+        "2P. 1Ç. 24",
+        "2P. 1Ç. 25",
+        "2P. 1Ç. 26",
+        "2P. 1Ç. 27",
+        "2P. 1Ç. 28",
+        "2P. 1Ç. 29",
+        "2P. 1Ç. 30",
+        "2P. 1Ç. 31",
+        "2P. 1Ç. 32",
+        "2P. 1Ç. 33"
+    ]
+
+          
+          
+          
+};
+        
+        // PDF links for each category
+        const pdfLinks = {
+"A BLOK 1.KAT": "https://drive.google.com/file/d/1hqrSZnLZhP6wQY4Oot_J5nIAZ2C2Aygc/view?usp=drive_link",
+"A BLOK 2.KAT": "https://drive.google.com/file/d/1XGGFvKHwsn9RG8XmtE4ocaXfNNOHLuZO/view?usp=drive_link",
+"A BLOK 3.KAT": "https://drive.google.com/file/d/1QGSKqV5jpBxbFA76K1zvAovoKL4jcu-4/view?usp=drive_link",
+"A BLOK 4.KAT": "https://drive.google.com/file/d/1f2KWJmj0bR8g04o9JDIkl6EbUWWajjGQ/view?usp=drive_link",
+"A BLOK 5.KAT": "https://drive.google.com/file/d/1bZGpoL8gIzUsxIy_NaQm5iENhq_RvklL/view?usp=drive_link",
+"A BLOK BODRUM": "https://drive.google.com/file/d/17CWSzBAl8sfltRpiHnBVHpJdXbQIp8kM/view?usp=drive_link",
+"A BLOK ZEMİN": "https://drive.google.com/file/d/1US3IvwH81LaS3Y7_FIvqSTwt4uWOrUv5/view?usp=drive_link",          
+"B BLOK BODRUM": "https://drive.google.com/file/d/1DIeI8cjLFDUhE8jkgq_7BqvqU-8uMwBW/view?usp=drive_link",
+"B BLOK 1.KAT": "https://drive.google.com/file/d/1A4oEZog5fesrOj8hnOOL3cVelfV4DK_F/view?usp=drive_link",
+"B BLOK 2.KAT": "https://drive.google.com/file/d/1Nig3Zwx5Edzgp6j5dbYKcL2UHRhWVvMt/view?usp=drive_link",
+"B BLOK ZEMİN": "https://drive.google.com/file/d/1zHPeovTysO8GQAGlTUtJru3kEzE-A7al/view?usp=drive_link",
+"C BLOK 1.KAT": "https://drive.google.com/file/d/1R9dNX-o6U1NQslOcfhWamXCrj5g_TDSv/view?usp=drive_link",
+"C BLOK 2.KAT": "https://drive.google.com/file/d/15TOyAtiDlwyuCx5LA15D4Nn9AVuSfAbe/view?usp=drive_link",
+"C BLOK BODRUM": "https://drive.google.com/file/d/1GkxD7eZFiLhMjGwI5ykngNPcgaVVcGDs/view?usp=drive_link",
+"C BLOK ZEMİN": "https://drive.google.com/file/d/1ox-JijcthFfK1h_t3xqeenYCLlkG49F7/view?usp=drive_link",
+"D BLOK ZEMİN": "https://drive.google.com/file/d/1o1KISzldTYcwwmXlEVZeueWeYlCqoQL0/view?usp=drive_link",
+"D BLOK BODRUM": "https://drive.google.com/file/d/1mNlcsf2zufVvTQODOyvu3BHNKKNRJiNU/view?usp=drive_link",
+"E BLOK (Konferans Sal.) BODRUM KAT": "https://drive.google.com/file/d/1tza_B5j638mRemua4G2w0idZTS80XmmD/view?usp=drive_link",
+ "E BLOK(Konferans Sal.)ZEMİN KAT" : "https://drive.google.com/file/d/1CdOb-eHBvGPg4mcnT6rx5V6eqXKzRdLj/view?usp=drive_link",
+          
+"F BLOK 1.KAT": "https://drive.google.com/file/d/1Kj1yHWlzluHoPUie0hdh4z75jYmR3HRc/view?usp=drive_link",
+"F BLOK 2.KAT": "https://drive.google.com/file/d/1rBe6FIcyy9HS1qk8YvFlyMZwOJPIFkE7/view?usp=drive_link",
+"F BLOK BODRUM KAT": "https://drive.google.com/file/d/160cxXuFLiF1dzO7VIrr3BHPrXUo-L4vp/view?usp=drive_link",
+"F BLOK ZEMİN KAT": "https://drive.google.com/file/d/1MlI58nyO5x8qlcOtFfdfi5IWx0IM-BLy/view?usp=drive_link",
+"G BLOK 1.KAT": "https://drive.google.com/file/d/1cXRbHLjv_DAySllkpB16Obc7s0yvSzdt/view?usp=drive_link",
+"G BLOK 2.KAT": "https://drive.google.com/file/d/1CF_X1i1PQA0_rjD3CUfTrFuVKqisBNay/view?usp=drive_link",
+"G BLOK BODRUM KAT": "https://drive.google.com/file/d/1I5JEZcGqxRLuVEytCLv0EmwRWMbF9WmS/view?usp=drive_link",
+"G BLOK ZEMİN KAT": "https://drive.google.com/file/d/1Wn64tJppfmB2nm-M9XWvTiKGC-KZVOg5/view?usp=drive_link",
+        };
+        
+        function searchItem() {
+            const prefix1 = document.getElementById('prefix1').value;
+            const prefix2 = document.getElementById('prefix2').value;
+            const number = document.getElementById('numberInput').value.trim();
+            
+            if (!number) {
+                alert("Lütfen bir numara giriniz.");
+                return;
+            }
+            
+            const searchTerm = `${prefix1}. ${prefix2}. ${number}`;
+            const resultsDiv = document.getElementById('results');
+            resultsDiv.innerHTML = '';
+            
+            let found = false;
+            
+            // Search through all categories
+            for (const [category, itemList] of Object.entries(items)) {
+                if (itemList.includes(searchTerm)) {
+                    found = true;
+                    const resultItem = document.createElement('div');
+                    resultItem.className = 'result-item';
+                    resultItem.textContent = `${searchTerm} (YERİ: KAT ${category})`;
+                    
+                    resultItem.onclick = function() {
+                        openPdf(category);
+                    };
+                    
+                    resultsDiv.appendChild(resultItem);
+                    break; // Stop after first match
+                }
+            }
+            
+            if (!found) {
+                resultsDiv.innerHTML = `<div class="result-item">Sonuç bulunamadı: ${searchTerm}</div>`;
+            }
+        }
+        
+        function openPdf(category) {
+            const pdfUrl = pdfLinks[category];
+            if (pdfUrl) {
+                window.open(pdfUrl, '_blank');
+            } else {
+                alert("PDF bağlantısı bulunamadı!");
+            }
+        }
+        
+        // Allow pressing Enter in the number input
+        document.getElementById('numberInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                searchItem();
+            }
+        });
+        
+        // Focus on number input when page loads
+        window.onload = function() {
+            document.getElementById('numberInput').focus();
+        };
+    </script>
+</body>
+</html>
