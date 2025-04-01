@@ -1,1 +1,315 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <link rel="shortcut icon" type="png" href="resimler/basis.png"> 
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Responsive Interaktif Harita</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: start;
+      height: 100vh;
+      width: 100%;
+      overflow: hidden;
+    }
 
+    #tooltip-container {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: white;
+      border: 1px solid #ccc;
+      padding: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      z-index: 1000;
+      display: none;
+    }
+
+    .container {
+      position: relative;
+      width: 100%;
+      height: 100vh;
+    }
+
+    img {
+      width: 100%;
+      height: 100vh;
+      display: block;
+    }
+
+    svg {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+    }
+
+    circle {
+      fill: rgba(255, 0, 0, 0.3);
+      stroke: rgba(255, 0, 0, 0.5);
+      stroke-width: 2;
+      cursor: pointer;
+      pointer-events: all;
+      transition: fill 0.3s ease, stroke 0.3s ease;
+    }
+
+    circle:hover {
+      fill: rgba(0, 255, 0, 0.3);
+      stroke: rgba(0, 255, 0, 0.5);
+    }
+
+    text {
+      font-size: 12px;
+      fill: white;
+      font-weight: bold;
+      text-anchor: middle;
+      pointer-events: none;
+      transition: fill 0.3s ease;
+    }
+
+    /* Yeni Eklenen CSS */
+    circle:hover + text {
+      fill: yellow;
+    }
+
+    @media (max-width: 768px) {
+      text {
+        font-size: 8px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div id="tooltip-container">
+    <img id="tooltip-image" src="" alt="Bina Resmi" style="max-width: 200px; max-height: 150px;">
+  </div>
+
+  <div class="container">
+    <img src="https://basistakip.github.io/basis/interaktif/yerleske/ana_kroki_acik.jpeg" alt="Kroki" id="krokiImage">
+    <svg id="mapSvg"></svg>
+  </div>
+
+  <script>
+    const hotspots = [
+      
+        {
+        "name": " EY-LER",
+        "coords": [97, 57, 15],
+        "href": "https://basistakip.github.io/basis/interaktif/yerleske/eyler.html",
+        "image": ""
+      },
+         {
+        "name": " JENERATÖRLER",
+        "coords": [97, 157, 15],
+        "href": "https://basistakip.github.io/basis/interaktif/jen/jeneratorler.html",
+        "image": ""
+      },
+          {
+        "name": " BİNALAR",
+        "coords": [97, 257, 15],
+        "href": "https://basistakip.github.io/basis/interaktif/binalar/binalar.html",
+        "image": ""
+      },
+        {
+        "name": " UPSLER",
+        "coords": [97, 357, 15],
+        "href": "https://basistakip.github.io/basis/interaktif/upsler/upsler.html",
+        "image": ""
+      },
+        {
+        "name": " ASANSÖRLER",
+        "coords": [97, 457, 15],
+        "href": "https://basistakip.github.io/basis/interaktif/asansorler/asansorler.html",
+        "image": ""
+      },
+        {
+        "name": " SAYAÇLAR",
+        "coords": [97, 557, 15],
+        "href": "https://basistakip.github.io/basis/interaktif/sayaclar/sayaclar.html",
+        "image": ""
+      },
+         {
+        "name": " YANGIN",
+        "coords": [97, 657, 15],
+        "href": "https://basistakip.github.io/basis/interaktif/yangin/yangin.html",
+        "image": ""
+      },
+       {
+        "name": " KAPILAR",
+        "coords": [97, 757, 15],
+        "href": "https://basistakip.github.io/basis/interaktif/kapilar/kapilar.html",
+        "image": ""
+      },
+        {
+        "name": " YEDEK",
+        "coords": [97, 857, 15],
+        "href": "https://drive.google.com/drive/folders/1DEWbIhid2o-aX0FVe5f9Ei7viTUQRg7Z6bJwm06s0rrB_zlNzLhMZEXelP_O0F--vMdZjKBh?usp=drive_link",
+        "image": ""
+      },
+       {
+        "name": " TOPLAM 13 UPS",
+        "coords": [317, 807],
+        "href": "https://drive.google.com/drive/folders/1DEWbIhid2o-aX0FVe5f9Ei7viTUQRg7Z6bJwm06s0rrB_zlNzLhMZEXelP_O0F--vMdZjKBh?usp=drive_link",
+        "image": ""
+      },
+      
+      
+      {
+        "name": "1-U(G blk Bodrum K. Ömer Sey.)",
+        "coords": [1597, 486, 15],
+        "href": "https://drive.google.com/drive/folders/1pwXiHLl7yw6AIzaOO49SLUtolpNcC20QBgyLy1n3_nkUP45-YNF2uLBHNl2_8susyyko-PHB?usp=drive_link",
+        "image": ""
+      },
+      {
+        "name": "2-U(C blk Bodrum K. Kantin Yanı, Atölye Ka.)",
+        "coords": [1690, 451, 15],
+        "href": "https://drive.google.com/drive/folders/1hmJcIhyntoymPfJvOhp1ITkbJqc083pk6gvmVLDRkD-KG6N9919caUM74CdwwZV5fbAWN6qA?usp=drive_link",
+        "image": ""
+      },
+      {
+        "name": "3-U(E blk Konferans Sal. Sahne Arkası)",
+        "coords": [1580, 377, 15],
+        "href": "https://drive.google.com/drive/folders/1VjasPy9bdVjvRR680JxX4xgWjZltAGLeQLAAFs6Xw1837M7_AnvlYRFGQnNWh7PpPpoPE0zM?usp=drive_link",
+        "image": ""
+      },
+      {
+        "name": "4-U(D blk Bodrum Kat(Amfi 1 Yanı))",
+        "coords": [1690, 388, 15],
+        "href": "https://drive.google.com/drive/folders/18K_r0NlUd9oKPlD5rk5DdgnXqwwRqyc1fZnlZivtNYLSTWjBUbLynuNzytn_48WQdEr1vs9E?usp=drive_link",
+        "image": ""
+      },
+      {
+        "name": "5-U(D blk 2.Kat(Çay Ocağı Kar.)",
+        "coords": [1763, 414, 15],
+        "href": "https://drive.google.com/drive/folders/14xuuoh6oa_GmEDVXWmgFNwBVRHh-WirW422G-o15qpviYusOdI6mr9T0FefA27rmnhD90neE?usp=drive_link",
+        "image": ""
+      },
+      {
+        "name":"6-U(Kütüphane, Asansör Dai. Yanı)       _",
+        "coords": [1564, 438, 15],
+        "href": "https://drive.google.com/drive/folders/1lPI2QXLmXI0WIzbkgsTMmLa8M3M48MZ-tZOULzdhXIX6YrdLv7aYIHEf57FpC4VRZ3KEH9po?usp=drive_link",
+        "image": ""
+      },
+      {
+        "name": "7-U(Sağlık Bil. F blk(1.Kat Alçak Tavan Mer. Yanı)",
+        "coords": [1226, 338, 15],
+        "href": "https://drive.google.com/drive/folders/18gezPtO0J3gs0u75YKVwQt9H5j2SsLL0httbHHPUUvTWN6MD9AqraKtq5fo_p6_Sah7WC9fi?usp=drive_link",
+        "image": ""
+      },
+      {
+        "name": "8-U(Sağlık Bil. Bodrum Kat(Alçak Tavan Merd. Baş.)",
+        "coords": [1244, 361, 15],
+        "href": "https://drive.google.com/drive/folders/10xL_dFYx0gzhinT01geh0XCnamacLbQZ1FigeN28rIFQz6HjYJxwJthhl7u8QYLgw7biB8YB?usp=drive_link",
+        "image": ""
+      },
+      {
+        "name": "9-U(Müh. Giriş K. Enerji O)",
+        "coords": [1758, 223, 15],
+        "href": "https://drive.google.com/drive/folders/1nrAPtLpYkI2j65_yty1M_xVc8JA3hhAVSu0zY28C5BntlfH7DDpkA_6qDbz9pLyur_JAqmbV?usp=drive_link",
+        "image": ""
+      },
+      {
+        "name": "10-U(ÖYM Yemekhaneler Koridor Enerji Od.)",
+        "coords": [1521, 203, 15],
+        "href": "https://drive.google.com/drive/folders/1xZS0oxXH9o5cSCYZrqJ5TA-BBuVC7T-6BRVa_7jHSIFbxLD3MxOuNk_YtL7Dn-311t9SxHvA?usp=drive_link",
+        "image": ""
+      },
+      {
+        "name": "11-U (Spor Komplk. Akademi. (Bodrum Kat)",
+        "coords": [596, 397, 15],
+        "href": "https://drive.google.com/drive/folders/1kZMoM74Fk14pp8xg3aDVlU1YyLMG-BwS6R4havrFUmWwUnzdS0Au9YT1jnuX0EFgs9OBtsL8?usp=drive_link",
+        "image": ""
+      },
+      {
+        "name": "12-U(Kapalı Spor Sal. Jeneratör Transfer Od)",
+        "coords": [601, 652, 15],
+        "href": "https://drive.google.com/drive/folders/1uhJKxv56GnyXniA16y_HRy4EqQ-9z7lche9FjFSEG_DGKONK8WL_R-d0KGKges2e-EqfdYRB?usp=drive_link",
+        "image": ""
+      },
+      {
+        "name": "13-U(Spor Stadyum Enerji O.)",
+        "coords": [356, 501, 15],
+        "href": "https://drive.google.com/drive/folders/1IcexA9ZoAA0b5m87XWxofDdZhsCR4yYh_LSHyLuEPUjsu-Do5he1YmNFLixBYak4lZ8kC2h_?usp=drive_link",
+        "image": "https://i.hizliresim.com/74p9dkk.jpeg"
+      }
+    ];
+
+      // Mouse    "image": "https://i.hizliresim.com/74p9dkk.jpeg" }];
+    function createHotspots() {
+      const image = document.getElementById('krokiImage');
+      const svg = document.getElementById('mapSvg');
+      const tooltipContainer = document.getElementById('tooltip-container');
+      const tooltipImage = document.getElementById('tooltip-image');
+      svg.innerHTML = '';
+
+      const originalWidth = image.naturalWidth;
+      const originalHeight = image.naturalHeight;
+      const currentWidth = image.clientWidth;
+      const currentHeight = image.clientHeight;
+
+      hotspots.forEach(hotspot => {
+        const scaledCoords = hotspot.coords.map((coord, index) => {
+          return index % 2 === 0
+            ? (coord / originalWidth) * currentWidth
+            : (coord / originalHeight) * currentHeight;
+        });
+
+        // Yuvarlak (circle) oluştur
+        const circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+        circle.setAttribute("cx", scaledCoords[0]);
+        circle.setAttribute("cy", scaledCoords[1]);
+        circle.setAttribute("r", scaledCoords[2]);
+        circle.addEventListener('click', () => {
+          window.location.href = hotspot.href;
+        });
+
+        // Metin ekle
+        const text = document.createElementNS("http://www.w3.org/2000/svg", "text");
+        text.setAttribute("x", scaledCoords[0]);
+        text.setAttribute("y", scaledCoords[1] + 20);
+        
+             
+        
+        
+        
+        text.setAttribute("text-anchor", "middle");
+        text.setAttribute("transform", `rotate(-45, ${scaledCoords[0]}, ${scaledCoords[1] + 20})`);
+        text.textContent = hotspot.name;
+
+        
+        
+        
+        
+        
+        // Mouse üzerine gelince resmi göster
+        circle.addEventListener('mouseover', () => {
+          if (hotspot.image) {
+            tooltipImage.src = hotspot.image;
+            tooltipContainer.style.display = 'block';
+          }
+        });
+
+        // Mouse üzerinden çıkınca resmi gizle
+        circle.addEventListener('mouseout', () => {
+          tooltipContainer.style.display = 'none';
+        });
+
+        svg.appendChild(circle);
+        svg.appendChild(text);
+      });
+    }
+
+    window.addEventListener('load', createHotspots);
+    window.addEventListener('resize', createHotspots);
+  </script>
+</body>
+</html>
