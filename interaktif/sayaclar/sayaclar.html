@@ -1,1 +1,433 @@
 
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <link rel="shortcut icon" type="png" href="resimler/basis.png"> 
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Responsive Interaktif Harita</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: start;
+      height: 100vh;
+      width: 100%;
+      overflow: hidden;
+    }
+
+    #tooltip-container {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: white;
+      border: 1px solid #ccc;
+      padding: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      z-index: 1000;
+      display: none;
+    }
+
+    .container {
+      position: relative;
+      width: 100%;
+      height: 100vh;
+    }
+
+    img {
+      width: 100%;
+      height: 100vh;
+      display: block;
+    }
+
+    svg {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+    }
+
+    ellipse, circle {
+      fill: rgba(255, 0, 0, 0.3);
+      stroke: rgba(255, 0, 0, 0.5);
+      stroke-width: 2;
+      cursor: pointer;
+      pointer-events: all;
+      transition: fill 0.3s ease, stroke 0.3s ease;
+    }
+
+    ellipse:hover, circle:hover {
+      fill: rgba(0, 255, 0, 0.3);
+    }
+
+    text {
+      font-size: 9px;
+      fill: white; /* Beyaz renk */
+      font-weight: bold;
+      text-anchor: end; /* Metnin son harfi belirtilen x, y'de bitsin */
+      pointer-events: none;
+      transition: fill 0.3s ease;
+    }
+
+    /* Yeni Eklenen CSS */
+    ellipse:hover + text, circle:hover + text {
+      fill: yellow;
+    }
+
+    /* Mobil cihazlar için stiller */
+    @media (max-width: 768px) {
+      .container {
+        height: auto;
+      }
+
+      img {
+        height: auto;
+      }
+
+      text {
+        font-size: 8px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div id="tooltip-container">
+    <img id="tooltip-image" src="" alt="Bina Resmi" style="max-width: 200px; max-height: 150px;">
+  </div>
+
+  <div class="container">
+    <img src="https://i.hizliresim.com/9m0ki92.png" alt="Kroki" id="krokiImage">
+    <svg id="mapSvg"></svg>
+  </div>
+
+  <script>
+const hotspots = [
+  
+  
+        {
+        "name": " EY-LER",
+        "coords": [97, 57, 15],
+        "href": "https://basistakip.github.io/basis/interaktif/yerleske/eyler.html",
+        "image": ""
+      },
+         {
+        "name": " JENERATÖRLER",
+        "coords": [97, 157, 15],
+        "href": "https://basistakip.github.io/basis/interaktif/jen/jeneratorler.html",
+        "image": ""
+      },
+          {
+        "name": " BİNALAR",
+        "coords": [97, 257, 15],
+        "href": "https://basistakip.github.io/basis/interaktif/binalar/binalar.html",
+        "image": ""
+      },
+        {
+        "name": " UPSLER",
+        "coords": [97, 357, 15],
+        "href": "https://basistakip.github.io/basis/interaktif/upsler/upsler.html",
+        "image": ""
+      },
+        {
+        "name": " ASANSÖRLER",
+        "coords": [97, 457, 15],
+        "href": "https://basistakip.github.io/basis/interaktif/asansorler/asansorler.html",
+        "image": ""
+      },
+        {
+        "name": " SAYAÇLAR",
+        "coords": [97, 557, 15],
+        "href": "https://basistakip.github.io/basis/interaktif/sayaclar/sayaclar.html",
+        "image": ""
+      },
+         {
+        "name": " YANGIN",
+        "coords": [97, 657, 15],
+        "href": "https://basistakip.github.io/basis/interaktif/yangin/yangin.html",
+        "image": ""
+      },
+       {
+        "name": " KAPILAR",
+        "coords": [97, 757, 15],
+        "href": "https://basistakip.github.io/basis/interaktif/kapilar/kapilar.html",
+        "image": ""
+      },
+        {
+        "name": " YEDEK",
+        "coords": [97, 857, 15],
+        "href": "https://drive.google.com/drive/folders/1DEWbIhid2o-aX0FVe5f9Ei7viTUQRg7Z6bJwm06s0rrB_zlNzLhMZEXelP_O0F--vMdZjKBh?usp=drive_link",
+        "image": ""
+      },
+       {
+        "name": " TOPLAM 32 SAYAÇ",
+        "coords": [317, 807,1],
+        "href": "https://drive.google.com/drive/folders/1DEWbIhid2o-aX0FVe5f9Ei7viTUQRg7Z6bJwm06s0rrB_zlNzLhMZEXelP_O0F--vMdZjKBh?usp=drive_link",
+        "image": ""
+      },
+      
+  
+  
+  {
+    "name": "1-S Elk(ZİRAAT ATM Niz.)",
+    "coords": [1799, 584, 15], // [cx, cy, r]
+    "href": "https://drive.google.com/drive/folders/1DLtbquB-Ak0NIurJaT5BaNE3hiImmLYHXUAEqeGT-CWSK9sY0TYPXfDdffU4SoHSus7wrhht?usp=drive_link",
+    "image": ""
+  },
+  {
+    "name": "2-S Elk(ÖĞRENCİ KANTİN(Rektörlük)",
+    "coords": [1648, 456, 15], // [cx, cy, r]
+    "href": "https://drive.google.com/drive/folders/1aSPgkZjdCHYgdIWXcO0lL4TTCgggXiEzEQdO45P0Wng0UvCV-BF_mKuS_-YE-9XvKZ_m7VKs?usp=sharing",
+    "image": ""
+  },
+  {
+    "name": "3-S Elk(ÖĞRNCİ KANTİN Fırıntaş)",
+    "coords": [1540, 223, 15], // [cx, cy, r]
+    "href": "https://drive.google.com/drive/folders/1h2ae74hiNt-ITMPHeNbF53EAn601T0jMKvGMqSV5L8wa9xRMZQ4-NCDcSO-LIpu7Vi2djMZn?usp=drive_link",
+    "image": ""
+  },
+  {
+    "name": "4-S Elk(MERKEZİ DERSLİK Sağlık Kantin)",
+    "coords": [1208, 381, 15], // [cx, cy, r]
+    "href": "https://drive.google.com/drive/folders/1yAi-oiAEiV06Azo0a_H_KpEfTuA8vrliOdbX2Fs_j2MBunlZxkW8kf3p-lOLWE_TF-Y5hHFk?usp=drive_link",
+    "image": ""
+  },
+  {
+    "name": "5-S Elk(Rektörlük Kırtasiye)",
+    "coords": [1677, 485, 15], // [cx, cy, r]
+    "href": "https://drive.google.com/drive/folders/1nm1ZA1BM_OFHL5hapfPbbyDGynlptlsHT-h_oBeWZtqMnuvqN00wi8csnhr32d5y82dYyKn2?usp=drive_link",
+    "image": ""
+  },
+  {
+    "name": "6-S Elk(Vodafone Kapalı Çatı)",
+    "coords": [695, 657, 15], // [cx, cy, r]
+    "href": "https://drive.google.com/drive/folders/15EEKWg_fc95EK5Y4mSGmj4zZ-xTHDfa8FSf3ngxTJWQbLNDhqrLX5AFG3j-h_QFKMGX1ulVw?usp=drive_link",
+    "image": ""
+  },
+  {
+    "name": "7-S Elk(Kütüphane Oto)",
+    "coords": [1577, 429, 15], // [cx, cy, r]
+    "href": "https://drive.google.com/drive/folders/16J5dISLrvg28nKYoVR72a_1u9J91-AGTuFbrpjfQK6kLJN5_y5Hr50na4gNCb0tCSOHYOQJB?usp=drive_link",
+    "image": ""
+  },
+  {
+    "name": "8-S Elk(Müh. Oto)",
+    "coords": [1745, 212, 15], // [cx, cy, r]
+    "href": "https://drive.google.com/drive/folders/11SSG_dPngKzRTI7wFLdS2uyGsll08ANw1Ns5bYW_nRjsAFdt8wB3P5rDT3GgEI05tH4b2aKe?usp=drive_link",
+    "image": ""
+  },
+  {
+    "name": "9-S Elk(Spor Akademi Oto)",
+    "coords": [623, 415, 15], // [cx, cy, r]
+    "href": "https://drive.google.com/drive/folders/1cz3X4vbcZdKzwj26vcVY6FIOkmSV7FLu9Oyu62XjxSw_LkyOITK30sW3PO6iKk3Lo5ohO2Cc?usp=drive_link",
+    "image": ""
+  },
+  {
+    "name": "10-S Elk(ÖYM Oto)",
+    "coords": [1512, 194, 15], // [cx, cy, r]
+    "href": "https://drive.google.com/drive/folders/1y7oNAUfZFAdyONW6EJkqtIrUvKc9_3-WhecfKxqUe4vdf1Agv_-DA_bhSv6gcf_vh-y4pvUE?usp=drive_link",
+    "image": ""
+  },
+  {
+    "name": "11-S Elk(Cafe ÖYM)",
+    "coords": [1562, 255, 15], // [cx, cy, r]
+    "href": "https://drive.google.com/drive/folders/1PfqC89rIQBFsguz2IdiVkqkIaYVcUf227roQAJ7wccO7Fr9BDOd0_B4x5mYHSBeUkdIHzHxl?usp=drive_link",
+    "image": ""
+  },
+  {
+    "name": "12-S Elk(Tarım Kredi. ÖYM)",
+    "coords": [1586, 280, 15], // [cx, cy, r]
+    "href": "https://drive.google.com/drive/folders/1fEdKOREqHuV3QSsqtrwOyENKSSoXfDTZJyvZWRgJNbEs-QiapJ9p3S8HVNY-el2nxm3BppKH?usp=drive_link",
+    "image": ""
+  },
+  {
+    "name": "13-S Elk(Faktör İnş(Merkezi Ders üstü)",
+    "coords": [1164, 323, 15], // [cx, cy, r]
+    "href": "https://drive.google.com/drive/folders/1-hcOOtXjSB6_EgvreRO3syvKxrL_9xWLonIK36wjljMiNhfeEZ7q1jnIMWB7Pl-gD4d7MmFK?usp=drive_link",
+    "image": ""
+  },
+  {
+    "name": "14-S Elk(Faktör İnş.AG İçi",
+    "coords": [1610, 33, 15], // [cx, cy, r]
+    "href": "https://drive.google.com/drive/folders/1Np9pV9KzLsya3uSfL_dmAvFiGUvF2t57JK0wMd576m4G2CGspnZOKatW5JTPQbBj2556x_HS?usp=drive_link",
+    "image": ""
+  },
+  {
+    "name": "15-S Elk(Turkcell Kapalı Çatı)",
+    "coords": [585, 674, 15], // [cx, cy, r]
+    "href": "https://drive.google.com/drive/folders/1LLdI83dTpdQBep7-5uLjVZR5xe-s0HEBTaxf_707ig6vtd9ZY_hznifk68ng9lKB25TGD2-X?usp=drive_link",
+    "image": ""
+  },
+  {
+    "name": "16-S Elk(Öğrc,Per.Ymk(Ablk)",
+    "coords": [1604, 310, 15], // [cx, cy, r]
+    "href": "https://drive.google.com/drive/folders/1RJvVTnc-FzNnTmcktaYZMDA_JMljbE4MGgtyuemtKlOm3PSeS8XwQUW9ovga6EopA97as9hw?usp=drive_link",
+    "image": ""
+  },
+  {
+    "name": "17-S Elk(ASM)",
+    "coords": [1495, 165, 15], // [cx, cy, r]
+    "href": "https://drive.google.com/drive/folders/1hstfDlZLKvWUmRCFKIR24K8G6XhHKInv2Egd8XieTTx-gQuOJt-P63b3foYIhu7GJrKBzqaj?usp=drive_link",
+    "image": ""
+  },
+  {
+    "name": "18-S Elk(ASM Ups)",
+    "coords": [1468, 140, 15], // [cx, cy, r]
+    "href": "https://drive.google.com/drive/folders/17NDSvZWibC6JW-fCgH0gqNkOJcud8tNYrkiwcijJyflPo4WNyw1w9uYeP11b-U1zFWCozQ9n?usp=drive_link",
+    "image": "https://i.hizliresim.com/74p9dkk.jpeg"
+  },
+  {
+    "name": "19-S SU(ASM)",
+    "coords": [1416, 101, 15], // [cx, cy, r]
+    "href": "https://drive.google.com/drive/folders/1akYVImD7eIcpa6XNKinwQ66fe6Ny3PSKqJ51xwNmgzjXyPXAsAIJwuFyr3B8kRkGB8J1cgQc?usp=drive_link",
+    "image": ""
+  },
+  {
+    "name": "20-S SU(ÖĞR.KANTİN(Rektörlük)",
+    "coords": [1619, 432, 15], // [cx, cy, r]
+    "href": "https://drive.google.com/drive/folders/17sB6eLt8M_2TsDxpoLhJ08V9j2rdYSw10eOH41yKcYkBsQyQ8iHpVcHGl5K7m4WniTIFatk0?usp=drive_link",
+    "image": ""
+  },
+  {
+    "name": "21-S SU(Merkez Derslik(Sağ. Kantin)",
+    "coords": [1233, 477, 15], // [cx, cy, r]
+    "href": "https://drive.google.com/drive/folders/17sB6eLt8M_2TsDxpoLhJ08V9j2rdYSw10eOH41yKcYkBsQyQ8iHpVcHGl5K7m4WniTIFatk0?usp=drive_link",
+    "image": ""
+  },
+  {
+    "name": "22-S SU(Fırıntaş ÖYM)",
+    "coords": [1442, 118, 15], // [cx, cy, r]
+    "href": "https://drive.google.com/drive/folders/1pZALmgTj1wY2oguTJ2MMYzShC-hRJ5Cj8vsX83tQSiGH54Gh_VK7dqeEkCxnAKNqw-6TW7nW?usp=drive_link",
+    "image": "https://i.hizliresim.com/74p9dkk.jpeg"
+  },
+  {
+    "name": "23-S SU(Coffy ÖYM)",
+    "coords": [NaN], // Geçersiz koordinat, düzeltilmesi gerekiyor
+    "href": "https://drive.google.com/drive/folders/1qkFdOZ7WUxZ7IFIYoSM82DFATkNv9zZWuGL5rG9gAcP3JKnpe8wCcvT8-669OYZDBfcaYDnu?usp=drive_link",
+    "image": ""
+  },
+  {
+    "name": "24-S SU(Eski Ymkh(Soğuk A Blk)",
+    "coords": [1345, 90, 15], // Geçersiz koordinat, düzeltilmesi gerekiyor
+    "href": "https://drive.google.com/drive/folders/1MK5vomPqEIEB44-tXLlU8wG_mIxVev7C_wlpcr-FbKyCJmwTeqyzoCNCaJkiW1xd1xFtkOHh?usp=drive_link",
+    "image": ""
+  },
+  {
+    "name": "25-S SU(Eski Ymkh(Sıcak A Blk)",
+    "coords": [1310, 75, 15], // [cx, cy, r]
+    "href": "https://drive.google.com/drive/folders/16KUOJQhH8SfGHE8tgFZfkfnw2Szw4pLpS83vISMpa69JIJCvjNPZMwRwFemho3YGxzRGIyO7?usp=drive_link",
+    "image": ""
+  },
+  {
+    "name": "26-S Elk(Yeni Öğrenci Ymk(D blk)",
+    "coords": [1400, 247, 15], // [cx, cy, r]
+    "href": "https://drive.google.com/drive/folders/1AWTC0lfYZ50ZpAlALkcBut7oAG5WipLfAuoXpE6lyZl6skXPCm1nb58Idgf4vw8ca_T56mKI?usp=drive_link",
+    "image": ""
+  },
+  {
+    "name": "27-S SU(Yeni Ymkh. Soğuk(D Blk)",
+    "coords": [1427, 305, 15],// Geçersiz koordinat, düzeltilmesi gerekiyor
+    "href": "https://drive.google.com/drive/folders/1n9Rb8z5yMkbCacUXI9i6uEKDXPAcS0AYk3IJQMNYOAi3nH3ADrGMqAHX97JmAHVhd9E9S6lL?usp=drive_link",
+    "image": ""
+  },
+  {
+    "name": "28-S SU(Yeni Yemkh.(Sıcak(D Blk)",
+    "coords": [1380, 90, 15], // gerekiyor
+    "href": "https://drive.google.com/drive/folders/1RczJXDyyYtaqpGpbcnBvMiccMNZHU4UgmZ9T6wPlB7q6vNZWo-X_9y7oj1ZTTg8zInjLEUcy?usp=drive_link",
+    "image": ""
+  },
+  {
+    "name": "29-S Elk(Ziraat Atm2 Trafo Yanı)",
+    "coords": [1460, 495, 15], // Geçersiz koordinat, düzeltilmesi gerekiyor
+    "href": "https://drive.google.com/drive/folders/1tEDIzshhE8u1Qc2MRwDyAFvsDAbnW_voBuYkQS3Y-P2nMfdbO6AIks49t1BrDcGqfHt5LjBP?usp=drive_link",
+    "image": ""
+  },
+    {
+    "name": "30-S Elk Sağlık Bil. Fak. -2.Kat Bekleme Alanı",
+    "coords": [1134, 333, 15], // [cx, cy, r]
+    "href": "https://drive.google.com/drive/folders/1-hcOOtXjSB6_EgvreRO3syvKxrL_9xWLonIK36wjljMiNhfeEZ7q1jnIMWB7Pl-gD4d7MmFK?usp=drive_link",
+    "image": ""
+  },
+  {
+    "name": "31-S Elk MF-107 Dersliği Yanı 0ncı Kat",
+    "coords": [1134, 410, 15], // [cx, cy, r]
+    "href": "https://drive.google.com/drive/folders/1-hcOOtXjSB6_EgvreRO3syvKxrL_9xWLonIK36wjljMiNhfeEZ7q1jnIMWB7Pl-gD4d7MmFK?usp=drive_link",
+    "image": ""
+  },
+  {
+    "name": "32-S Elk MZF-07 Dersliği Yanı -1ncİi Kat",
+    "coords": [1164, 410, 15], // [cx, cy, r]
+    "href": "https://drive.google.com/drive/folders/1-hcOOtXjSB6_EgvreRO3syvKxrL_9xWLonIK36wjljMiNhfeEZ7q1jnIMWB7Pl-gD4d7MmFK?usp=drive_link",
+    "image": ""
+  }
+  
+];
+
+    function createHotspots() {
+      const image = document.getElementById('krokiImage');
+      const svg = document.getElementById('mapSvg');
+      const tooltipContainer = document.getElementById('tooltip-container');
+      const tooltipImage = document.getElementById('tooltip-image');
+      svg.innerHTML = '';
+
+      const originalWidth = image.naturalWidth;
+      const originalHeight = image.naturalHeight;
+      const currentWidth = image.clientWidth;
+      const currentHeight = image.clientHeight;
+
+      hotspots.forEach(hotspot => {
+        const scaledCoords = hotspot.coords.map((coord, index) => {
+          return index % 2 === 0
+            ? (coord / originalWidth) * currentWidth
+            : (coord / originalHeight) * currentHeight;
+        });
+
+        // Yuvarlak (circle) oluştur
+        const circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+        circle.setAttribute("cx", scaledCoords[0]);
+        circle.setAttribute("cy", scaledCoords[1]);
+        circle.setAttribute("r", scaledCoords[2]);
+        circle.addEventListener('click', () => {
+          window.location.href = hotspot.href;
+        });
+
+        // Mouse üzerine gelince resmi göster
+        circle.addEventListener('mouseover', () => {
+          if (hotspot.image) {
+            tooltipImage.src = hotspot.image;
+            tooltipContainer.style.display = 'block';
+          }
+        });
+
+        // Mouse üzerinden çıkınca resmi gizle
+        circle.addEventListener('mouseout', () => {
+          tooltipContainer.style.display = 'none';
+        });
+
+        // Metin ekle
+        const text = document.createElementNS("http://www.w3.org/2000/svg", "text");
+        const textX = scaledCoords[0] + scaledCoords[2] / 2; // Metni yuvarlağın sağ iç tarafına yerleştir
+        const textY = scaledCoords[1] + scaledCoords[2] / 2; // Metni yuvarlağın alt iç tarafına yerleştir
+        text.setAttribute("x", textX);
+        text.setAttribute("y", textY);
+        text.setAttribute("transform", `rotate(-45, ${textX}, ${textY})`); // 45 derece döndür
+        text.setAttribute("text-anchor", "end"); // Metnin son harfi belirtilen x, y'de bitsin
+        text.textContent = hotspot.name;
+
+        // Önce circle, sonra text eklenmeli
+        svg.appendChild(circle);
+        svg.appendChild(text);
+      });
+    }
+
+    window.addEventListener('load', createHotspots);
+    window.addEventListener('resize', createHotspots);
+  </script>
+</body>
+</html>
