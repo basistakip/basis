@@ -1,1 +1,239 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <link rel="shortcut icon" type="png" href="resimler/basis.png"> 
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Responsive Interaktif Harita</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: start;
+      height: 100vh;
+      width: 100%;
+      overflow: hidden;
+    }
 
+    #tooltip-container {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: white;
+      border: 1px solid #ccc;
+      padding: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      z-index: 1000;
+      display: none;
+    }
+
+    .container {
+      position: relative;
+      width: 100%;
+      height: 100vh;
+    }
+
+    img {
+      width: 100%;
+      height: 100vh;
+      display: block;
+    }
+
+    svg {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+    }
+
+    polygon {
+      fill: rgba(255, 0, 0, 0.3);
+      stroke: rgba(255, 0, 0, 0.5);
+      stroke-width: 2;
+      cursor: pointer;
+      pointer-events: all;
+    }
+
+    polygon:hover {
+      fill: rgba(0, 255, 0, 0.3);
+    }
+
+    text {
+      font-size: 14px;
+      fill: rgb(255, 253, 253);
+      font-weight: bold;
+      text-anchor: middle;
+      pointer-events: none;
+    }
+
+    /* Mobil cihazlar için stiller */
+    @media (max-width: 768px) {
+      .container {
+        height: auto;
+      }
+
+      img {
+        height: auto;
+      }
+
+      text {
+        font-size: 12px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div id="tooltip-container">
+    <img id="tooltip-image" src="" alt="Bina Resmi" style="max-width: 200px; max-height: 150px;">
+  </div>
+
+  <div class="container">
+    <img src="https://basistakip.github.io/basis/interaktif/yerleske/ana_kroki_acik.jpeg" alt="Kroki" id="krokiImage">
+    <svg id="mapSvg"></svg>
+  </div>
+
+  <script>
+    const hotspots = [
+      {
+    "name": "EY-LER",
+    "coords": [60, 60, 130, 60, 130, 90, 60, 90],
+    "href": "https://basistakip.github.io/basis/interaktif/yerleske/eyler.html",
+    "image": ""
+  },
+  {
+    "name": "JENERATÖRLER",
+    "coords": [60, 160, 210, 160, 210, 190, 60, 190],
+    "href": "https://basistakip.github.io/basis/interaktif/jen/jeneratorler.html",
+    "image": ""
+  },
+  {
+    "name": "BİNALAR",
+    "coords": [60, 260, 150, 260, 150, 290, 60, 290],
+    "href": "https://basistakip.github.io/basis/interaktif/binalar/binalar.html",
+    "image": ""
+  },
+  {
+    "name": "UPSLER",
+    "coords": [60, 360, 140, 360, 140, 390, 60, 390],
+    "href": "https://basistakip.github.io/basis/interaktif/upsler/upsler.html",
+    "image": ""
+  },
+  {
+    "name": "ASANSÖRLER",
+    "coords": [60, 460, 190, 460, 190, 490, 60, 490],
+     "href": "https://basistakip.github.io/basis/interaktif/asansorler/asansorler.html",
+    "image": ""
+  },
+  {
+    "name": "SAYAÇLAR",
+    "coords": [60, 560, 160, 560, 160, 590, 60, 590],
+    "href": "https://basistakip.github.io/basis/interaktif/sayaclar/sayaclar.html",
+    "image": ""
+  },
+  {
+    "name": "YANGIN",
+    "coords": [60, 660, 130, 660, 130, 690, 60, 690],
+    "href": "https://basistakip.github.io/basis/interaktif/yangin/yangin.html",
+    "image": ""
+  },
+  {
+    "name": "KAPILAR",
+    "coords": [60, 760, 140, 760, 140, 790, 60, 790],
+     "href": "https://basistakip.github.io/basis/interaktif/kapilar/kapilar.html",
+    "image": ""
+  },
+  {
+    "name": "YEDEK",
+    "coords": [60, 860, 120, 860, 120, 890, 60, 890],
+        "href": "https://basistakip.github.io/basis/interaktif/yedek/yedek.html",
+    "image": ""
+  },
+  ,
+   {"name": "11 Bina ", "coords": [300, 850, 300, 850, ]},
+  ,
+      
+      
+      { name: "SPOR STADYUMU", coords: [156, 590, 169, 497, 277, 424, 485, 530, 462, 657, 382, 712, 245, 677], href: "https://drive.google.com/drive/folders/1fuJlOv0wUs1FuxvWsjhw4KvpLSu8CX6fiV9FnR83QOF35Tp9FvHw_-tIyI5PVamJ9jzF7QSp" },
+      { name: "KAPALI SPOR SALONU", coords: [551, 552, 699, 535, 713, 675, 566, 697], href: "https://drive.google.com/drive/folders/1N-rdUOu98ZSLd_WJLMNd5332qGAJ8HOdDTdRn1qOZ6DfTUgtUb4AuvnbdKUovc19ow1vNtcF" },
+      { name: "SPOR AKADEMİSİ", coords: [543, 361, 558, 477, 675, 460, 670, 346], href: "https://drive.google.com/drive/folders/1dLwbe0hBNFASEfx6U_FgmF8KB5lp2pKJX-sgyIUj0RFe803SpiUVP71v28oZbrTHkzfEHot6" },
+      { name: "MERKEZİ DERSLİK", coords: [1118, 333, 1369, 304, 1387, 409, 1127, 441], href: "https://drive.google.com/drive/folders/1r06zRd6eEISG9I326JGR2QL4bbxManul_U9jBU3dY7IWpLqFuezVePQ9odOYrJogy_ortKB9?usp=drive_link", image: "https://i.hizliresim.com/74p9dkk.jpeg" },
+      { name: "SAĞLIK BİLİMLERİ", coords: [1127, 445, 1390, 412, 1398, 488, 1136, 524], href: "https://drive.google.com/drive/folders/1tewPGlaVleaB8PSDKJ3CpX4-TJlpyu-I?usp=drive_link" },
+      { name: "REKTÖRLÜK", coords: [1799, 394, 1681, 374, 1578, 382, 1505, 430, 1495, 498, 1618, 517, 1624, 482, 1782, 517, 1799, 459], href: "https://drive.google.com/drive/folders/1843LTVIrIDvvBholUqK34vJ1YNVD1gWvnSS-NMJmcFRvOAbAM1c_awRyRxg41YQpoUdafR6a" },
+      { name: "ÖYM", coords: [1475, 258, 1485, 313, 1619, 292, 1603, 174, 1566, 179, 1553, 128, 1448, 141, 1453, 176, 1388, 186, 1398, 266], href: "https://drive.google.com/drive/folders/1843LTVIrIDvvBholUqK34vJ1YNVD1gWvnSS-NMJmcFRvOAbAM1c_awRyRxg41YQpoUdafR6a" },
+      { name: "MÜHENDİSLİK", coords: [1757, 150, 1769, 218, 1741, 264, 1664, 271, 1656, 228, 1727, 218, 1721, 155], href: "https://drive.google.com/drive/folders/1uB4ockbREFNf6CcssejK9mD6PAs9IfAdI3Ux7Svk2Nep9gmdG7c6-9Ltv126R0v9lbgteRzl" },
+      { name: "MÜHENDİSLİK LAB", coords: [1741, 43, 1754, 98, 1673, 110, 1674, 86, 1712, 78, 1709, 47, 1727, 45], href: "https://drive.google.com/drive/folders/1bgWYCbNqtLbAUy-SE_2JB9aDyMXZDY2cvJg09xjuKJZpIpLhuRzsv3BvE6j3dnWCoJensB0B" },
+      { name: "NİZAMİYELER", coords: [1460, 793, 1465, 835, 1573, 830, 1566, 788], href: "https://drive.google.com/drive/folders/1zqqeHVUV7rTb8tQ_8n7ZbG10Y4idNLPV6FYvkbli4a2KYmyp3rV1tT8rGM59pSGHjvyhuMk-" },
+      { name: "YENİ DENİZCİLİK", coords: [673, 783, 675, 863, 789, 866, 789, 785], href: "https://drive.google.com/drive/folders/1ZYsVVhI4hydIBoVo1W_J-VoJa5fo7XQ_3jV6TsN7XfM1cWRnRysoUkenNsRLjsUfauAmDerP", image: "https://i.hizliresim.com/llnxe6j.png" },
+      { name: "CAMİ", coords: [], href: "" }
+    ];
+
+    function createHotspots() {
+      const image = document.getElementById('krokiImage');
+      const svg = document.getElementById('mapSvg');
+      const tooltipContainer = document.getElementById('tooltip-container');
+      const tooltipImage = document.getElementById('tooltip-image');
+      svg.innerHTML = '';
+
+      const originalWidth = image.naturalWidth;
+      const originalHeight = image.naturalHeight;
+      const currentWidth = image.clientWidth;
+      const currentHeight = image.clientHeight;
+
+      hotspots.forEach(hotspot => {
+        const scaledCoords = hotspot.coords.map((coord, index) => {
+          return index % 2 === 0
+            ? (coord / originalWidth) * currentWidth
+            : (coord / originalHeight) * currentHeight;
+        });
+
+        const polygon = document.createElementNS("http://www.w3.org/2000/svg", "polygon");
+        polygon.setAttribute("points", scaledCoords.join(" "));
+        polygon.addEventListener('click', () => {
+          window.location.href = hotspot.href;
+        });
+
+        // Mouse üzerine gelince resmi göster
+        polygon.addEventListener('mouseover', () => {
+          if (hotspot.image) {
+            tooltipImage.src = hotspot.image;
+            tooltipContainer.style.display = 'block';
+          }
+        });
+
+        // Mouse üzerinden çıkınca resmi gizle
+        polygon.addEventListener('mouseout', () => {
+          tooltipContainer.style.display = 'none';
+        });
+
+        svg.appendChild(polygon);
+
+        const text = document.createElementNS("http://www.w3.org/2000/svg", "text");
+        let xSum = 0, ySum = 0;
+        for (let i = 0; i < scaledCoords.length; i += 2) {
+          xSum += scaledCoords[i];
+          ySum += scaledCoords[i + 1];
+        }
+        const centerX = xSum / (scaledCoords.length / 2);
+        const centerY = ySum / (scaledCoords.length / 2);
+
+        text.setAttribute("x", centerX);
+        text.setAttribute("y", centerY);
+        text.setAttribute("transform", `rotate(-35, ${centerX}, ${centerY})`);
+        text.setAttribute("text-anchor", "middle");
+        text.textContent = hotspot.name;
+        svg.appendChild(text);
+      });
+    }
+
+    window.addEventListener('load', createHotspots);
+    window.addEventListener('resize', createHotspots);
+  </script>
+</body>
+</html>
