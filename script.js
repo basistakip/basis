@@ -7,31 +7,42 @@ document.querySelectorAll('.system-button').forEach(button => {
       this.style.transform = 'translateY(-8px)';
     }, 150);
 
-    // Öncelikle data-url özelliğini kontrol et
+    // URL kontrolü
     const targetUrl = this.getAttribute('data-url');
     const systemName = this.querySelector('span').textContent;
 
-    if (targetUrl) {
-      console.log(`${systemName} sistemine yönlendiriliyor: ${targetUrl}`);
+    if (!targetUrl) {
+      console.error(`${systemName} sistemi için URL tanımlanmamış`);
+      return;
+    }
+
+    console.log(`${systemName} sistemine yönlendiriliyor: ${targetUrl}`);
+    
+    try {
+      // Yeni sekmede açma işlemi
+      const newWindow = window.open('', '_blank');
       
-      // Mutlak URL kontrolü (http/https ile başlıyorsa doğrudan aç)
-      if (targetUrl.startsWith('http://') || targetUrl.startsWith('https://')) {
-        window.open(targetUrl, '_blank');
-      } 
-      // Göreli URL ise (/) base URL ekleyerek aç
-      else if (targetUrl.startsWith('/')) {
-        window.open(window.location.origin + targetUrl, '_blank');
+      if (newWindow) {
+        // Tarayıcı pop-up engelleyiciyi aşmak için
+        newWindow.location.href = targetUrl;
+      } else {
+        // Pop-up engellendi uyarısı
+        const confirmRedirect = confirm(
+          `"${systemName}" sayfasına yönlendirilmek istiyor musunuz?\n\n` +
+          `Tarayıcınız yeni sekme açmayı engelledi. ` +
+          `URL: ${targetUrl}\n\n"Tamam"a basarak yönlendirileceksiniz.`
+        );
+        
+        if (confirmRedirect) {
+          window.location.href = targetUrl;
+        }
       }
-      // Diğer durumlarda doğrudan aç
-      else {
-        window.open(targetUrl, '_blank');
-      }
-    } else {
-      console.log(`${systemName} sistemi için bir URL tanımlanmamış.`);
-      alert(`${systemName} sistemi için URL tanımlanmamış.`);
+    } catch (error) {
+      console.error('Yönlendirme hatası:', error);
+      alert(`Yönlendirme sırasında hata oluştu: ${error.message}`);
     }
     
-    // Sayfanın yeniden yüklenmesini engelle
+    // Varsayılan davranışı engelle
     e.preventDefault();
     e.stopPropagation();
   });
