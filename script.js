@@ -1,7 +1,7 @@
 document.querySelectorAll('.system-button').forEach(button => {
   // URL eşleştirmeleri
   const urlMappings = {
-    "Basis Drive": "https://drive.bandirma.edu.tr",
+    "Basis Drive": "https://www.youtube.com/",
     "Rektörlük Binası": "/rektörlük-binası",
     "Kapalı Spor Salonu": "/kapalı-spor-salonu",
     "Spor Akademisi": "/spor-akademisi",
