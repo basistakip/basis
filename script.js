@@ -1,7 +1,6 @@
 document.querySelectorAll('.system-button').forEach(button => {
   // URL eşleştirmeleri
   const urlMappings = {
-    "GitHub Web Yapiisleribanu_":"https://github.com/basistakip/basis",
     "Basis Drive": "https://drive.bandirma.edu.tr",
     "Rektörlük Binası": "/rektörlük-binası",
     "Kapalı Spor Salonu": "/kapalı-spor-salonu",
