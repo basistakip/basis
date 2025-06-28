@@ -1,284 +1,790 @@
 <!DOCTYPE html>
-<html lang="en">
-
+<html lang="tr">
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BASİS</title>
-
+    <title>Sistem Kontrol Paneli</title>
     <link rel="stylesheet" href="style.css">
-    <link rel="shortcut icon" type="png" href="resimler/basis.png"> 
-</head>
-
-<style>
-body {
-  font-family: Arial, Helvetica, sans-serif;
-  margin: 0;
-  padding: 0;
-}
-
-#searchBar {
-  width: 100%;
-  font-size: 18px;
-  padding: 12px;
-  border: 1px solid #ddd;
-  box-sizing: border-box;
-}
-
-#subMenu {
-  display: none;
-  flex-direction: column;
-  margin-top: 10px;
-}
-
-#subMenu a {
-  padding: 12px;
-  font-size: 16px;
-  text-align: left;
-  border: none;
-  background-color: #f1f1f1;
-  cursor: pointer;
-  margin-bottom: 5px;
-  text-decoration: none;
-  color: black;
-  display: flex;
-  align-items: center;
-}
-
-#subMenu a:hover {
-  background-color: #ddd;
-}
-
-#subMenu a img {
-  width: 44px;
-  height: 44px;
-  margin-right: 10px;
-}
-</style>
 </head>
 <body>
-
-<h2>Search Bar ve Gizli Butonlar</h2>
-
-<input type="text" id="searchBar" placeholder="Buton ismi yazın (Örnek: Buton 1)" oninput="filterButtons()">
-
-<div id="subMenu">
-<a href="https://docs.google.com/forms/d/e/1FAIpQLScxCPN1_kgTCX_H1HDOeDpbekoaBYjOHpfBfgq9lna5wmOK7A/viewform?usp=dialog" target="_blank">
-    <img src="resimler/googleform.png"> 1-DIŞ MEKANLAR GENEL FORM
-</a>
-
-<a href="https://docs.google.com/forms/d/e/1FAIpQLSf4h0wnFssq0_yrcmx8TMuPAFE_epZCJXJkh5ruiFyFtg-oaA/viewform?usp=dialog" target="_blank">
-    <img src="resimler/googleform.png"> 2-HÜCRE GENEL FORM
-</a>
-
-<a href="https://docs.google.com/forms/d/e/1FAIpQLScTZ14Ux5CLe4i_oDjKgnvmKj6niN5C5PxMY0xJhJTI7hUwTA/viewform?usp=dialog" target="_blank">
-    <img src="resimler/googleform.png"> 3-TRAFOLAR GENEL FORM
-</a>
-
-<a href="https://docs.google.com/forms/d/e/1FAIpQLSfEDXOKKVtnuI46mvx6qA6EC6_iRLBDhOXzFtp11sCwfzJ5RQ/viewform?usp=sharing" target="_blank">
-    <img src="resimler/googleform.png"> 4-KOMPANZASYON GENEL FORM
-</a>
-
-<a href="https://docs.google.com/forms/d/e/1FAIpQLSd1tQr2Xk0l5U1R21RQsRuBuCmY71cwgt8hEjeGxTUR98j2Ow/viewform?usp=sharing" target="_blank">
-    <img src="resimler/googleform.png"> 5-JENERATÖRLER (J) GENEL FORM
-</a>
-
-<a href="https://docs.google.com/forms/d/e/1FAIpQLSfvjsqoxRrroQo9SqrtTfKC15wPJg90e7v3hu5rvXre69EwOw/viewform?usp=sharing" target="_blank">
-    <img src="resimler/googleform.png"> 6-BİNALAR/TALEPLER (BT)
-</a>
-
-<a href="https://docs.google.com/forms/d/e/1FAIpQLSdjauyGsm9zewmnTBFOb4nm4O0MDTex9Axvecif3GWu8xMmgg/viewform?usp=sharing" target="_blank">
-    <img src="resimler/googleform.png"> 7-ANA DAĞITIM PANOSU (ADP)
-</a>
-
-<a href="https://docs.google.com/forms/d/e/1FAIpQLSedsw82b7j3l0jd0oAkk-Ff7-Fi0z-_cHuLm4e04D-WUD8geg/viewform?usp=sharing" target="_blank">
-    <img src="resimler/googleform.png"> 8-ELEKTRİK ODASI (EO) GENEL FORM
-</a>
-
-<a href="https://docs.google.com/forms/d/e/1FAIpQLSfc-n6TIgMrUN6KRJTXk7P70-W7qx4iYf_HEvLajrAT6ZPGEw/viewform?usp=sharing" target="_blank">
-    <img src="resimler/googleform.png"> 9-ELEKTRİK PANOLARI (EP) GENEL FORM
-</a>
-
-<a href="https://docs.google.com/forms/d/e/1FAIpQLSefsh8rnW66nqbck3m9rX0BjomREUkBK9ta8XwzAu6Sunj2Kw/viewform?usp=sharing" target="_blank">
-    <img src="resimler/googleform.png"> 10-UPSLER (U) GENEL FORM
-</a>
-
-<a href="https://docs.google.com/forms/d/e/1FAIpQLSd4EySc0RLScnnuru-_7C3GDJHZ9dLgmeyl44f0TDk59etdBw/viewform?usp=dialog" target="_blank">
-    <img src="resimler/googleform.png"> 11-ASANSÖRLER (A) GENEL FORM
-</a>
-
-<a href="https://docs.google.com/forms/d/e/1FAIpQLSf2Nrf6trMJTyB5IHJJx8IEI6rbqc_zXIVvyiyZyybOkbXM2Q/viewform?usp=sharing" target="_blank">
-    <img src="resimler/googleform.png"> 12-SAYAÇLAR (S) GENEL FORM
-</a>
-
-<a href="https://docs.google.com/forms/d/e/1FAIpQLSeyaLx3COBQM3993La9FQqn5f0L9Dw2GYi0_oPfBi4p99hxig/viewform?usp=sharing" target="_blank">
-    <img src="resimler/googleform.png"> 13-YANGIN KONTROL PANELİ GENEL FORM
-</a>
-
-<a href="https://docs.google.com/forms/d/e/1FAIpQLSe19nb3UpSvk2gu0kUkcyygtBQBfokHCy0z0SDgeL6-axptBA/viewform?usp=sharing" target="_blank">
-    <img src="resimler/googleform.png"> 14-AYDINLATMA OTOMASYON (AO) GENEL FORM
-</a>
-
-<a href="https://docs.google.com/forms/d/e/1FAIpQLSfdPEGTU_6O7cmA8mkx-oUbusQdzBNuMpZEQ-30c_ij7nM5sQ/viewform?usp=sharing" target="_blank">
-    <img src="resimler/googleform.png"> 15-KAYAR KAPI (KK) GENEL FORM
-</a>
-
-<a href="https://docs.google.com/forms/d/e/1FAIpQLSfdPEGTU_6O7cmA8mkx-oUbusQdzBNuMpZEQ-30c_ij7nM5sQ/viewform?usp=sharing" target="_blank">
-    <img src="resimler/googleform.png"> 16-DÖNER KAPI (DK) GENEL FORM
-</a>
-
-<a href="https://docs.google.com/forms/d/e/1FAIpQLSfXFHQwZ737iW591cv76j3H_2mSojWRr8-6Vk6iiIHaKYqUxA/viewform?usp=sharing" target="_blank">
-    <img src="resimler/googleform.png"> 17-MALZEME (M) GENEL FORM
-</a>
-
-<a href="https://drive.google.com/drive/folders/1Bq8BgeYdaxkzCyxzWDlGzQOeE9AKBURs?usp=sharing" target="_blank">
-    <img src="resimler/googleform.png"> 18-RAPOR (R)
-</a>
-
-<a href="https://docs.google.com/forms/d/e/1FAIpQLSdJRjpO1aC0qD9ZZbsY4NhjHDySM0r4ZmO0OG7O2pYHWV-y1A/viewform?usp=sharing" target="_blank">
-    <img src="resimler/googleform.png"> 19-İLETİŞİM (İ) GENEL FORMU
-</a>
+  
+  
+  
+  
+    <div class="control-panel">
+      
+      
+      
+        <div class="section main-systems">
+          
+          
+          
+          <div class="system-button" data-url="/banu-uni">
+    <div class="icon banu-icon"></div>
+    <span>Banü Üni</span>
+</div>
+          
+          
+            <div class="system-button search-bar-wide" data-url="/sistem-ara">
+                <div class="search-iframe-container">
+                    <iframe
+                        src="https://basistakip.github.io/basis/aramacubugu2.html"
+                        frameborder="0"
+                        width="100%"
+                        height="80px"
+                        scrolling="yes"
+                      
+                        allowfullscreen=""
+                        loading="lazy"
+                        referrerpolicy="no-referrer-when-downgrade">
+                    </iframe>
+                </div>
+            </div>
+          
+          
+          
+          
+          
+          
+          
+                    
+        <div class="system-button" data-url="/basis-drive">
+          
+    <div class="icon basis-drive-icon"></div>
+    <span>Basis Drive</span>
 </div>
 
+<div class="system-button">
+    <div class="icon github-web-icon"></div>
+    <span>GitHub Web Yapiisleribanu_</span>
+</div>
+          
+          
+          
+          
+                      <!-- Rektörlük Binası -->
+            <div class="system-button">
+                <div class="icon building-icon"></div>
+                <span>Rektörlük Binası</span>
+            </div>
 
-<script>
-function filterButtons() {
-  var input, filter, subMenu, links, i, txtValue;
-  input = document.getElementById("searchBar");
-  filter = input.value.toUpperCase();
-  subMenu = document.getElementById("subMenu");
-  links = subMenu.getElementsByTagName("a");
+            <!-- Kapalı Spor Salonu -->
+            <div class="system-button">
+                <div class="icon sport-icon"></div>
+                <span>Kapalı Spor Salonu</span>
+            </div>
 
-  if (filter.length === 0) {
-    subMenu.style.display = "none";
-    return;
-  }
-
-  for (i = 0; i < links.length; i++) {
-    txtValue = links[i].textContent || links[i].innerText;
-    if (txtValue.toUpperCase().indexOf(filter) > -1) {
-      links[i].style.display = "flex";
-    } else {
-      links[i].style.display = "none";
-    }
-  }
-
-  subMenu.style.display = "flex";
-}
-</script>
-
-<body>
-
-<section class="container content">
-
-    <h1>ELEKTRİK BAKIM ONARIM </h1>
-    <p></p>
-    <h1></h1>
-    <p></p>
-    <h1></h1>
-    <p></p>
-  <div class="links">
-        <a href="index.html" target="_blank"><img src="resimler/basis.png" style="width:132px;height:142px;border:0;">Basis</a>
-        <a href="https://docs.google.com/forms/d/e/1FAIpQLSc9J106VQr9w0WOIEOzJP1yiNb0dYtNIFv1S3rYIA__tE16vw/viewform" target="_blank"><img src="resimler/talepyaz.png" style="width:132px;height:142px;border:0;">Talep Yaz</a>
-        <a href="izlemepaneli.html" target="_blank"><img src="resimler/izlemepaneli.png" style="width:132px;height:142px;border:0;">İzleme Paneli</a>
-        <a href="https://docs.google.com/spreadsheets/d/1rBrzlnckorQKsxIoec_gQtAqdqp4SeSS1orOrAhuF2A/edit?hl=tr&gid=2110297457#gid=2110297457" target="_blank"><img src="resimler/takip.png" style="width:132px;height:142px;border:0;">Takip </a>
-        <a href="https://docs.google.com/spreadsheets/d/1rBrzlnckorQKsxIoec_gQtAqdqp4SeSS1orOrAhuF2A/edit?hl=tr&gid=1178319267#gid=1178319267" target="_blank"><img src="resimler/talepler.png" style="width:132px;height:142px;border:0;">Talepler</a>
-        <a href="https://ubys.bandirma.edu.tr/ERMS/Inbox/Record/Index?#" target="_blank"><img src="resimler/elektonikbelge.png" style="width:132px;height:142px;border:0;">Belge Gezgini</a>
-        <a href="https://destek.bandirma.edu.tr/scp/index.php" target="_blank"><img src="resimler/destek.png" style="width:132px;height:142px;border:0;">Destek</a>
-        <a href="https://mail.google.com/mail/u/0/#inbox" target="_blank"><img src="resimler/eposta.png" style="width:132px;height:142px;border:0;">E-posta</a>
-        <a href="projeler.html" target="_blank"><img src="resimler/proje.png" style="width:132px;height:142px;border:0;">Proje</a>
-    </div>
-
-    <div>
-        <br> 
-        <br> 
-    </div> 
-
-    <h1>Periyodik Takip</h1>
-    <div class="links">
-        <a href="#"><img src="resimler/fatura.png" style="width:132px;height:142px;border:0;">Fatura</a>
-        <a href="#"><img src="resimler/rapor.png" style="width:132px;height:142px;border:0;">Rapor </a>
-        <a href="https://drive.google.com/drive/folders/1LQEMoJIGTYbt_H_AYLF9_TKcnLDfrtPrmDcvxDQ01R0VdeA8YJQWM8k0GNnN9ZTsLFZxkXoa?hl=tr"><img src="resimler/yangin.png" style="width:132px;height:142px;border:0;">Yangın</a>
-        <a href="#"><img src="resimler/asansor.png" style="width:132px;height:142px;border:0;">Asansör</a>
-        <a href="https://docs.google.com/spreadsheets/d/1rBrzlnckorQKsxIoec_gQtAqdqp4SeSS1orOrAhuF2A/edit?gid=257810065#gid=257810065"><img src="resimler/jenerator.png" style="width:132px;height:142px;border:0;">Jeneratör</a>
-        <a href="https://docs.google.com/spreadsheets/d/1rBrzlnckorQKsxIoec_gQtAqdqp4SeSS1orOrAhuF2A/edit?gid=1985657838#gid=1985657838"><img src="resimler/ups.png" style="width:132px;height:142px;border:0;">Ups</a>
-        <a href="#"><img src="resimler/otomasyon.png" style="width:132px;height:142px;border:0;">Otomasyon</a>
-        <a href="#"><img src="resimler/trafo.png" style="width:132px;height:142px;border:0;">Trafo-Ag</a>
-        <a href="#"><img src="resimler/kayarkapi.png" style="width:132px;height:142px;border:0;">Kayar Kapı</a>
-    </div>
-
-    <div>
-        <br> 
-        <br> 
-    </div> 
-
-    <h1>Malzeme/Araç/Bina Takip</h1>
-    <div class="links">
-        <a href="https://docs.google.com/spreadsheets/d/1rBrzlnckorQKsxIoec_gQtAqdqp4SeSS1orOrAhuF2A/edit?gid=1923298998#gid=1923298998"><img src="resimler/istenenmalzeme.png" style="width:132px;height:142px;border:0;">İstenen Malzeme</a>
-        <a href="https://docs.google.com/spreadsheets/d/1rBrzlnckorQKsxIoec_gQtAqdqp4SeSS1orOrAhuF2A/edit?gid=2106122521#gid=2106122521"><img src="resimler/alinanmalzeme.png" style="width:132px;height:142px;border:0;">Alınan Malzeme</a>
-        <a href="https://docs.google.com/spreadsheets/d/1rBrzlnckorQKsxIoec_gQtAqdqp4SeSS1orOrAhuF2A/edit?gid=1043957333#gid=1043957333"><img src="resimler/verilenmalzeme.png" style="width:132px;height:142px;border:0;">Verilen Malzeme</a>
-        <a href="#"><img src="resimler/envanter.png" style="width:132px;height:142px;border:0;">Envanter</a>
-        <a href="#"><img src="resimler/araclarimiz.png" style="width:132px;height:142px;border:0;">Araçlarımız</a>
-        <a href="binalar.html"><img src="resimler/binalar.png" style="width:132px;height:142px;border:0;">Binalar</a>
-    </div>
-
-    <div>
-        <br> 
-        <br> 
-    </div> 
-
-    <h1>Evrak/Etiket/Afiş/Levha</h1>
-    <div class="links">
-        <a
-<a href="#">  <img src="resimler/evraklar.png" style="width:132px;height:142px;border:0;">Evraklar</a>
-<a href="https://docs.google.com/spreadsheets/d/1rBrzlnckorQKsxIoec_gQtAqdqp4SeSS1orOrAhuF2A/edit?hl=tr&gid=338832847#gid=338832847">  <img src="resimler/arsiv.png" style="width:132px;height:142px;border:0;">Arşiv</a>
-<a href="#">  <img src="resimler/ana.png" style="width:132px;height:142px;border:0;"></a>
+          <!-- Spor Akademisi (YENİ) -->
+<div class="system-button">
+    <div class="icon sport-academy-icon"></div>
+    <span>Spor Akademisi</span>
 </div>
 
-<div>
-    <br> 
-    <br> 
-</div> 
+            <!-- Merkezi Derslik -->
+            <div class="system-button">
+                <div class="icon classroom-icon"></div>
+                <span>Merkezi Derslik</span>
+            </div>
 
-<h1>Gelişim</h1>
-<div class="links">
-    <a href="#">  <img src="resimler/teknik.png" style="width:132px;height:142px;border:0;">Teknik</a>
-    <a href="#">  <img src="resimler/rapor.png" style="width:132px;height:142px;border:0;">Rapor</a>
-    <a href="https://pbis.bandirma.edu.tr/personel/">  <img src="resimler/egitim.png" style="width:132px;height:142px;border:0;">Eğitim</a>
-    <a href="#">  <img src="resimler/ana.png" style="width:132px;height:142px;border:0;"></a>
-    <a href="https://uzaktanegitimkapisi.cbiko.gov.tr/">  <img src="resimler/sheet_bilgileri.png" style="width:132px;height:142px;border:0;">Uzaktan Eğitim</a>
+            <!-- ÖYM -->
+            <div class="system-button">
+                <div class="icon office-icon"></div>
+                <span>ÖYM</span>
+            </div>
+
+            <!-- Mühendislik -->
+            <div class="system-button">
+                <div class="icon engineering-icon"></div>
+                <span>Mühendislik</span>
+            </div>
+
+            <!-- Denizcilik -->
+            <div class="system-button">
+                <div class="icon maritime-icon"></div>
+                <span>Denizcilik</span>
+            </div>
+
+            <!-- İlahiyat Binası -->
+            <div class="system-button">
+                <div class="icon religion-icon"></div>
+                <span>İlahiyat Binası</span>
+            </div>
+          
+          
+                      <!-- Susurluk MYO -->
+            <div class="system-button">
+                <div class="icon susurluk-myo-icon"></div>
+                <span>Susurluk MYO</span>
+            </div>
+
+            <!-- Erdek MYO -->
+            <div class="system-button">
+                <div class="icon erdek-myo-icon"></div>
+                <span>Erdek MYO</span>
+            </div>
+
+            <!-- Manyas MYO -->
+            <div class="system-button">
+                <div class="icon manyas-myo-icon"></div>
+                <span>Manyas MYO</span>
+            </div>
+
+            <!-- Gönen MYO -->
+            <div class="system-button">
+                <div class="icon gonen-myo-icon"></div>
+                <span>Gönen MYO</span>
+            </div>
+
+            <!-- Bandırma MYO -->
+            <div class="system-button">
+                <div class="icon bandirma-myo-icon"></div>
+                <span>Bandırma MYO</span>
+            </div>
+
+            <!-- Denizcilik MYO -->
+            <div class="system-button">
+                <div class="icon maritime-myo-icon"></div>
+                <span>Denizcilik MYO</span>
+            </div>
+
+            <!-- Edincik MYO -->
+            <div class="system-button">
+                <div class="icon edincik-myo-icon"></div>
+                <span>Edincik MYO</span>
+            </div>
+
+  
+          
+          
+        </div>
+         
+      
+      
+      
+      
+      
+      
+        <div class="section other-systems">
+          
+          
+                    
+          
+          
+          
+          
+          
+          
+          
+          
+            <div class="system-button" data-url="/binalar-talepler">
+                <div class="icon building-icon"></div>
+                <span>Binalar/Talepler</span>
+            </div>
+            <div class="system-button" data-url="/upsler">
+                <div class="icon ups-icon"></div>
+                <span>UPS'ler</span>
+            </div>
+            <div class="system-button" data-url="/yangin">
+                <div class="icon fire-icon"></div>
+                <span>Yangın</span>
+            </div>
+            <div class="system-button" data-url="/kayar-kapilar">
+                <div class="icon sliding-door-icon"></div>
+                <span>Kayar Kapılar</span>
+            </div>
+            <div class="system-button" data-url="/raporlar">
+                <div class="icon report-icon"></div>
+                <span>Raporlar</span>
+            </div>
+            <div class="system-button electric-grid" data-url="/elektrik-yerleskesi">
+                <div class="icon">
+                    <svg class="electric-icon" viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg">
+                        <path class="tower" d="M40 20 L40 60 M30 30 L50 30 M30 40 L50 40" />
+                        <path class="power-line" d="M10 40 L70 40" />
+                        <circle class="spark" cx="60" cy="50" r="3" />
+                    </svg>
+                </div>
+                <span>Elektrik Yerleşkesi</span>
+            </div>
+            <div class="system-button" data-url="/klima-santrali">
+                <div class="icon klima">
+                    <div class="fan-blade"></div>
+                    <div class="fan-blade"></div>
+                    <div class="fan-blade"></div>
+                </div>
+                <span>Klima Santrali</span>
+            </div>
+            <div class="system-button" data-url="/asansorler">
+                <div class="icon elevator">
+                    <div class="elevator-shaft">
+                        <div class="elevator-car"></div>
+                    </div>
+                </div>
+                <span>Asansörler</span>
+            </div>
+          
+          
+          
+          
+          
+                                        <div class="system-button" data-url="/projeler">
+                <div class="icon project-icon"></div>
+                <span>Projeler</span>
+            </div>
+          
+          
+          
+            <div class="system-button" data-url="/vrf-sistemi">
+                <div class="icon vrf-system">
+                    <div class="heat-exchange"></div>
+                    <div class="pipe pipe-1"></div>
+                    <div class="pipe pipe-2"></div>
+                </div>
+                <span>VRF Sistemi</span>
+            </div>
+          
+
+          
+          
+          
+            <div class="system-button" data-url="/chiller-sogutma">
+                <div class="icon chiller">
+                    <div class="compressor"></div>
+                    <div class="coolant"></div>
+                    <div class="fan"></div>
+                </div>
+                <span>Chiller Soğutma</span>
+            </div>
+            <div class="system-button inventory" data-url="/malzeme-envanter-takibi">
+                <div class="icon">
+                    <div class="inventory-box"></div>
+                    <div class="inventory-items">
+                        <div class="inventory-item"></div>
+                        <div class="inventory-item"></div>
+                        <div class="inventory-item"></div>
+                    </div>
+                </div>
+                <span>Malzeme/Envanter Takibi</span>
+            </div>
+            <div class="system-button generator" data-url="/jenerator">
+                <div class="icon">
+                    <div class="generator-body"></div>
+                    <div class="engine-piston"></div>
+                    <div class="exhaust-pipe"></div>
+                    <div class="engine-fan"></div>
+                </div>
+                <span>Jeneratör</span>
+            </div>
+            <div class="system-button" data-url="/yazilim-teknik">
+                <div class="icon software-icon"></div>
+                <span>Yazılım Teknik</span>
+            </div>
+            <div class="system-button" data-url="/iletisim">
+                <div class="icon contact-icon"></div>
+                <span>İletişim</span>
+            </div>
+            <div class="system-button" data-url="/aydinlatma-otomasyon">
+                <div class="icon light-automation-icon"></div>
+                <span>Aydınlatma Otomasyon</span>
+            </div>
+            <div class="system-button" data-url="/arastir">
+                <div class="icon research-icon"></div>
+                <span>Araştır</span>
+            </div>
+            <div class="system-button" data-url="/etiketler">
+                <div class="icon tag-icon"></div>
+                <span>Etiketler</span>
+            </div>
+            <div class="system-button" data-url="/notlar-takip">
+                <div class="icon notes-icon"></div>
+                <span>Notlar/Takip</span>
+            </div>
+            <div class="system-button" data-url="/genel-teknik">
+                <div class="icon general-tech-icon"></div>
+                <span>Genel Teknik</span>
+            </div>
+            <div class="system-button" data-url="/sayaclar-faturalar">
+                <div class="icon meter-invoice-icon"></div>
+                <span>Sayaçlar/Faturalar</span>
+            </div>
+          
+            <div class="system-button" data-url="/digerleri">
+                <div class="icon others-icon"></div>
+                <span>Diğerleri</span>
+            </div>
+          
+          
+
+          
+          
+          
+<div class="system-button" data-url="/evraklar">
+    <div class="icon evrak-icon"></div>
+    <span>Evraklar</span>
 </div>
-
-<h1>Bağlantılar</h1>
-<div class="links">
-           <a href="https://rehber.bandirma.edu.tr/" target="_blank"><img src="resimler/rehber.png" style="width:132px;height:142px;border:0;">Rehber</a>
-        <a href="https://sksdb.bandirma.edu.tr/tr/sksdb/Sayfa/Goster/Yemek-Menusu-2725" target="_blank"><img src="resimler/yemeklistesi.png" style="width:132px;height:142px;border:0;">Yemek Listesi</a>
-        <a href="https://bandirma.edu.tr/" target="_blank"><img src="resimler/ana.png" style="width:132px;height:142px;border:0;">Banü</a>
-        <a href="https://www.bandirma.edu.tr/tr/www/Duyuru/Liste?k=-1" target="_blank"><img src="resimler/duyurular.png" style="width:132px;height:142px;border:0;">Duyurular</a>
-        <a href="https://ubys.bandirma.edu.tr/" target="_blank"><img src="resimler/ubys.png" style="width:132px;height:142px;border:0;">Ubys</a><a href="https://ubys.bandirma.edu.tr/HRM/Memur/KisiselMemurIslemleri/KisiselMemurIslemleri/Index">  <img src="resimler/kisisel.png" style="width:132px;height:142px;border:0;">Kişisel Memur</a>
-    <a href="https://ubys.bandirma.edu.tr/ERMS/Inbox/Record/Index?#">  <img src="resimler/elektonikbelge.png" style="width:132px;height:142px;border:0;">Elektronik Belge</a>
-    <a href="https://docs.google.com/spreadsheets/d/1rBrzlnckorQKsxIoec_gQtAqdqp4SeSS1orOrAhuF2A/edit?gid=1787424415#gid=1787424415">  <img src="resimler/iletisim.png" style="width:132px;height:142px;border:0;">İletişim</a>
-    <a href="https://pbis.bandirma.edu.tr/personel/">  <img src="resimler/pbis.png" style="width:132px;height:142px;border:0;">Pbis</a>
+<div class="system-button" data-url="/rehber">
+    <div class="icon rehber-icon"></div>
+    <span>Rehber</span>
 </div>
-
-<h1>Teknik Bağlantılar</h1>
-<div class="links">
-    <a href="https://web.whatsapp.com/">  <img src="resimler/whatsapp.png" style="width:132px;height:142px;border:0;">Whatsapp</a>
-    <a href="https://drive.google.com/drive/folders/1eiutw-FoGhxFqCNbJDC8dPsz_lkwArGK30Eq1SmEZQYWOJXkOGCWKNt_3Kkx4EGvQXpJc7kS">  <img src="resimler/talepresim.png" style="width:132px;height:142px;border:0;">Talep Resim</a>
-    <a href="https://drive.google.com/drive/u/0/folders/1_oytQNzVloUEBPXImerh9rsBNGsOTYxz?ths=true">  <img src="resimler/basisdrive.png" style="width:132px;height:142px;border:0;">Basis Drive</a>
-    <a href="https://tools.pdf24.org/tr/pdf-dondurme">  <img src="resimler/pdf.png" style="width:132px;height:142px;border:0;">Pdf Döndürme</a>
-    <a href="#">  <img src="resimler/onerilen.png" style="width:132px;height:142px;border:0;">Önerilen</a>
-    <a href="https://www.photopea.com/">  <img src="resimler/onlinephotshop.png" style="width:132px;height:142px;border:0;">Online Photoshop</a>
-    <a href="https://online.uedas.com.tr/">  <img src="resimler/uedas.png" style="width:132px;height:142px;border:0;">Uedaş</a>
-    <a href="https://docs.google.com/spreadsheets/d/1rBrzlnckorQKsxIoec_gQtAqdqp4SeSS1orOrAhuF2A/edit?gid=889881063#gid=889881063">  <img src="resimler/notlar.png" style="width:132px;height:142px;border:0;">Notlar</a>
+<div class="system-button" data-url="/banu-uni">
+    <div class="icon banu-icon"></div>
+    <span>Banü Üni</span>
 </div>
+<div class="system-button" data-url="/ubys">
+    <div class="icon ubys-icon"></div>
+    <span>Ubys</span>
+</div>
+<div class="system-button" data-url="/e-posta">
+    <div class="icon email-icon"></div>
+    <span>E-Posta</span>
+</div>
+<div class="system-button" data-url="/talep-yaz">
+    <div class="icon talep-icon"></div>
+    <span>Talep Yaz</span>
+</div>
+<div class="system-button" data-url="/otomasyon-aydinlatma">
+    <div class="icon otomasyon-icon"></div>
+    <span>Otomasyon Aydınlatma</span>
+</div>
+<div class="system-button" data-url="/destek-sayfasi">
+    <div class="icon destek-icon"></div>
+    <span>Destek Sayfası</span>
+</div>
+<div class="system-button" data-url="/kisisel-sayfa">
+    <div class="icon kisisel-icon"></div>
+    <span>Kişisel Sayfa</span>
+</div>
+<div class="system-button" data-url="/egitim-kapisi">
+    <div class="icon egitim-icon"></div>
+    <span>Eğitim Kapısı</span>
+</div>
+<div class="system-button" data-url="/teknik-dokuman">
+    <div class="icon teknik-icon"></div>
+    <span>Teknik Döküman</span>
+</div>
+          
+          
+        </div>
+      
+      
+      
+      
+      
+      
+      
+      
+      
 
-<p>koyu mavi yazı renk kodu : #0e4f9b; Fontda; font-family:sans-serif Bu site Mahmut Kılıç tarafından tasarlanmıştır. <a href="https://codepen.io/Mahmut-Kilic-the-decoder/pen/KwPxVdy">https://codepen.io/Mahmut-Kilic-the-decoder/pen/KwPxVdy</a></p>
-    </section>
-    <!--! section end -->
+        <div class="section map-section">
+            <h2>Konum Haritası</h2>
+            <div class="map-container">
+                <iframe
+                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3003.5413000000003!2d27.9739775!3d40.3846617!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x14b6fc709e3a6a1f%3A0x6b87d3a0e1c0d5c!2sBand%C4%B1rma%2C%20Bal%C4%B1kesir%2C%20T%C3%BCrkiye!5e0!3m2!1str!2sus!4v1700000000000!5m2!1str!2sus"
+                    width="100%"
+                    height="450"
+                    style="border:0;"
+                    allowfullscreen=""
+                    loading="lazy"
+                    referrerpolicy="no-referrer-when-downgrade">
+                </iframe>
+            </div>
+                  
+        </div>
+      
 
+    <script src="script.js"></script>
 </body>
+  </html><!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistem Kontrol Paneli</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  
+  
+  
+  
+    <div class="control-panel">
+      
+      
+      
+        <div class="section main-systems">
+          
+          
+          
+          <div class="system-button" data-url="/banu-uni">
+    <div class="icon banu-icon"></div>
+    <span>Banü Üni</span>
+</div>
+          
+          
+            <div class="system-button search-bar-wide" data-url="/sistem-ara">
+                <div class="search-iframe-container">
+                    <iframe
+                        src="https://basistakip.github.io/basis/aramacubugu2.html"
+                        frameborder="0"
+                        width="100%"
+                        height="80px"
+                        scrolling="yes"
+                      
+                        allowfullscreen=""
+                        loading="lazy"
+                        referrerpolicy="no-referrer-when-downgrade">
+                    </iframe>
+                </div>
+            </div>
+          
+          
+          
+          
+          
+          
+          
+                    
+        <div class="system-button" data-url="/basis-drive">
+          
+    <div class="icon basis-drive-icon"></div>
+    <span>Basis Drive</span>
+</div>
 
+
+          
+          
+          
+          
+                      <!-- Rektörlük Binası -->
+            <div class="system-button">
+                <div class="icon building-icon"></div>
+                <span>Rektörlük Binası</span>
+            </div>
+
+            <!-- Kapalı Spor Salonu -->
+            <div class="system-button">
+                <div class="icon sport-icon"></div>
+                <span>Kapalı Spor Salonu</span>
+            </div>
+
+          <!-- Spor Akademisi (YENİ) -->
+<div class="system-button">
+    <div class="icon sport-academy-icon"></div>
+    <span>Spor Akademisi</span>
+</div>
+
+            <!-- Merkezi Derslik -->
+            <div class="system-button">
+                <div class="icon classroom-icon"></div>
+                <span>Merkezi Derslik</span>
+            </div>
+
+            <!-- ÖYM -->
+            <div class="system-button">
+                <div class="icon office-icon"></div>
+                <span>ÖYM</span>
+            </div>
+
+            <!-- Mühendislik -->
+            <div class="system-button">
+                <div class="icon engineering-icon"></div>
+                <span>Mühendislik</span>
+            </div>
+
+            <!-- Denizcilik -->
+            <div class="system-button">
+                <div class="icon maritime-icon"></div>
+                <span>Denizcilik</span>
+            </div>
+
+            <!-- İlahiyat Binası -->
+            <div class="system-button">
+                <div class="icon religion-icon"></div>
+                <span>İlahiyat Binası</span>
+            </div>
+          
+          
+                      <!-- Susurluk MYO -->
+            <div class="system-button">
+                <div class="icon susurluk-myo-icon"></div>
+                <span>Susurluk MYO</span>
+            </div>
+
+            <!-- Erdek MYO -->
+            <div class="system-button">
+                <div class="icon erdek-myo-icon"></div>
+                <span>Erdek MYO</span>
+            </div>
+
+            <!-- Manyas MYO -->
+            <div class="system-button">
+                <div class="icon manyas-myo-icon"></div>
+                <span>Manyas MYO</span>
+            </div>
+
+            <!-- Gönen MYO -->
+            <div class="system-button">
+                <div class="icon gonen-myo-icon"></div>
+                <span>Gönen MYO</span>
+            </div>
+
+            <!-- Bandırma MYO -->
+            <div class="system-button">
+                <div class="icon bandirma-myo-icon"></div>
+                <span>Bandırma MYO</span>
+            </div>
+
+            <!-- Denizcilik MYO -->
+            <div class="system-button">
+                <div class="icon maritime-myo-icon"></div>
+                <span>Denizcilik MYO</span>
+            </div>
+
+            <!-- Edincik MYO -->
+            <div class="system-button">
+                <div class="icon edincik-myo-icon"></div>
+                <span>Edincik MYO</span>
+            </div>
+
+  
+          
+          
+        </div>
+         
+      
+      
+      
+      
+      
+      
+        <div class="section other-systems">
+          
+          
+                    
+          
+          
+          
+          
+          
+          
+          
+          
+            <div class="system-button" data-url="/binalar-talepler">
+                <div class="icon building-icon"></div>
+                <span>Binalar/Talepler</span>
+            </div>
+            <div class="system-button" data-url="/upsler">
+                <div class="icon ups-icon"></div>
+                <span>UPS'ler</span>
+            </div>
+            <div class="system-button" data-url="/yangin">
+                <div class="icon fire-icon"></div>
+                <span>Yangın</span>
+            </div>
+            <div class="system-button" data-url="/kayar-kapilar">
+                <div class="icon sliding-door-icon"></div>
+                <span>Kayar Kapılar</span>
+            </div>
+            <div class="system-button" data-url="/raporlar">
+                <div class="icon report-icon"></div>
+                <span>Raporlar</span>
+            </div>
+            <div class="system-button electric-grid" data-url="/elektrik-yerleskesi">
+                <div class="icon">
+                    <svg class="electric-icon" viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg">
+                        <path class="tower" d="M40 20 L40 60 M30 30 L50 30 M30 40 L50 40" />
+                        <path class="power-line" d="M10 40 L70 40" />
+                        <circle class="spark" cx="60" cy="50" r="3" />
+                    </svg>
+                </div>
+                <span>Elektrik Yerleşkesi</span>
+            </div>
+            <div class="system-button" data-url="/klima-santrali">
+                <div class="icon klima">
+                    <div class="fan-blade"></div>
+                    <div class="fan-blade"></div>
+                    <div class="fan-blade"></div>
+                </div>
+                <span>Klima Santrali</span>
+            </div>
+            <div class="system-button" data-url="/asansorler">
+                <div class="icon elevator">
+                    <div class="elevator-shaft">
+                        <div class="elevator-car"></div>
+                    </div>
+                </div>
+                <span>Asansörler</span>
+            </div>
+          
+          
+          
+          
+          
+                                        <div class="system-button" data-url="/projeler">
+                <div class="icon project-icon"></div>
+                <span>Projeler</span>
+            </div>
+          
+          
+          
+            <div class="system-button" data-url="/vrf-sistemi">
+                <div class="icon vrf-system">
+                    <div class="heat-exchange"></div>
+                    <div class="pipe pipe-1"></div>
+                    <div class="pipe pipe-2"></div>
+                </div>
+                <span>VRF Sistemi</span>
+            </div>
+          
+
+          
+          
+          
+            <div class="system-button" data-url="/chiller-sogutma">
+                <div class="icon chiller">
+                    <div class="compressor"></div>
+                    <div class="coolant"></div>
+                    <div class="fan"></div>
+                </div>
+                <span>Chiller Soğutma</span>
+            </div>
+            <div class="system-button inventory" data-url="/malzeme-envanter-takibi">
+                <div class="icon">
+                    <div class="inventory-box"></div>
+                    <div class="inventory-items">
+                        <div class="inventory-item"></div>
+                        <div class="inventory-item"></div>
+                        <div class="inventory-item"></div>
+                    </div>
+                </div>
+                <span>Malzeme/Envanter Takibi</span>
+            </div>
+            <div class="system-button generator" data-url="/jenerator">
+                <div class="icon">
+                    <div class="generator-body"></div>
+                    <div class="engine-piston"></div>
+                    <div class="exhaust-pipe"></div>
+                    <div class="engine-fan"></div>
+                </div>
+                <span>Jeneratör</span>
+            </div>
+            <div class="system-button" data-url="/yazilim-teknik">
+                <div class="icon software-icon"></div>
+                <span>Yazılım Teknik</span>
+            </div>
+            <div class="system-button" data-url="/iletisim">
+                <div class="icon contact-icon"></div>
+                <span>İletişim</span>
+            </div>
+            <div class="system-button" data-url="/aydinlatma-otomasyon">
+                <div class="icon light-automation-icon"></div>
+                <span>Aydınlatma Otomasyon</span>
+            </div>
+            <div class="system-button" data-url="/arastir">
+                <div class="icon research-icon"></div>
+                <span>Araştır</span>
+            </div>
+            <div class="system-button" data-url="/etiketler">
+                <div class="icon tag-icon"></div>
+                <span>Etiketler</span>
+            </div>
+            <div class="system-button" data-url="/notlar-takip">
+                <div class="icon notes-icon"></div>
+                <span>Notlar/Takip</span>
+            </div>
+            <div class="system-button" data-url="/genel-teknik">
+                <div class="icon general-tech-icon"></div>
+                <span>Genel Teknik</span>
+            </div>
+            <div class="system-button" data-url="/sayaclar-faturalar">
+                <div class="icon meter-invoice-icon"></div>
+                <span>Sayaçlar/Faturalar</span>
+            </div>
+          
+            <div class="system-button" data-url="/digerleri">
+                <div class="icon others-icon"></div>
+                <span>Diğerleri</span>
+            </div>
+          
+          
+
+          
+          
+          
+<div class="system-button" data-url="/evraklar">
+    <div class="icon evrak-icon"></div>
+    <span>Evraklar</span>
+</div>
+<div class="system-button" data-url="/rehber">
+    <div class="icon rehber-icon"></div>
+    <span>Rehber</span>
+</div>
+<div class="system-button" data-url="/banu-uni">
+    <div class="icon banu-icon"></div>
+    <span>Banü Üni</span>
+</div>
+<div class="system-button" data-url="/ubys">
+    <div class="icon ubys-icon"></div>
+    <span>Ubys</span>
+</div>
+<div class="system-button" data-url="/e-posta">
+    <div class="icon email-icon"></div>
+    <span>E-Posta</span>
+</div>
+<div class="system-button" data-url="/talep-yaz">
+    <div class="icon talep-icon"></div>
+    <span>Talep Yaz</span>
+</div>
+<div class="system-button" data-url="/otomasyon-aydinlatma">
+    <div class="icon otomasyon-icon"></div>
+    <span>Otomasyon Aydınlatma</span>
+</div>
+<div class="system-button" data-url="/destek-sayfasi">
+    <div class="icon destek-icon"></div>
+    <span>Destek Sayfası</span>
+</div>
+<div class="system-button" data-url="/kisisel-sayfa">
+    <div class="icon kisisel-icon"></div>
+    <span>Kişisel Sayfa</span>
+</div>
+<div class="system-button" data-url="/egitim-kapisi">
+    <div class="icon egitim-icon"></div>
+    <span>Eğitim Kapısı</span>
+</div>
+<div class="system-button" data-url="/teknik-dokuman">
+    <div class="icon teknik-icon"></div>
+    <span>Teknik Döküman</span>
+</div>
+          
+          
+        </div>
+      
+      
+      
+      
+      
+      
+      
+      
+      
+
+        <div class="section map-section">
+            <h2>Konum Haritası</h2>
+            <div class="map-container">
+                <iframe
+                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3003.5413000000003!2d27.9739775!3d40.3846617!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x14b6fc709e3a6a1f%3A0x6b87d3a0e1c0d5c!2sBand%C4%B1rma%2C%20Bal%C4%B1kesir%2C%20T%C3%BCrkiye!5e0!3m2!1str!2sus!4v1700000000000!5m2!1str!2sus"
+                    width="100%"
+                    height="450"
+                    style="border:0;"
+                    allowfullscreen=""
+                    loading="lazy"
+                    referrerpolicy="no-referrer-when-downgrade">
+                </iframe>
+            </div>
+                  
+        </div>
+      
+
+    <script src="script.js"></script>
+</body>
 </html>
-
