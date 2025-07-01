@@ -11,6 +11,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- İZİN VERİLEN E-POSTA ADRESLERİ LİSTESİ ---
     // Sadece bu listedeki e-posta adresleri içeriğe erişebilir.
+    // E-posta adreslerini KÜÇÜK HARFLE ve BAŞINDA/SONUNDA BOŞLUK OLMADAN yazmaya dikkat edin.
     const allowedEmails = [
         "mahmutkilicankara@gmail.com", // Kendi e-postanızı buraya ekleyin
         "ikinci.izinli.kullanici@example.com", // İzin vermek istediğiniz diğer e-postalar
@@ -24,7 +25,12 @@ document.addEventListener('DOMContentLoaded', () => {
         const decodedToken = parseJwt(idToken);
 
         if (decodedToken && decodedToken.email) {
-            const userEmail = decodedToken.email;
+            // Kullanıcının e-postasını küçük harfe çevir ve boşlukları temizle
+            const userEmail = decodedToken.email.toLowerCase().trim();
+
+            console.log("Giriş denemesi: " + userEmail);
+            console.log("İzin verilen e-postalar: ", allowedEmails);
+            console.log("E-posta izin verilenler listesinde mi? " + allowedEmails.includes(userEmail));
 
             // Giriş yapan kullanıcının e-posta adresinin izin verilenler listesinde olup olmadığını kontrol et
             if (allowedEmails.includes(userEmail)) {
@@ -36,7 +42,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 profileInfo.style.display = 'flex'; // Profil bilgilerini göster (CSS'inize göre 'block' veya 'flex')
                 logoutButton.style.display = 'block'; // Çıkış butonunu göster
                 googleSignInButton.style.display = 'none'; // Google giriş butonunu gizle
-                accessDeniedMessage.style.display = 'none'; // Erişim engellendi mesajını gizle
+                accessDeniedMessage.style.display = 'none'; // Erişim engellendi mesajını gizle (önemli!)
 
                 // Tüm sistem butonlarını etkinleştir ve görünür yap
                 systemButtons.forEach(button => {
@@ -89,11 +95,18 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Fonksiyon: Erişim engellendi mesajını göster
+    // Mesajın kaybolması için bir setTimeout kullanırız.
     function showAccessDenied(message) {
         accessDeniedMessage.textContent = message;
         accessDeniedMessage.style.display = 'block';
-        setTimeout(() => {
+        // Önceki zamanlayıcı varsa temizle
+        if (window.accessDeniedTimeout) {
+            clearTimeout(window.accessDeniedTimeout);
+        }
+        // Yeni zamanlayıcıyı ayarla
+        window.accessDeniedTimeout = setTimeout(() => {
             accessDeniedMessage.style.display = 'none';
+            window.accessDeniedTimeout = null; // Zamanlayıcıyı sıfırla
         }, 8000); // 8 saniye sonra gizle
     }
 
@@ -101,7 +114,7 @@ document.addEventListener('DOMContentLoaded', () => {
     logoutButton.addEventListener('click', () => {
         // Google oturumunu kapat
         google.accounts.id.disableAutoSelect(); // Otomatik seçimi devre dışı bırak
-        // Eğer g_csrf_token kullanıyorsanız (One-Tap için genellikle gerekmez), kaldırın
+        // İsteğe bağlı: Eğer Google oturumunu tamamen sonlandırmak isterseniz
         // google.accounts.id.revoke(localStorage.getItem('g_csrf_token'), done => {
         //     console.log('Oturum kapatıldı:', done);
         //     localStorage.removeItem('g_csrf_token'); // Token'ı depodan kaldır
@@ -116,7 +129,7 @@ document.addEventListener('DOMContentLoaded', () => {
         profileInfo.style.display = 'none';
         logoutButton.style.display = 'none';
         googleSignInButton.style.display = 'block'; // Google giriş butonunu göster
-        accessDeniedMessage.style.display = 'none';
+        accessDeniedMessage.style.display = 'none'; // Hata mesajını gizle
 
         // Tüm sistem bölümlerini gizle
         document.getElementById('main-systems-section').style.display = 'none';
