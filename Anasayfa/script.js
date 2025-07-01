@@ -21,47 +21,48 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Fonksiyon: Google kimlik bilgileri yanıtını işler
     window.handleCredentialResponse = (response) => {
+        console.log("handleCredentialResponse çağrıldı.");
         const idToken = response.credential;
         const decodedToken = parseJwt(idToken);
 
         if (decodedToken && decodedToken.email) {
-            // Kullanıcının e-postasını küçük harfe çevir ve boşlukları temizle
             const userEmail = decodedToken.email.toLowerCase().trim();
 
-            console.log("Giriş denemesi: " + userEmail);
-            console.log("İzin verilen e-postalar: ", allowedEmails);
+            console.log("Giriş denemesi e-postası: " + userEmail);
             console.log("E-posta izin verilenler listesinde mi? " + allowedEmails.includes(userEmail));
 
-            // Giriş yapan kullanıcının e-posta adresinin izin verilenler listesinde olup olmadığını kontrol et
             if (allowedEmails.includes(userEmail)) {
-                // Giriş başarılı, kullanıcı bilgilerini göster
+                console.log("E-posta yetkili: " + userEmail);
                 profilePicture.src = decodedToken.picture;
                 profileName.textContent = decodedToken.name;
                 profileEmail.textContent = userEmail;
 
                 // Yetkilendirme başarılı: Token'ı localStorage'a kaydet
                 localStorage.setItem('google_id_token', idToken);
-                localStorage.setItem('user_email', userEmail); // E-postayı da kaydedelim
+                localStorage.setItem('user_email', userEmail); 
 
                 displayAuthorizedUI(decodedToken);
 
             } else {
-                // Yetkisiz e-posta adresi
-                console.warn("Erişim Reddedildi: " + userEmail + " adresi için yetki yok.");
+                console.warn("Yetkisiz e-posta: " + userEmail);
                 showAccessDenied("Bu e-posta (" + userEmail + ") ile bu içeriğe erişim izniniz yok. Lütfen yetkili bir hesapla giriş yapın.");
                 
-                // Yetkisiz kullanıcılar için tüm bilgileri temizle ve arayüzü sıfırla
+                // Yetkisiz kullanıcılar için localStorage'ı temizle
                 localStorage.removeItem('google_id_token');
                 localStorage.removeItem('user_email');
                 resetUI();
+                // Yetkisiz kullanıcı için tekrar giriş isteme, sadece çıkış butonu kalsın
+                googleSignInButton.style.display = 'none'; 
 
                 // Google One-Tap'ın tekrar otomatik açılmasını engellemek için iptal et
-                google.accounts.id.cancel();
+                // google.accounts.id.cancel(); // Bu, eğer One-Tap zaten gösteriliyorsa onu kapatır.
             }
         } else {
             console.error("Kimlik doğrulama başarısız: E-posta bulunamadı veya token geçersiz.");
             showAccessDenied("Giriş başarısız oldu. Lütfen tekrar deneyin.");
-            resetUI(); // Arayüzü sıfırla
+            localStorage.removeItem('google_id_token'); // Hatalı token'ı temizle
+            localStorage.removeItem('user_email');
+            resetUI();
         }
     };
 
@@ -98,7 +99,7 @@ document.addEventListener('DOMContentLoaded', () => {
         profileInfo.style.display = 'flex';
         logoutButton.style.display = 'block';
         googleSignInButton.style.display = 'none';
-        accessDeniedMessage.style.display = 'none'; // Yetkili kullanıcıda hata mesajı gizli olmalı
+        accessDeniedMessage.style.display = 'none'; 
 
         systemButtons.forEach(button => {
             button.style.pointerEvents = 'auto';
@@ -111,17 +112,22 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Çıkış yap butonu dinleyicisi
     logoutButton.addEventListener('click', () => {
-        // Google oturumunu tamamen kapat (One-Tap için genellikle gerekmez ama temiz bir çıkış için iyi)
+        // Google oturumunu tamamen kapat
+        // Eğer kullanıcı sadece oturumu kapatıp başka bir Google hesabıyla giriş yapacaksa disableAutoSelect kullanılır.
+        // Eğer cihazdan tamamen çıkış yapacaksa revoke kullanılır. revoke kullanırken dikkatli olun!
         google.accounts.id.disableAutoSelect(); // Otomatik seçimi devre dışı bırak
-        // İsteğe bağlı: google.accounts.id.revoke('TOKEN_BURAYA_GELIR', done => { ... });
+        // Eğer gerçekten tüm Google oturumlarından çıkış yapmak isterseniz:
+        // google.accounts.id.revoke(localStorage.getItem('google_id_token'), done => {
+        //     console.log('Google oturumu iptal edildi:', done);
+        // });
 
         // localStorage'daki kimlik bilgilerini temizle
         localStorage.removeItem('google_id_token');
         localStorage.removeItem('user_email');
         
         resetUI(); // Arayüzü sıfırla
-        alert("Başarıyla çıkış yaptınız.");
-        // İsterseniz sayfayı yeniden yükleyebilirsiniz: window.location.reload();
+        alert("Başarıyla çıkış yaptınız. Tekrar giriş yapmak için lütfen Google ile giriş yapın.");
+        // Sayfayı yenilemek iyi bir uygulama olabilir: window.location.reload();
     });
 
     // Arayüzü başlangıç durumuna sıfırla (yani giriş yapılmamış durum)
@@ -140,44 +146,51 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Sayfa yüklendiğinde oturum kontrolü yap
-    // Bu kısım, sayfa yenilendiğinde oturumu sürdürmek için kritik!
-    const savedToken = localStorage.getItem('google_id_token');
-    const savedEmail = localStorage.getItem('user_email');
+    // --- Sayfa Yüklendiğinde Oturum Kontrol ve Başlatma Mantığı ---
+    function initializeAuthFlow() {
+        const savedToken = localStorage.getItem('google_id_token');
+        const savedEmail = localStorage.getItem('user_email');
 
-    if (savedToken && savedEmail) {
-        const decodedToken = parseJwt(savedToken);
-        // Token'ın süresinin dolup dolmadığını kontrol etmek iyi bir uygulamadır.
-        // decodedToken.exp * 1000 < Date.now() ise token süresi dolmuştur.
-        if (decodedToken && decodedToken.email && allowedEmails.includes(savedEmail)) {
-            // Kaydedilmiş token ve e-posta geçerliyse ve yetkiliyse, UI'yı güncelle
-            profilePicture.src = decodedToken.picture;
-            profileName.textContent = decodedToken.name;
-            profileEmail.textContent = savedEmail;
-            displayAuthorizedUI(decodedToken);
-            console.log("Kayıtlı oturum bulundu ve aktif.");
+        if (savedToken && savedEmail) {
+            const decodedToken = parseJwt(savedToken);
+            // Token'ın geçerli olup olmadığını ve süresinin dolmadığını kontrol et
+            // decodedToken.exp değeri saniye cinsindendir, Date.now() ise milisaniye.
+            const isTokenExpired = decodedToken && decodedToken.exp * 1000 < Date.now();
+
+            if (decodedToken && !isTokenExpired && allowedEmails.includes(savedEmail)) {
+                // Kaydedilmiş token geçerliyse ve yetkiliyse, UI'yı güncelle
+                console.log("Kayıtlı ve geçerli oturum bulundu: " + savedEmail);
+                profilePicture.src = decodedToken.picture;
+                profileName.textContent = decodedToken.name;
+                profileEmail.textContent = savedEmail;
+                displayAuthorizedUI(decodedToken);
+                // Google One-Tap otomatik seçimi için prompt() çağırmaya gerek yok,
+                // data-auto_select bunu zaten yapmalı.
+            } else {
+                // Kaydedilmiş token geçersiz, süresi dolmuş veya e-posta yetkisizse oturumu temizle
+                console.warn("Kayıtlı oturum geçersiz, süresi dolmuş veya yetkisiz. Temizleniyor.");
+                localStorage.removeItem('google_id_token');
+                localStorage.removeItem('user_email');
+                resetUI();
+                // Otomatik giriş başarısız olursa, kullanıcıya manuel giriş seçeneği sunmak için prompt() çağır
+                google.accounts.id.prompt(); 
+            }
         } else {
-            // Kaydedilmiş token geçersiz veya e-posta yetkisizse oturumu temizle
-            console.warn("Kayıtlı oturum geçersiz veya yetkisiz. Temizleniyor.");
-            localStorage.removeItem('google_id_token');
-            localStorage.removeItem('user_email');
+            // Hiç kaydedilmiş oturum yoksa, arayüzü sıfırla ve Google girişini göster
+            console.log("Kayıtlı oturum bulunamadı. Google One-Tap tetikleniyor.");
             resetUI();
-            google.accounts.id.prompt(); // Otomatik seçimi tekrar tetikle (isteğe bağlı)
+            google.accounts.id.prompt(); // One-Tap pop-up'ını tetikle
         }
-    } else {
-        // Hiç kaydedilmiş oturum yoksa, arayüzü sıfırla ve Google girişini göster
-        console.log("Kayıtlı oturum bulunamadı. Giriş bekleniyor.");
-        resetUI();
-        google.accounts.id.prompt(); // One-Tap pop-up'ını tetikle
     }
+
+    // Uygulamayı başlat
+    initializeAuthFlow();
 
     // Buton tıklama olayları
     systemButtons.forEach(button => {
         button.addEventListener('click', () => {
             const url = button.dataset.url;
             if (url) {
-                // Burada tekrar yetki kontrolü yapmak isteyebilirsiniz,
-                // ancak CSS'teki pointer-events zaten tıklamayı engellemiş olmalı.
                 window.open(url, '_blank');
             }
         });
