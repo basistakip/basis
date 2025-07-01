@@ -18,19 +18,7 @@ document.addEventListener('DOMContentLoaded', () => {
         "ucuncu.kullanici@gmail.com"
     ];
     // --------------------------------------------------------
-function showAccessDenied(message) {
-    accessDeniedMessage.textContent = message;
-    accessDeniedMessage.style.display = 'block';
-    // Önceki zamanlayıcı varsa temizle
-    if (window.accessDeniedTimeout) {
-        clearTimeout(window.accessDeniedTimeout);
-    }
-    // Yeni zamanlayıcıyı ayarla
-    window.accessDeniedTimeout = setTimeout(() => {
-        accessDeniedMessage.style.display = 'none';
-        window.accessDeniedTimeout = null; // Zamanlayıcıyı sıfırla
-    }, 8000); // 8 saniye sonra gizle
-}
+
     // Fonksiyon: Google kimlik bilgileri yanıtını işler
     window.handleCredentialResponse = (response) => {
         const idToken = response.credential;
@@ -51,35 +39,21 @@ function showAccessDenied(message) {
                 profileName.textContent = decodedToken.name;
                 profileEmail.textContent = userEmail;
 
-                profileInfo.style.display = 'flex'; // Profil bilgilerini göster (CSS'inize göre 'block' veya 'flex')
-                logoutButton.style.display = 'block'; // Çıkış butonunu göster
-                googleSignInButton.style.display = 'none'; // Google giriş butonunu gizle
-                accessDeniedMessage.style.display = 'none'; // Erişim engellendi mesajını gizle (önemli!)
+                // Yetkilendirme başarılı: Token'ı localStorage'a kaydet
+                localStorage.setItem('google_id_token', idToken);
+                localStorage.setItem('user_email', userEmail); // E-postayı da kaydedelim
 
-                // Tüm sistem butonlarını etkinleştir ve görünür yap
-                systemButtons.forEach(button => {
-                    button.style.pointerEvents = 'auto'; // Tıklanabilir yap
-                    button.style.opacity = '1'; // Tamamen görünür yap
-                });
-                
-                // Ana sistem bölümlerini görünür yap (index.html'deki CSS'e uygun olarak)
-                document.getElementById('main-systems-section').style.display = 'grid'; // Veya 'block', 'flex' CSS'inize göre ayarlayın
-                document.getElementById('other-systems-section').style.display = 'grid'; // Veya 'block', 'flex' CSS'inize göre ayarlayın
+                displayAuthorizedUI(decodedToken);
 
             } else {
                 // Yetkisiz e-posta adresi
                 console.warn("Erişim Reddedildi: " + userEmail + " adresi için yetki yok.");
                 showAccessDenied("Bu e-posta (" + userEmail + ") ile bu içeriğe erişim izniniz yok. Lütfen yetkili bir hesapla giriş yapın.");
                 
-                profileInfo.style.display = 'none'; // Profil bilgisini gizle
-                logoutButton.style.display = 'block'; // Sadece çıkış butonu kalsın
-                googleSignInButton.style.display = 'none'; // Google giriş butonunu gizle
-
-                // Tüm sistem butonlarını devre dışı bırak ve yarı saydam yap
-                systemButtons.forEach(button => {
-                    button.style.pointerEvents = 'none'; // Tıklanamaz yap
-                    button.style.opacity = '0.5'; // Yarı saydam yap
-                });
+                // Yetkisiz kullanıcılar için tüm bilgileri temizle ve arayüzü sıfırla
+                localStorage.removeItem('google_id_token');
+                localStorage.removeItem('user_email');
+                resetUI();
 
                 // Google One-Tap'ın tekrar otomatik açılmasını engellemek için iptal et
                 google.accounts.id.cancel();
@@ -107,71 +81,109 @@ function showAccessDenied(message) {
     }
 
     // Fonksiyon: Erişim engellendi mesajını göster
-    // Mesajın kaybolması için bir setTimeout kullanırız.
     function showAccessDenied(message) {
         accessDeniedMessage.textContent = message;
         accessDeniedMessage.style.display = 'block';
-        // Önceki zamanlayıcı varsa temizle
         if (window.accessDeniedTimeout) {
             clearTimeout(window.accessDeniedTimeout);
         }
-        // Yeni zamanlayıcıyı ayarla
         window.accessDeniedTimeout = setTimeout(() => {
             accessDeniedMessage.style.display = 'none';
-            window.accessDeniedTimeout = null; // Zamanlayıcıyı sıfırla
-        }, 8000); // 8 saniye sonra gizle
+            window.accessDeniedTimeout = null;
+        }, 8000);
+    }
+
+    // Arayüzü yetkili kullanıcıya göre ayarla
+    function displayAuthorizedUI(decodedToken) {
+        profileInfo.style.display = 'flex';
+        logoutButton.style.display = 'block';
+        googleSignInButton.style.display = 'none';
+        accessDeniedMessage.style.display = 'none'; // Yetkili kullanıcıda hata mesajı gizli olmalı
+
+        systemButtons.forEach(button => {
+            button.style.pointerEvents = 'auto';
+            button.style.opacity = '1';
+        });
+        
+        document.getElementById('main-systems-section').style.display = 'grid';
+        document.getElementById('other-systems-section').style.display = 'grid';
     }
 
     // Çıkış yap butonu dinleyicisi
     logoutButton.addEventListener('click', () => {
-        // Google oturumunu kapat
+        // Google oturumunu tamamen kapat (One-Tap için genellikle gerekmez ama temiz bir çıkış için iyi)
         google.accounts.id.disableAutoSelect(); // Otomatik seçimi devre dışı bırak
-        // İsteğe bağlı: Eğer Google oturumunu tamamen sonlandırmak isterseniz
-        // google.accounts.id.revoke(localStorage.getItem('g_csrf_token'), done => {
-        //     console.log('Oturum kapatıldı:', done);
-        //     localStorage.removeItem('g_csrf_token'); // Token'ı depodan kaldır
-        // });
+        // İsteğe bağlı: google.accounts.id.revoke('TOKEN_BURAYA_GELIR', done => { ... });
+
+        // localStorage'daki kimlik bilgilerini temizle
+        localStorage.removeItem('google_id_token');
+        localStorage.removeItem('user_email');
+        
         resetUI(); // Arayüzü sıfırla
         alert("Başarıyla çıkış yaptınız.");
         // İsterseniz sayfayı yeniden yükleyebilirsiniz: window.location.reload();
     });
 
-    // Arayüzü başlangıç durumuna sıfırla
+    // Arayüzü başlangıç durumuna sıfırla (yani giriş yapılmamış durum)
     function resetUI() {
         profileInfo.style.display = 'none';
         logoutButton.style.display = 'none';
         googleSignInButton.style.display = 'block'; // Google giriş butonunu göster
-        accessDeniedMessage.style.display = 'none'; // Hata mesajını gizle
+        accessDeniedMessage.style.display = 'none';
 
-        // Tüm sistem bölümlerini gizle
         document.getElementById('main-systems-section').style.display = 'none';
         document.getElementById('other-systems-section').style.display = 'none';
 
-        // Tüm butonları devre dışı bırak ve yarı saydam yap
         systemButtons.forEach(button => {
             button.style.pointerEvents = 'none';
             button.style.opacity = '0.5';
         });
     }
 
-    // Sayfa yüklendiğinde başlangıçta tüm butonları devre dışı bırak ve giriş butonunu göster
-    resetUI();
+    // Sayfa yüklendiğinde oturum kontrolü yap
+    // Bu kısım, sayfa yenilendiğinde oturumu sürdürmek için kritik!
+    const savedToken = localStorage.getItem('google_id_token');
+    const savedEmail = localStorage.getItem('user_email');
 
-    // Buton tıklama olayları (yetkilendirme sonrası aktif olacaklar)
+    if (savedToken && savedEmail) {
+        const decodedToken = parseJwt(savedToken);
+        // Token'ın süresinin dolup dolmadığını kontrol etmek iyi bir uygulamadır.
+        // decodedToken.exp * 1000 < Date.now() ise token süresi dolmuştur.
+        if (decodedToken && decodedToken.email && allowedEmails.includes(savedEmail)) {
+            // Kaydedilmiş token ve e-posta geçerliyse ve yetkiliyse, UI'yı güncelle
+            profilePicture.src = decodedToken.picture;
+            profileName.textContent = decodedToken.name;
+            profileEmail.textContent = savedEmail;
+            displayAuthorizedUI(decodedToken);
+            console.log("Kayıtlı oturum bulundu ve aktif.");
+        } else {
+            // Kaydedilmiş token geçersiz veya e-posta yetkisizse oturumu temizle
+            console.warn("Kayıtlı oturum geçersiz veya yetkisiz. Temizleniyor.");
+            localStorage.removeItem('google_id_token');
+            localStorage.removeItem('user_email');
+            resetUI();
+            google.accounts.id.prompt(); // Otomatik seçimi tekrar tetikle (isteğe bağlı)
+        }
+    } else {
+        // Hiç kaydedilmiş oturum yoksa, arayüzü sıfırla ve Google girişini göster
+        console.log("Kayıtlı oturum bulunamadı. Giriş bekleniyor.");
+        resetUI();
+        google.accounts.id.prompt(); // One-Tap pop-up'ını tetikle
+    }
+
+    // Buton tıklama olayları
     systemButtons.forEach(button => {
         button.addEventListener('click', () => {
             const url = button.dataset.url;
             if (url) {
-                // Güvenlik: Eğer butona basıldığında yetkisizse bu link çalışmamalı.
-                // handleCredentialResponse içindeki pointer-events: none; bunu sağlar.
-                // Yine de backend kontrolü en güvenlisidir.
+                // Burada tekrar yetki kontrolü yapmak isteyebilirsiniz,
+                // ancak CSS'teki pointer-events zaten tıklamayı engellemiş olmalı.
                 window.open(url, '_blank');
             }
         });
     });
 
-    // Klima Santrali ikonundaki pervaneleri döndür (eğer animasyon CSS'inizde tanımlıysa)
-    // Bu kısım, sadece ikonun görselleştirilmesi içindir, işlevsellikle ilgili değildir.
+    // Klima Santrali ikonundaki pervaneleri döndür
     const fanBlades = document.querySelectorAll('.klima .fan-blade');
     if (fanBlades.length === 3) {
         fanBlades[0].style.setProperty('--angle', '0deg');
