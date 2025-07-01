@@ -1,5 +1,4 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // HTML elementlerini seç
     const systemButtons = document.querySelectorAll('.system-button');
     const profileInfo = document.getElementById('profile-info');
     const profilePicture = document.getElementById('profile-picture');
@@ -9,15 +8,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const accessDeniedMessage = document.getElementById('access-denied');
     const googleSignInButton = document.querySelector('.g_id_signin');
 
-    // --- İZİN VERİLEN E-POSTA ADRESLERİ LİSTESİ ---
     const allowedEmails = [
-        "mahmutkilicankara@gmail.com", // Kendi e-postanızı buraya ekleyin
+        "mahmutkilicankara@gmail.com",
         "ikinci.izinli.kullanici@example.com",
         "ucuncu.kullanici@gmail.com"
     ];
-    // --------------------------------------------------------
 
-    // Fonksiyon: Google kimlik bilgileri yanıtını işler
     window.handleCredentialResponse = (response) => {
         console.log("handleCredentialResponse çağrıldı.");
         const idToken = response.credential;
@@ -25,7 +21,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (decodedToken && decodedToken.email) {
             const userEmail = decodedToken.email.toLowerCase().trim();
-
             console.log("Giriş denemesi e-postası: " + userEmail);
             console.log("E-posta izin verilenler listesinde mi? " + allowedEmails.includes(userEmail));
 
@@ -39,9 +34,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 localStorage.setItem('user_email', userEmail); 
 
                 displayAuthorizedUI(decodedToken);
-                google.accounts.id.cancel(); // Başarılı girişten sonra One-Tap'ı kapat
+                google.accounts.id.cancel(); 
             } else {
-                // *** YETKİSİZ E-POSTA DURUMU ***
                 console.warn("Yetkisiz e-posta: " + userEmail + ". Erişim reddedildi.");
                 
                 // Mesajı göster ve arayüzü sıfırla
@@ -51,9 +45,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 localStorage.removeItem('user_email');
                 
                 // Yetkisiz kullanıcılar için sadece çıkış butonu gösterilir, giriş butonu gizlenir
+                // NOT: resetUI çağrısı içinde hata mesajı da gizleniyor olabilir, bu yüzden daha dikkatli olmalıyız.
                 resetUI(true); // Parametre göndererek giriş butonunu gizli tutuyoruz
                 
-                google.accounts.id.cancel(); // One-Tap'ı kapat
+                // Hata mesajının resetUI tarafından hemen gizlenmediğinden emin olmak için
+                // showAccessDenied'den sonra yeniden görünür yapma denemesi (bir sonraki adımda detaylı).
+                
+                google.accounts.id.cancel(); 
             }
         } else {
             console.error("Kimlik doğrulama başarısız: E-posta bulunamadı veya token geçersiz.");
@@ -64,7 +62,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
-    // Fonksiyon: JWT'yi çözümle
     function parseJwt(token) {
         try {
             const base64Url = token.split('.')[1];
@@ -80,27 +77,43 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Fonksiyon: Erişim engellendi mesajını göster
+    // *** BURADA ÖNEMLİ DEĞİŞİKLİK VAR ***
     function showAccessDenied(message) {
-        accessDeniedMessage.textContent = message;
-        accessDeniedMessage.style.display = 'block';
-        console.log("Erişim engellendi mesajı gösterildi: " + message);
-
+        // Önceki zamanlayıcı varsa temizle
         if (window.accessDeniedTimeout) {
             clearTimeout(window.accessDeniedTimeout);
         }
+
+        // Mesajı güncelle ve görünür yap
+        accessDeniedMessage.textContent = message;
+        accessDeniedMessage.style.display = 'block';
+        console.log("Erişim engellendi mesajı GÖSTERİLDİ: '" + message + "'");
+
+        // Elementin gerçekten görünür olup olmadığını kontrol etmek için ufak bir gecikme ekleyelim.
+        // Bu, eğer mesaj hemen başka bir CSS/JS tarafından eziliyorsa yardımcı olabilir.
+        setTimeout(() => {
+             const computedStyle = window.getComputedStyle(accessDeniedMessage);
+             console.log("accessDeniedMessage Computed Display Style:", computedStyle.display);
+             if (computedStyle.display === 'none') {
+                 console.warn("UYARI: accessDeniedMessage beklenenden önce gizlendi! Başka bir CSS/JS kuralı çakışıyor olabilir.");
+                 // Zorla tekrar gösterelim
+                 accessDeniedMessage.style.display = 'block';
+             }
+        }, 50); // Çok kısa bir gecikme
+
+        // Mesajı belirli bir süre sonra gizlemek için yeni zamanlayıcıyı ayarla
         window.accessDeniedTimeout = setTimeout(() => {
             accessDeniedMessage.style.display = 'none';
             window.accessDeniedTimeout = null;
-            console.log("Erişim engellendi mesajı gizlendi.");
+            console.log("Erişim engellendi mesajı GİZLENDİ.");
         }, 8000); // 8 saniye sonra gizle
     }
 
-    // Arayüzü yetkili kullanıcıya göre ayarla
     function displayAuthorizedUI(decodedToken) {
         profileInfo.style.display = 'flex';
         logoutButton.style.display = 'block';
-        googleSignInButton.style.display = 'none'; // Giriş butonu gizli kalmalı
-        accessDeniedMessage.style.display = 'none'; // Yetkili kullanıcıda hata mesajı gizli olmalı
+        googleSignInButton.style.display = 'none';
+        accessDeniedMessage.style.display = 'none'; // Yetkili kullanıcıda hata mesajı kesinlikle gizli olmalı
 
         systemButtons.forEach(button => {
             button.style.pointerEvents = 'auto';
@@ -111,31 +124,42 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('other-systems-section').style.display = 'grid';
     }
 
-    // Çıkış yap butonu dinleyicisi
     logoutButton.addEventListener('click', () => {
         google.accounts.id.disableAutoSelect(); 
         localStorage.removeItem('google_id_token');
         localStorage.removeItem('user_email');
         
-        resetUI(); // Arayüzü sıfırla, bu durumda giriş butonu görünecek
+        resetUI();
         alert("Başarıyla çıkış yaptınız. Tekrar giriş yapmak için lütfen Google ile giriş yapın.");
-        google.accounts.id.prompt(); // One-Tap'ı tekrar tetikle
+        google.accounts.id.prompt();
     });
 
-    // Arayüzü başlangıç durumuna sıfırla (yani giriş yapılmamış durum)
-    // showGoogleSignIn parametresi, Google giriş butonunun gösterilip gösterilmeyeceğini kontrol eder.
-    function resetUI(hideGoogleSignIn = false) { // Varsayılan olarak gösterme açıktır
+    // resetUI fonksiyonunu optimize edelim
+    function resetUI(hideGoogleSignIn = false) {
         profileInfo.style.display = 'none';
         logoutButton.style.display = 'none';
         
-        // Sadece hideGoogleSignIn true ise Google giriş butonunu gizle
         if (hideGoogleSignIn) {
             googleSignInButton.style.display = 'none'; 
         } else {
-            googleSignInButton.style.display = 'block'; // Varsayılan olarak göster
+            googleSignInButton.style.display = 'block'; 
         }
         
-        accessDeniedMessage.style.display = 'none'; // resetUI çağrıldığında mesajı gizle
+        // Buradaki accessDeniedMessage.style.display = 'none'; satırı, 
+        // yetkisiz giriş yapıldığında mesajı hemen gizleyebilir.
+        // Bu yüzden bu satırı yetkisiz giriş senaryosunda showAccessDenied'den sonra çağırırken dikkatli olmalıyız.
+        // Şimdilik sadece yetkili durumunda veya çıkışta çağırmak daha mantıklı.
+        // Veya `showAccessDenied` fonksiyonunun kendisi mesajın durumunu yönetmeli.
+        // Güvenli olması için, resetUI'nin bu satırı sadece belirli durumlarda çalıştırmasını sağlayalım
+        // Eğer bir hata mesajı gösteriliyorsa ve resetUI çağrılıyorsa, mesajın hemen gizlenmemesi için 
+        // accessDeniedMessage.style.display = 'none'; satırını bu senaryoda çalıştırmayalım.
+        
+        // Şu anki senaryoda, resetUI yetkisiz bir giriş olduğunda çağrıldığında,
+        // showAccessDenied zaten mesajı gösterecek ve zamanlayıcıyı kuracak.
+        // Eğer resetUI, mesajın hemen gizlenmesine neden olursa, burayı kaldırmak gerekebilir.
+        // Şimdilik, sadece authorizedUI'de veya logout'ta açıkça gizlendiğinden emin olalım.
+        // Test için bu satırı yorum satırı yapabilirsiniz:
+        // accessDeniedMessage.style.display = 'none'; 
 
         document.getElementById('main-systems-section').style.display = 'none';
         document.getElementById('other-systems-section').style.display = 'none';
@@ -144,10 +168,9 @@ document.addEventListener('DOMContentLoaded', () => {
             button.style.pointerEvents = 'none';
             button.style.opacity = '0.5';
         });
-        console.log("UI sıfırlandı.");
+        console.log("UI sıfırlandı. Google SignIn butonu görünürlüğü: " + googleSignInButton.style.display);
     }
 
-    // --- Sayfa Yüklendiğinde Oturum Kontrol ve Başlatma Mantığı ---
     function initializeAuthFlow() {
         const savedToken = localStorage.getItem('google_id_token');
         const savedEmail = localStorage.getItem('user_email');
@@ -162,25 +185,22 @@ document.addEventListener('DOMContentLoaded', () => {
                 profileName.textContent = decodedToken.name;
                 profileEmail.textContent = savedEmail;
                 displayAuthorizedUI(decodedToken);
-                // Oturum açık olduğu için One-Tap'ı tetikleme!
             } else {
                 console.warn("Kayıtlı oturum geçersiz, süresi dolmuş veya yetkisiz. Temizleniyor.");
                 localStorage.removeItem('google_id_token');
                 localStorage.removeItem('user_email');
-                resetUI(); // Yetkisizse normal sıfırlama, giriş butonu görünecek
+                resetUI();
                 google.accounts.id.prompt(); 
             }
         } else {
             console.log("Kayıtlı oturum bulunamadı. Google One-Tap tetikleniyor.");
-            resetUI(); // Oturum yoksa normal sıfırlama, giriş butonu görünecek
-            google.accounts.id.prompt(); // One-Tap pop-up'ını tetikle
+            resetUI();
+            google.accounts.id.prompt();
         }
     }
 
-    // Uygulamayı başlat
     initializeAuthFlow();
 
-    // Buton tıklama olayları
     systemButtons.forEach(button => {
         button.addEventListener('click', () => {
             const url = button.dataset.url;
@@ -190,7 +210,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // Klima Santrali ikonundaki pervaneleri döndür
     const fanBlades = document.querySelectorAll('.klima .fan-blade');
     if (fanBlades.length === 3) {
         fanBlades[0].style.setProperty('--angle', '0deg');
