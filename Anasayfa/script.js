@@ -18,7 +18,19 @@ document.addEventListener('DOMContentLoaded', () => {
         "ucuncu.kullanici@gmail.com"
     ];
     // --------------------------------------------------------
-
+function showAccessDenied(message) {
+    accessDeniedMessage.textContent = message;
+    accessDeniedMessage.style.display = 'block';
+    // Önceki zamanlayıcı varsa temizle
+    if (window.accessDeniedTimeout) {
+        clearTimeout(window.accessDeniedTimeout);
+    }
+    // Yeni zamanlayıcıyı ayarla
+    window.accessDeniedTimeout = setTimeout(() => {
+        accessDeniedMessage.style.display = 'none';
+        window.accessDeniedTimeout = null; // Zamanlayıcıyı sıfırla
+    }, 8000); // 8 saniye sonra gizle
+}
     // Fonksiyon: Google kimlik bilgileri yanıtını işler
     window.handleCredentialResponse = (response) => {
         const idToken = response.credential;
