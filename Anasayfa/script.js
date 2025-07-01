@@ -10,11 +10,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const googleSignInButton = document.querySelector('.g_id_signin');
 
     // --- İZİN VERİLEN E-POSTA ADRESLERİ LİSTESİ ---
-    // Sadece bu listedeki e-posta adresleri içeriğe erişebilir.
-    // E-posta adreslerini KÜÇÜK HARFLE ve BAŞINDA/SONUNDA BOŞLUK OLMADAN yazmaya dikkat edin.
     const allowedEmails = [
         "mahmutkilicankara@gmail.com", // Kendi e-postanızı buraya ekleyin
-        "ikinci.izinli.kullanici@example.com", // İzin vermek istediğiniz diğer e-postalar
+        "ikinci.izinli.kullanici@example.com",
         "ucuncu.kullanici@gmail.com"
     ];
     // --------------------------------------------------------
@@ -42,6 +40,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 localStorage.setItem('user_email', userEmail); 
 
                 displayAuthorizedUI(decodedToken);
+                // Başarılı girişten sonra Google One-Tap'ı otomatik olarak kapat
+                // Bu, yeni bir oturum açıldığında One-Tap'ın tekrar görünmesini engeller.
+                google.accounts.id.cancel(); 
 
             } else {
                 console.warn("Yetkisiz e-posta: " + userEmail);
@@ -51,11 +52,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 localStorage.removeItem('google_id_token');
                 localStorage.removeItem('user_email');
                 resetUI();
-                // Yetkisiz kullanıcı için tekrar giriş isteme, sadece çıkış butonu kalsın
+                // Yetkisiz kullanıcı için sadece çıkış butonu kalsın, giriş butonu gizli kalsın
                 googleSignInButton.style.display = 'none'; 
 
                 // Google One-Tap'ın tekrar otomatik açılmasını engellemek için iptal et
-                // google.accounts.id.cancel(); // Bu, eğer One-Tap zaten gösteriliyorsa onu kapatır.
+                google.accounts.id.cancel(); 
             }
         } else {
             console.error("Kimlik doğrulama başarısız: E-posta bulunamadı veya token geçersiz.");
@@ -98,7 +99,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function displayAuthorizedUI(decodedToken) {
         profileInfo.style.display = 'flex';
         logoutButton.style.display = 'block';
-        googleSignInButton.style.display = 'none';
+        googleSignInButton.style.display = 'none'; // Giriş butonu gizli kalmalı
         accessDeniedMessage.style.display = 'none'; 
 
         systemButtons.forEach(button => {
@@ -112,22 +113,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Çıkış yap butonu dinleyicisi
     logoutButton.addEventListener('click', () => {
-        // Google oturumunu tamamen kapat
-        // Eğer kullanıcı sadece oturumu kapatıp başka bir Google hesabıyla giriş yapacaksa disableAutoSelect kullanılır.
-        // Eğer cihazdan tamamen çıkış yapacaksa revoke kullanılır. revoke kullanırken dikkatli olun!
-        google.accounts.id.disableAutoSelect(); // Otomatik seçimi devre dışı bırak
-        // Eğer gerçekten tüm Google oturumlarından çıkış yapmak isterseniz:
-        // google.accounts.id.revoke(localStorage.getItem('google_id_token'), done => {
-        //     console.log('Google oturumu iptal edildi:', done);
-        // });
-
+        // Google oturumunu tamamen kapat ve otomatik seçimi devre dışı bırak
+        google.accounts.id.disableAutoSelect(); 
+        
         // localStorage'daki kimlik bilgilerini temizle
         localStorage.removeItem('google_id_token');
         localStorage.removeItem('user_email');
         
         resetUI(); // Arayüzü sıfırla
         alert("Başarıyla çıkış yaptınız. Tekrar giriş yapmak için lütfen Google ile giriş yapın.");
-        // Sayfayı yenilemek iyi bir uygulama olabilir: window.location.reload();
+        // Çıkış yapıldıktan sonra One-Tap'ın tekrar görünmesini tetikle
+        google.accounts.id.prompt();
     });
 
     // Arayüzü başlangıç durumuna sıfırla (yani giriş yapılmamış durum)
@@ -153,8 +149,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (savedToken && savedEmail) {
             const decodedToken = parseJwt(savedToken);
-            // Token'ın geçerli olup olmadığını ve süresinin dolmadığını kontrol et
-            // decodedToken.exp değeri saniye cinsindendir, Date.now() ise milisaniye.
             const isTokenExpired = decodedToken && decodedToken.exp * 1000 < Date.now();
 
             if (decodedToken && !isTokenExpired && allowedEmails.includes(savedEmail)) {
@@ -164,8 +158,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 profileName.textContent = decodedToken.name;
                 profileEmail.textContent = savedEmail;
                 displayAuthorizedUI(decodedToken);
-                // Google One-Tap otomatik seçimi için prompt() çağırmaya gerek yok,
-                // data-auto_select bunu zaten yapmalı.
+                // Oturum açık olduğu için One-Tap'ı tetikleme!
+                // google.accounts.id.prompt(); // BU SATIRI KALDIRDIK VEYA ÇAĞIRMIYORUZ
             } else {
                 // Kaydedilmiş token geçersiz, süresi dolmuş veya e-posta yetkisizse oturumu temizle
                 console.warn("Kayıtlı oturum geçersiz, süresi dolmuş veya yetkisiz. Temizleniyor.");
