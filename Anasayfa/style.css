@@ -48,7 +48,7 @@ body {
 .control-panel {
     display: flex;
     flex-direction: column; /* Bölümleri dikey olarak sırala */
-    gap: 0px; /* Bölümler arası boşluk */
+    gap: 5px; /* Bölümler arası boşluk */
     max-width: 1000px; /* Maksimum genişliği artırıldı */
     width: 100%;
     background: #ffffff; /* Ana panelin arkaplanı */
