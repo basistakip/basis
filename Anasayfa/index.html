@@ -7,21 +7,89 @@
     <link rel="shortcut icon" type="png" href="resimler/basis.png">
     <link rel="stylesheet" href="style.css">
     <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <style>
+        /* CSS'inizi buraya veya style.css dosyanıza ekleyin */
+        /* Kontrol panelini ve içindeki ana bölümleri başlangıçta gizli tut */
+        .control-panel .section {
+            display: none; /* Sistem butonlarını ve diğer bölümleri gizle */
+        }
+
+        /* Giriş ve profil alanları için stil (örnek, stil.css'inizde daha detaylı olabilir) */
+        .university-header {
+            background-color: #007bff;
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        .profile-info {
+            display: flex;
+            align-items: center;
+            justify-content: center; /* Ortalamak için */
+            gap: 15px;
+            padding: 10px;
+            border-top: 1px solid #eee;
+            margin-top: 15px;
+            flex-wrap: wrap; /* Küçük ekranlarda alt alta gelmesi için */
+        }
+        .profile-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        #profile-picture {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid #007bff;
+        }
+        .profile-text {
+            display: flex;
+            flex-direction: column;
+            text-align: left; /* Metni sola hizala */
+        }
+        #logout-button {
+            background-color: #dc3545;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.9em;
+            transition: background-color 0.3s ease;
+        }
+        #logout-button:hover {
+            background-color: #c82333;
+        }
+        #access-denied {
+            color: red;
+            font-weight: bold;
+            margin-top: 15px;
+        }
+        /* Google giriş butonu ve One-Tap div'i için düzenleme */
+        .g_id_signin {
+            margin: 0 auto; /* Butonu ortalamak için */
+            display: inline-block; /* Ortalamak için gerekli */
+        }
+    </style>
 </head>
 <body>
     <div class="control-panel">
         <div class="university-header">
             <h2>BASİS/ANASAYFA</h2>
         </div>
+
         <div class="university-header" style="background-color: #f0f2f5; color: #333; padding: 10px 0; border-radius: 5px; box-shadow: none;">
             <div id="g_id_onload"
-                 data-client_id="387277586108-8m32c8tdfb0oemnr5kuv2fao6rtm35c0.apps.googleusercontent.com"
-                 data-context="signin"
+                 data-client_id="387277586108-8m32c8tdfb0oemnr5kuv2fao6rtm35c0.apps.googleusercontent.com" data-context="signin"
                  data-ux_mode="popup"
                  data-callback="handleCredentialResponse"
                  data-auto_prompt="false">
             </div>
-            <div class="g_id_signin"
+            <div class="g_id_signin" id="google-signin-button"
                  data-type="standard"
                  data-shape="rectangular"
                  data-theme="outline"
@@ -29,6 +97,7 @@
                  data-size="large"
                  data-logo_alignment="left">
             </div>
+
             <div id="profile-info" class="profile-info" style="display: none;">
                 <div class="profile-container">
                     <img id="profile-picture" src="" alt="Profil Resmi">
@@ -42,7 +111,7 @@
             <p id="access-denied" style="display: none;">Bu içeriğe erişim izniniz yok.</p>
         </div>
 
-        <div class="section main-systems">
+        <div class="section main-systems" id="main-systems-section">
             <div class="system-button" data-url="https://basistakip.github.io/basis/index.html">
                 <div class="icon banu-icon"></div>
                 <span>BASİS ANASAYFA</span>
@@ -131,7 +200,7 @@
             </div>
         </div>
 
-        <div class="section other-systems">
+        <div class="section other-systems" id="other-systems-section">
             <div class="system-button" data-url="https://drive.google.com/drive/folders/1jSrb6uypTKJsfYBnC5_1uwocLaubOw2gwwj06WCBpTdrC7l3UETK67D-bUC0MJSkMOuX7b8S?usp=sharing">
                 <div class="icon building-icon"></div>
                 <span>Binalar/Talepler</span>
@@ -184,6 +253,7 @@
             </div>
         </div>
     </div>
+    
     <script src="script.js"></script>
 </body>
 </html>
