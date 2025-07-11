@@ -8,8 +8,8 @@ const countdowns = [
       { date: 13, hour: 0, minute: 0, text: 'YEDEK 1' },
         { date: 14, hour: 0, minute: 0, text: 'YEDEK 2' },
     { date: 15, hour: 0, minute: 0, text: 'YEDEK 3' },
-    { date: 14, hour: 0, minute: 0, text: 'YEDEK 2' },
-    { date: 14, hour: 0, minute: 0, text: 'YEDEK 2' },
+    { date: 14, hour: 0, minute: 0, text: 'YEDEK 4' },
+    { date: 14, hour: 0, minute: 0, text: 'YEDEK 6' },
 ];
 
 function createCountdown(date, hour, minute, text) {
