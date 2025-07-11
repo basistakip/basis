@@ -4,26 +4,66 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sistem Kontrol Paneli</title>
-        <link rel="shortcut icon" type="png" href="resimler/basis.png"> 
+    <link rel="shortcut icon" type="png" href="resimler/basis.png">
     <link rel="stylesheet" href="style.css">
+  
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+  
+  
+  
+  
+  
+  
+    <style>
+    
+    </style>
 </head>
 <body>
-  
-  
-  
-  
+
     <div class="control-panel">
-      
-      
-      
-        <div class="section main-systems">
+        <div class="university-header">
+            <h2>BASİS ANASAYFA </h2>
+        </div>
+
+        <div class="university-header" style="background-color: #f0f2f5; color: #333; padding: 10px 0; border-radius: 5px; box-shadow: none;">
+          
+             
+            <div id="g_id_onload"
+                 data-client_id="387277586108-8m32c8tdfb0oemnr5kuv2fao6rtm35c0.apps.googleusercontent.com" data-context="signin"
+                 data-ux_mode="popup"
+                 data-callback="handleCredentialResponse"
+                 data-auto_prompt="false" data-auto_select="true"> </div>
+            <div class="g_id_signin" id="google-signin-button"
+                 data-type="standard"
+                 data-shape="rectangular"
+                 data-theme="outline"
+                 data-text="signin_with"
+                 data-size="large"
+                 data-logo_alignment="left">
+            </div>
+
+            <div id="profile-info" class="profile-info" style="display: none;">
+                <div class="profile-container">
+                    <img id="profile-picture" src="" alt="Profil Resmi">
+                    <div class="profile-text">
+                        <span id="profile-name" style="font-weight: bold;"></span>
+                        <span id="profile-email" style="font-size: 0.9em; color: #555;"></span>
+                    </div>
+                </div>
+                <button id="logout-button">Çıkış Yap</button>
+            </div>
+            <p id="access-denied" style="display: none;">Bu içeriğe erişim izniniz yok.</p>
+          
+        </div>
+
+        <div class="section main-systems" id="main-systems-section">
           
           
+            <div class="system-button" data-url="https://basistakip.github.io/basis/index.html">
+                <div class="icon banu-icon"></div>
+                <span>BASİS İNTERAKTİF ANASAYFA</span>
+            </div>
           
-          <div class="system-button" data-url="https://basistakip.github.io/basis/index.html">
-    <div class="icon banu-icon"></div>
-    <span>BASİS ANASAYFA</span>
-</div>
           
           
             <div class="system-button search-bar-wide" data-url="/sistem-ara">
@@ -34,185 +74,171 @@
                         width="100%"
                         height="80px"
                         scrolling="yes"
-                      
                         allowfullscreen=""
                         loading="lazy"
                         referrerpolicy="no-referrer-when-downgrade">
                     </iframe>
                 </div>
             </div>
-          
-          
-          
-          
-          
-          
-          
-                    
-        <div class="system-button" data-url="https://drive.google.com/drive/u/0/folders/1LdEk5nnMH5ONEFurrsaJkopXvvuAahlC">
-          
-    <div class="icon basis-drive-icon"></div>
-    <span>Basis Drive</span>
-</div>
-
-<div class="system-button">
-    <div class="icon github-web-icon"></div>
-    <span>GitHub Web Yapiisleribanu_</span>
-</div>
-          
-          
-          
-          <!-- Rektörlük Binası -->
-<div class="system-button" data-url="https://drive.google.com/drive/folders/1843LTVIrIDvvBholUqK34vJ1YNVD1gWvnSS-NMJmcFRvOAbAM1c_awRyRxg41YQpoUdafR6a">
-    <div class="icon building-icon"></div>
-    <span>Rektörlük Binası</span>
-</div>
-
-<!-- Kapalı Spor Salonu -->
-<div class="system-button" data-url="https://drive.google.com/drive/folders/1N-rdUOu98ZSLd_WJLMNd5332qGAJ8HOdDTdRn1qOZ6DfTUgtUb4AuvnbdKUovc19ow1vNtcF">
-    <div class="icon sport-icon"></div>
-    <span>Kapalı Spor Salonu</span>
-</div>
-
-<!-- Spor Akademisi (YENİ) -->
-<div class="system-button" data-url="https://drive.google.com/drive/folders/1dLwbe0hBNFASEfx6U_FgmF8KB5lp2pKJX-sgyIUj0RFe803SpiUVP71v28oZbrTHkzfEHot6">
-    <div class="icon sport-academy-icon"></div>
-    <span>Spor Akademisi</span>
-</div>
-
-<!-- Merkezi Derslik -->
-<div class="system-button" data-url="https://drive.google.com/drive/folders/1r06zRd6eEISG9I326JGR2QL4bbxManul_U9jBU3dY7IWpLqFuezVePQ9odOYrJogy_ortKB9">
-    <div class="icon classroom-icon"></div>
-    <span>Merkezi Derslik</span>
-</div>
-
-<!-- ÖYM -->
-<div class="system-button" data-url="https://drive.google.com/drive/folders/1tRwRLRRWVqNk4gHnBeNBlwFNtYvkh1MEl3ZMljFppLKdAEhXCMsiXDL0mW-1H41B99cRhmOn">
-    <div class="icon office-icon"></div>
-    <span>ÖYM</span>
-</div>
-
-<!-- Mühendislik -->
-<div class="system-button" data-url="https://drive.google.com/drive/folders/1uB4ockbREFNf6CcssejK9mD6PAs9IfAdI3Ux7Svk2Nep9gmdG7c6-9Ltv126R0v9lbgteRzl">
-    <div class="icon engineering-icon"></div>
-    <span>Mühendislik</span>
-</div>
-
-<!-- Denizcilik -->
-<div class="system-button" data-url="https://drive.google.com/drive/folders/1ZYsVVhI4hydIBoVo1W_J-VoJa5fo7XQ_3jV6TsN7XfM1cWRnRysoUkenNsRLjsUfauAmDerP">
-    <div class="icon maritime-icon"></div>
-    <span>Denizcilik</span>
-</div>
-
-<!-- İlahiyat Binası -->
-<div class="system-button" data-url="https://drive.google.com/drive/folders/1zqqeHVUV7rTb8tQ_8n7ZbG10Y4idNLPV6FYvkbli4a2KYmyp3rV1tT8rGM59pSGHjvyhuMk-">
-    <div class="icon religion-icon"></div>
-    <span>İlahiyat Binası</span>
-</div>
-
-<!-- Susurluk MYO -->
-<div class="system-button" data-url="https://drive.google.com/drive/folders/1QMpzrWtSivxm7S9Mk0dLTTo7d9NMq_KfRSGBHpG8EDnmH-Z-9SVbvHcRfZu_hgqtEn3KE8d0">
-    <div class="icon susurluk-myo-icon"></div>
-    <span>Susurluk MYO</span>
-</div>
-
-<!-- Erdek MYO -->
-<div class="system-button" data-url="https://drive.google.com/drive/folders/1czb0F-Hx6homzZM5uf6eUkX9oh_uXvn2qOeUMB6C-GYtaBDhv_w6EvxOTwp3jmCxe8vKhP9T">
-    <div class="icon erdek-myo-icon"></div>
-    <span>Erdek MYO</span>
-</div>
-
-<!-- Manyas MYO -->
-<div class="system-button" data-url="https://drive.google.com/drive/folders/1HVvf9wcEgRUvJ1Yrlvpq-vG3ALeLanW1UWCDhWjiyspRCovRqfnlHZThVy-qOKW7chN5u3-G">
-    <div class="icon manyas-myo-icon"></div>
-    <span>Manyas MYO</span>
-</div>
-
-<!-- Gönen MYO -->
-<div class="system-button" data-url="https://drive.google.com/drive/folders/16zvos9NdCSDx-YZF1egTdB9wBByS7ygK51BA-IOzKHzsCXaVKHYlG4D9xj14MhbzyNmFpuMX">
-    <div class="icon gonen-myo-icon"></div>
-    <span>Gönen MYO</span>
-</div>
-
-<!-- Bandırma MYO -->
-<div class="system-button" data-url="https://drive.google.com/drive/folders/1D26Pcmer3vCRwHtgjMyDLMiyXppXBVyMjzf2-fnLAHggiPEje5OqyQh7xNw5w69wlMFjVWbE">
-    <div class="icon bandirma-myo-icon"></div>
-    <span>Bandırma MYO</span>
-</div>
-
-<!-- Denizcilik MYO -->
-<div class="system-button" data-url="https://drive.google.com/drive/folders/1aPAoVuyzc14TVujADHvOrtoHV__sQ5UNDh9hbAHr9W6WaOXUCvWInSLpG-QCslAO9LUWeUJo">
-    <div class="icon maritime-myo-icon"></div>
-    <span>Denizcilik MYO</span>
-</div>
-
-<!-- Edincik MYO -->
-<div class="system-button" data-url="https://drive.google.com/drive/folders/1SBCk4EUhkGFliXFfyJoIsJdF98le08PMqn2v-dfkQHikWTTg92aZBNqRsgb-SsyL_t3g0Pmc">
-    <div class="icon edincik-myo-icon"></div>
-    <span>Edincik MYO</span>
-</div>
-
-  
-          
-          
-        </div>
-         
-      
-      
-      
-      
-      
-      
-        <div class="section other-systems">
-          
-          
-                    
-          
-          
-          
-          
-          
-          
-          
-          
-            <div class="system-button" data-url="https://drive.google.com/drive/folders/1jSrb6uypTKJsfYBnC5_1uwocLaubOw2gwwj06WCBpTdrC7l3UETK67D-bUC0MJSkMOuX7b8S?usp=sharing">
-                <div class="icon building-icon"></div>
-                <span>Binalar/Talepler</span>
+            <div class="system-button" data-url="https://drive.google.com/drive/u/0/folders/1LdEk5nnMH5ONEFurrsaJkopXvvuAahlC">
+                <div class="icon basis-drive-icon"></div>
+                <span>Basis Drive</span>
             </div>
+          
+          
+<div class="system-button" data-url="HARITA_LINKİ">
+    <div class="icon map-icon"></div>
+    <span>Haritada Yeri</span>
+</div>
+           
+        </div>
+
+      
+      
+      
+      
+       
+      <!– SAYAÇLAR –>
+                    <div class="section other-systems" id="other-systems-section">
+                  
+                        <div class="section other-systems">
+        <div class="counter-container" id="counters"></div>
+          
+                          
+        </div>
+                      
+                      
+        </div>
+      <!– SAYAÇLAR –>
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+          <h2>İnteraktif Görünüm</h2>
+    
+    <!-- Sadece masaüstünde gözükecek iframe -->
+    <div class="desktop-only-map">
+        <iframe
+            src="https://basistakip.github.io/basis/interaktif/binalar/binalar.html"
+            width="100%"
+            height="450"
+            style="border:0;"
+            allowfullscreen
+            loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade">
+        </iframe>
+    </div>
+      
+      
+      
+ 
+      
+      
+      
+      
+      
+      
+      
+        <h2>GENEL ERİŞİM</h2>
+      
+        <div class="section other-systems" id="other-systems-section">
+          
+          
+                    
+          
+          
+          
+                                          <div class="system-button" data-url="https://drive.google.com/drive/folders/1LeiOLaTU8JixvIOjldPiJVTLPgsZt8t0?usp=drive_link">
+                <div class="icon project-icon"></div>
+                <span>Projeler</span>
+            </div>
+          
+          
+          
+          
+          
+          
+            <div class="system-button" data-url="https://docs.google.com/spreadsheets/d/1RNYkQd9bml7M74ciecpxPbY-VSS28HzbJgkeHUc2axg/edit?gid=109557683#gid=109557683">
+              <div class="talepler-icon"></div>
+                <span>Talepler</span>
+            </div>
+          
+          
+                 <!-- Özel Parçalar -->
+<div class="system-button" data-url="ÖZEL_PARÇALAR_LINKİ">
+    <div class="talep-yaz-icon"></div>
+    <span>Talep Yaz</span>
+</div>
+          
+          
+          
+          
+          <!-- Özel Parçalar -->
+<div class="system-button" data-url="ÖZEL_PARÇALAR_LINKİ">
+    <div class="icon custom-parts-icon"></div>
+    <span>Özel Parçalar</span>
+</div>
+          
+          
+          <!-- Isıtma/Soğutma -->
+<div class="system-button" data-url="ISITMA_SOGUTMA_LINKİ">
+    <div class="icon hvac-icon"></div>
+    <span>Isıtma/Soğutma</span>
+</div>
+          
+          
+          
+          
+          
+          
             <div class="system-button" data-url="https://drive.google.com/drive/folders/1KnjaNFmmKqHedHci7bGuPCFabh2sm-lMOGjAhTQOPTch2UKm_1ifs0Htv3gLO-JJbKVRApEa?usp=sharing">
                 <div class="icon ups-icon"></div>
                 <span>UPS'ler</span>
             </div>
+          
+          
+        <!-- Jeneratör Butonu -->
+<div class="system-button" data-url="JENERATÖR_LINKİ">
+    <div class="icon generator-icon"></div>
+    <span>Jeneratör</span>
+</div>  
+          
+          
+          
+          
+          
+          
             <div class="system-button" data-url="https://drive.google.com/drive/folders/1LQEMoJIGTYbt_H_AYLF9_TKcnLDfrtPrmDcvxDQ01R0VdeA8YJQWM8k0GNnN9ZTsLFZxkXoa?usp=sharing">
                 <div class="icon fire-icon"></div>
                 <span>Yangın</span>
             </div>
+          
+          
             <div class="system-button" data-url="https://drive.google.com/drive/folders/134Q0b-jeuilwSM-8No1sVo6T4U8qDJ3k5gHeZGtymAVqlgmy0eqq7oK3Y4UkA_V7jGG4E8ez?usp=sharing">
                 <div class="icon sliding-door-icon"></div>
                 <span>Kapılar</span>
             </div>
-            <div class="system-button" data-url="https://drive.google.com/drive/folders/1Bq8BgeYdaxkzCyxzWDlGzQOeE9AKBURs?usp=sharing">
-                <div class="icon report-icon"></div>
-                <span>Raporlar</span>
-            </div>
-            <div class="system-button electric-grid" data-url="https://drive.google.com/drive/folders/1L5odcO5nLoAjRGmiUaYsgdKnxJKM1w9NmXtfho5kcJT9ZDjpsce1Lu3ZJsbajZ6vzNnvxeqT?usp=sharing">
-                <div class="icon">
-                    <svg class="electric-icon" viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg">
-                        <path class="tower" d="M40 20 L40 60 M30 30 L50 30 M30 40 L50 40" />
-                        <path class="power-line" d="M10 40 L70 40" />
-                        <circle class="spark" cx="60" cy="50" r="3" />
-                    </svg>
-                </div>
-                <span>Elektrik Yerleşkesi</span>
-            </div>
-            <div class="system-button" data-url="/klima-santrali">
-                <div class="icon klima">
-                    <div class="fan-blade"></div>
-                    <div class="fan-blade"></div>
-                    <div class="fan-blade"></div>
-                </div>
-                <span>Klima Santrali</span>
-            </div>
+          
+
+          
+          
+        
+          
+          
+          
+
+          
+          
+          
             <div class="system-button" data-url="https://drive.google.com/drive/folders/1pfgWPMp47KvKXnjopyANH5xGY5imP3UFpo2LglZYYeg1R5mLdNaS7qNT3ltlFcfVZNesUujT?usp=sharing">
                 <div class="icon elevator">
                     <div class="elevator-shaft">
@@ -223,146 +249,214 @@
             </div>
           
           
+          <!-- İletişim -->
+<div class="system-button" data-url="HARITA_LINKİ">
+    <div class="icon map-icon"></div>
+    <span>Haritada Yeri</span>
+</div>
           
           
           
-                                        <div class="system-button" data-url="https://drive.google.com/drive/folders/1LeiOLaTU8JixvIOjldPiJVTLPgsZt8t0?usp=drive_link">
+<div class="system-button" data-url="ILETISIM_LINKI">
+    <div class="icon iletisim-icon"></div>
+    <span>ARA GÜVENLİK İletişim</span>
+</div>
+
+          
+          
+          
+            <div class="system-button" data-url="https://drive.google.com/drive/folders/1Bq8BgeYdaxkzCyxzWDlGzQOeE9AKBURs?usp=sharing">
+                <div class="icon report-icon"></div>
+                <span>Raporlar</span>
+            </div>
+          
+          
+            <div class="system-button electric-grid" data-url="https://drive.google.com/drive/folders/1L5odcO5nLoAjRGmiUaYsgdKnxJKM1w9NmXtfho5kcJT9ZDjpsce1Lu3ZJsbajZ6vzNnvxeqT?usp=sharing">
+                <div class="icon">
+                    <svg class="electric-icon" viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg">
+                        <path class="tower" d="M40 20 L40 60 M30 30 L50 30 M30 40 L50 40" />
+                        <path class="power-line" d="M10 40 L70 40" />
+                        <circle class="spark" cx="60" cy="50" r="3" />
+                    </svg>
+                </div>
+                <span>Elektrik Yerleşkesi</span>
+            </div>
+          
+          
+
+                        <div class="system-button">
+                <div class="icon github-web-icon"></div>
+                <span>GitHub Web Yapiisleribanu_</span>
+            </div>
+
+          
+              <div class="system-button">
+                <div class="email-icon"></div>
+                <span>E-POSTA</span>
+            </div>
+          
+          
+          
+        </div>
+      
+      
+      
+      
+      
+              <H2>BİNALAR</H2>
+      
+            <!– örnek alan 1 –>
+                    <div class="section other-systems" id="other-systems-section">
+            
+                      
+                      
+                      <div class="system-button" data-url="https://drive.google.com/drive/folders/1jSrb6uypTKJsfYBnC5_1uwocLaubOw2gwwj06WCBpTdrC7l3UETK67D-bUC0MJSkMOuX7b8S?usp=sharing">
+                <div class="icon building-icon"></div>
+                <span>Rektörlük Binası</span>
+            </div>
+            <div class="system-button" data-url="https://drive.google.com/drive/folders/1N-rdUOu98ZSLd_WJLMNd5332qGAJ8HOdDTdRn1qOZ6DfTUgtUb4AuvnbdKUovc19ow1vNtcF">
+                <div class="icon sport-icon"></div>
+                <span>Kapalı Spor Salonu</span>
+            </div>
+            <div class="system-button" data-url="https://drive.google.com/drive/folders/1dLwbe0hBNFASEfx6U_FgmF8KB5lp2pKJX-sgyIUj0RFe803SpiUVP71v28oZbrTHkzfEHot6">
+                <div class="icon sport-academy-icon"></div>
+                <span>Spor Akademisi</span>
+            </div>
+            <div class="system-button" data-url="https://drive.google.com/drive/folders/1r06zRd6eEISG9I326JGR2QL4bbxManul_U9jBU3dY7IWpLqFuezVePQ9odOYrJogy_ortKB9">
+                <div class="icon classroom-icon"></div>
+                <span>Merkezi Derslik</span>
+            </div>
+            <div class="system-button" data-url="https://drive.google.com/drive/folders/1tRwRLRRWVqNk4gHnBeNBlwFNtYvkh1MEl3ZMljFppLKdAEhXCMsiXDL0mW-1H41B99cRhmOn">
+                <div class="icon office-icon"></div>
+                <span>ÖYM</span>
+            </div>
+            <div class="system-button" data-url="https://drive.google.com/drive/folders/1uB4ockbREFNf6CcssejK9mD6PAs9IfAdI3Ux7Svk2Nep9gmdG7c6-9Ltv126R0v9lbgteRzl">
+                <div class="icon engineering-icon"></div>
+                <span>Mühendislik</span>
+            </div>
+            <div class="system-button" data-url="https://drive.google.com/drive/folders/1ZYsVVhI4hydIBoVo1W_J-VoJa5fo7XQ_3jV6TsN7XfM1cWRnRysoUkenNsRLjsUfauAmDerP">
+                <div class="icon maritime-icon"></div>
+                <span>Denizcilik</span>
+            </div>
+            <div class="system-button" data-url="https://drive.google.com/drive/folders/1zqqeHVUV7rTb8tQ_8n7ZbG10Y4idNLPV6FYvkbli4a2KYmyp3rV1tT8rGM59pSGHjvyhuMk-">
+                <div class="icon religion-icon"></div>
+                <span>İlahiyat Binası</span>
+            </div>
+            <div class="system-button" data-url="https://drive.google.com/drive/folders/1QMpzrWtSivxm7S9Mk0dLTTo7d9NMq_KfRSGBHpG8EDnmH-Z-9SVbvHcRfZu_hgqtEn3KE8d0">
+                <div class="icon susurluk-myo-icon"></div>
+                <span>Susurluk MYO</span>
+            </div>
+            <div class="system-button" data-url="https://drive.google.com/drive/folders/1czb0F-Hx6homzZM5uf6eUkX9oh_uXvn2qOeUMB6C-GYtaBDhv_w6EvxOTwp3jmCxe8vKhP9T">
+                <div class="icon erdek-myo-icon"></div>
+                <span>Erdek MYO</span>
+            </div>
+            <div class="system-button" data-url="https://drive.google.com/drive/folders/1HVvf9wcEgRUvJ1Yrlvpq-vG3ALeLanW1UWCDhWjiyspRCovRqfnlHZThVy-qOKW7chN5u3-G">
+                <div class="icon manyas-myo-icon"></div>
+                <span>Manyas MYO</span>
+            </div>
+            <div class="system-button" data-url="https://drive.google.com/drive/folders/16zvos9NdCSDx-YZF1egTdB9wBByS7ygK51BA-IOzKHzsCXaVKHYlG4D9xj14MhbzyNmFpuMX">
+                <div class="icon gonen-myo-icon"></div>
+                <span>Gönen MYO</span>
+            </div>
+            <div class="system-button" data-url="https://drive.google.com/drive/folders/1D26Pcmer3vCRwHtgjMyDLMiyXppXBVyMjzf2-fnLAHggiPEje5OqyQh7xNw5w69wlMFjVWbE">
+                <div class="icon bandirma-myo-icon"></div>
+                <span>Bandırma MYO</span>
+            </div>
+            <div class="system-button" data-url="https://drive.google.com/drive/folders/1aPAoVuyzc14TVujADHvOrtoHV__sQ5UNDh9hbAHr9W6WaOXUCvWInSLpG-QCslAO9LUWeUJo">
+                <div class="icon maritime-myo-icon"></div>
+                <span>Denizcilik MYO</span>
+            </div>
+            <div class="system-button" data-url="https://drive.google.com/drive/folders/1SBCk4EUhkGFliXFfyJoIsJdF98le08PMqn2v-dfkQHikTsgb-SsyL_t3g0Pmc">
+                <div class="icon edincik-myo-icon"></div>
+                <span>Edincik MYO</span>
+            </div>
+        </div>
+      <!– örnek alan 1 –>
+      
+      
+  
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+            <!– örnek alan 1 –>
+                    <div class="section other-systems" id="other-systems-section">
+                  
+                      <div class="system-button" data-url="https://drive.google.com/drive/folders/1jSrb6uypTKJsfYBnC5_1uwocLaubOw2gwwj06WCBpTdrC7l3UETK67D-bUC0MJSkMOuX7b8S?usp=sharing">
+                    
+                <div class="icon elevator">
+                    <div class="elevator-shaft">
+                        <div class="elevator-car"></div>
+                    </div>
+                </div>
+                <span>örnek alan 1</span>
+            </div>
+                
+                
+            <div class="system-button" data-url="https://drive.google.com/drive/folders/1LeiOLaTU8JixvIOjldPiJVTLPgsZt8t0?usp=drive_link">
+                <div class="icon project-icon"></div>
+                <span>örnek alan 1</span>
+            </div>
+        </div>
+      <!– örnek alan 1 –>
+      
+      
+      
+      
+      
+      <!– örnek alan 2 –>
+                    <div class="section other-systems" id="other-systems-section">
+                  
+                      <div class="system-button" data-url="https://drive.google.com/drive/folders/1jSrb6uypTKJsfYBnC5_1uwocLaubOw2gwwj06WCBpTdrC7l3UETK67D-bUC0MJSkMOuX7b8S?usp=sharing">
+                    
+                <div class="icon elevator">
+                    <div class="elevator-shaft">
+                        <div class="elevator-car"></div>
+                    </div>
+                </div>
+                <span>örnek alan 2</span>
+            </div>
+                
+                
+            <div class="system-button" data-url="https://drive.google.com/drive/folders/1LeiOLaTU8JixvIOjldPiJVTLPgsZt8t0?usp=drive_link">
+                <div class="icon project-icon"></div>
+                <span>örnek alan 2</span>
+            </div>
+        </div>
+      <!– örnek alan 2 –>
+      
+      
+      
+      
+      
+      
+      
+              <div class="section other-systems" id="other-systems-section">
+            <div class="system-button" data-url="https://drive.google.com/drive/folders/1jSrb6uypTKJsfYBnC5_1uwocLaubOw2gwwj06WCBpTdrC7l3UETK67D-bUC0MJSkMOuX7b8S?usp=sharing">
+
+                <div class="icon elevator">
+                    <div class="elevator-shaft">
+                        <div class="elevator-car"></div>
+                    </div>
+                </div>
+                <span>Asansörler Burayaı en üste al</span>
+            </div>
+                
+                
+            <div class="system-button" data-url="https://drive.google.com/drive/folders/1LeiOLaTU8JixvIOjldPiJVTLPgsZt8t0?usp=drive_link">
                 <div class="icon project-icon"></div>
                 <span>Projeler</span>
             </div>
-          
-          
-          
-            <div class="system-button" data-url="/vrf-sistemi">
-                <div class="icon vrf-system">
-                    <div class="heat-exchange"></div>
-                    <div class="pipe pipe-1"></div>
-                    <div class="pipe pipe-2"></div>
-                </div>
-                <span>VRF Sistemi</span>
-            </div>
-          
-
-          
-          
-          
-            <div class="system-button" data-url="/chiller-sogutma">
-                <div class="icon chiller">
-                    <div class="compressor"></div>
-                    <div class="coolant"></div>
-                    <div class="fan"></div>
-                </div>
-                <span>Chiller Soğutma</span>
-            </div>
-            <div class="system-button inventory" data-url="https://drive.google.com/drive/folders/19lF6wwm9J698YBXSx3o-hAueiVMyv28L1Gn9Ka-SkOAFRYJrujRTqzb1AuprD8tMYQZ2_Dxh?usp=sharing">
-                <div class="icon">
-                    <div class="inventory-box"></div>
-                    <div class="inventory-items">
-                        <div class="inventory-item"></div>
-                        <div class="inventory-item"></div>
-                        <div class="inventory-item"></div>
-                    </div>
-                </div>
-                <span>Malzeme/Envanter Takibi</span>
-            </div>
-            <div class="system-button generator" data-url="https://drive.google.com/drive/folders/1DEWbIhid2o-aX0FVe5f9Ei7viTUQRg7Z6bJwm06s0rrB_zlNzLhMZEXelP_O0F--vMdZjKBh?usp=sharing">
-                <div class="icon">
-                    <div class="generator-body"></div>
-                    <div class="engine-piston"></div>
-                    <div class="exhaust-pipe"></div>
-                    <div class="engine-fan"></div>
-                </div>
-                <span>Jeneratör</span>
-            </div>
-            <div class="system-button" data-url="https://drive.google.com/drive/folders/14I1z8AI0bwLcey17y6xwd-dsLcnLCzHb?usp=sharing">
-                <div class="icon software-icon"></div>
-                <span>Yazılım Teknik</span>
-            </div>
-            <div class="system-button" data-url="https://drive.google.com/drive/folders/19V8X62JjbgkAJCmpxFLQCpbOXnSqURrP?usp=sharing">
-                <div class="icon contact-icon"></div>
-                <span>İletişim</span>
-            </div>
-            <div class="system-button" data-url="https://drive.google.com/drive/folders/1m2mq4GltRWS1jRyJhNTB9_eLNtEhr6Nvnmz1-KfoYH1Op_fDMi2B-TqatcAkAfT7fZV1tBpJ?usp=sharing">
-                <div class="icon light-automation-icon"></div>
-                <span>Aydınlatma Otomasyon</span>
-            </div>
-            <div class="system-button" data-url="https://drive.google.com/drive/folders/16A7dSbZJ82J1yAdmdTixrPfJWKDSQWpc?usp=drive_link">
-                <div class="icon research-icon"></div>
-                <span>Araştır</span>
-            </div>
-            <div class="system-button" data-url="https://drive.google.com/drive/folders/1YfrYC8fBfVsI5EkVz2neeon6jx5iwQOC?usp=drive_link">
-                <div class="icon tag-icon"></div>
-                <span>Etiketler</span>
-            </div>
-            <div class="system-button" data-url="https://drive.google.com/drive/folders/18Iijpl9Mly0nz-do0fFq_-unRXL4XdEQFgfrJCzsNX_e2j2-h_MG2rKbbWAjb_DK_1iBSfBN?usp=sharing">
-                <div class="icon notes-icon"></div>
-                <span>Notlar/Takip</span>
-            </div>
-            <div class="system-button" data-url="https://drive.google.com/drive/folders/1qT4-NWmbKYKAl51vzTTX0FnAD2l0-L6jlM0tFa1VHPgCu95swsV7Ed5E2L16s8l7pc6Q9d5D?usp=drive_link">
-                <div class="icon general-tech-icon"></div>
-                <span>Genel Teknik</span>
-            </div>
-            <div class="system-button" data-url="https://drive.google.com/drive/folders/1uTsLvQLdlIoyjuQvQW3AAF6343l31Q1kDuPSvtMvR46mu8AwQKEapmAtU2RafR6FTAQsF1vu?usp=sharing">
-                <div class="icon meter-invoice-icon"></div>
-                <span>Sayaçlar/Faturalar</span>
-            </div>
-          
-            <div class="system-button" data-url="https://drive.google.com/drive/folders/1LdEk5nnMH5ONEFurrsaJkopXvvuAahlC">
-                <div class="icon others-icon"></div>
-                <span>Diğerleri</span>
-            </div>
-          
-          
-
-          
-          
-          
-<div class="system-button" data-url="https://drive.google.com/drive/folders/1FPuI4a8XbyKh10ybDIeF_GIBf1g8_k-90EqCUl3WfvlydGvjVi-FmZZE9i068iBh_kTHNRJR?usp=sharing">
-    <div class="icon evrak-icon"></div>
-    <span>Evraklar</span>
-</div>
-<div class="system-button" data-url="https://rehber.bandirma.edu.tr/">
-    <div class="icon rehber-icon"></div>
-    <span>Rehber</span>
-</div>
-<div class="system-button" data-url="https://bandirma.edu.tr/">
-    <div class="icon banu-icon"></div>
-    <span>BANÜ ANASAYFA</span>
-</div>
-<div class="system-button" data-url="https://ubys.bandirma.edu.tr/">
-    <div class="icon ubys-icon"></div>
-    <span>Ubys</span>
-</div>
-<div class="system-button" data-url="https://mail.google.com/mail/u/0/#inbox">
-    <div class="icon email-icon"></div>
-    <span>E-Posta</span>
-</div>
-<div class="system-button" data-url="https://docs.google.com/forms/d/e/1FAIpQLSfvjsqoxRrroQo9SqrtTfKC15wPJg90e7v3hu5rvXre69EwOw/viewform">
-    <div class="icon talep-icon"></div>
-    <span>Talep Yaz</span>
-</div>
-<div class="system-button" data-url="https://drive.google.com/drive/folders/1m2mq4GltRWS1jRyJhNTB9_eLNtEhr6Nvnmz1-KfoYH1Op_fDMi2B-TqatcAkAfT7fZV1tBpJ?usp=sharing">
-    <div class="icon otomasyon-icon"></div>
-    <span>Otomasyon Aydınlatma</span>
-</div>
-<div class="system-button" data-url="/destek-sayfasi">
-    <div class="icon destek-icon"></div>
-    <span>Destek Sayfası</span>
-</div>
-<div class="system-button" data-url="/kisisel-sayfa">
-    <div class="icon kisisel-icon"></div>
-    <span>Kişisel Sayfa</span>
-</div>
-<div class="system-button" data-url="/egitim-kapisi">
-    <div class="icon egitim-icon"></div>
-    <span>Eğitim Kapısı</span>
-</div>
-<div class="system-button" data-url="https://drive.google.com/drive/folders/1qT4-NWmbKYKAl51vzTTX0FnAD2l0-L6jlM0tFa1VHPgCu95swsV7Ed5E2L16s8l7pc6Q9d5D?usp=sharing">
-    <div class="icon teknik-icon"></div>
-    <span>Teknik Döküman</span>
-</div>
-          
-          
         </div>
       
       
@@ -373,12 +467,23 @@
       
       
       
+      
+      
+      
+      
+      
+      
+      
+      
+      
 
+      
+                       <!– harita –>
         <div class="section map-section">
             <h2>Konum Haritası</h2>
             <div class="map-container">
                 <iframe
-                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3003.5413000000003!2d27.9739775!3d40.3846617!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x14b6fc709e3a6a1f%3A0x6b87d3a0e1c0d5c!2sBand%C4%B1rma%2C%20Bal%C4%B1kesir%2C%20T%C3%BCrkiye!5e0!3m2!1str!2sus!4v1700000000000!5m2!1str!2sus"
+                    src="https://drive.google.com/drive/u/0/folders/1LdEk5nnMH5ONEFurrsaJkopXvvuAahlC"
                     width="100%"
                     height="450"
                     style="border:0;"
@@ -389,11 +494,27 @@
             </div>
                   
         </div>
+      <!– harita https://drive.google.com/drive/u/0/folders/1LdEk5nnMH5ONEFurrsaJkopXvvuAahlC
+      
+      https://basistakip.github.io/basis/interaktif/binalar/binalar.html
+      –>
+      
+      
+       <div class="control-panel">
+        <div class="counter-container" id="counters"></div>
+    </div>
       
 
-    <script src="script.js"></script>
+    </div>
+  
+  
+  
+  
+  
+  
+  
+  
+  
+<script src="script.js"></script>
 </body>
-  </html>
-  
-  
-  
+</html>
