@@ -1,24 +1,18 @@
-/* Google Login Card Styles */
 .card {
   border: 1px solid #ccc;
   padding: 20px;
-  margin: 20px auto;
+  margin: 20px;
   border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  max-width: 400px;
 }
-
 .profile-info {
   margin-top: 20px;
-  text-align: center;
 }
-
 .profile-info img {
   border-radius: 50%;
   width: 50px;
   height: 50px;
 }
-
 #oauth-button button {
   background-color: #4285F4;
   color: white;
@@ -27,11 +21,9 @@
   border-radius: 5px;
   cursor: pointer;
 }
-
 #oauth-button button:hover {
   background-color: #357ABD;
 }
-
 #logout-button {
   display: none;
   margin-top: 10px;
@@ -42,12 +34,8 @@
   border-radius: 5px;
   cursor: pointer;
 }
-
 #access-denied {
   display: none;
   color: red;
   margin-top: 20px;
-  text-align: center;
 }
-
-/* Your existing Basis Anasayfa CSS styles here */
