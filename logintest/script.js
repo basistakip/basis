@@ -2,6 +2,7 @@
     const allowedEmails = [
       "yapiisleribanu@gmail.com",
       "mahmutkilicankara@gmail.com",
+       "yapiisleribanuetiket@gmail.com",
       "izinli3@example.com"
     ];
 
