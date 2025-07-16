@@ -1,41 +1,181 @@
+/* ========== TEMEL STİLLER ========== */
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background: #f0f2f5;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+/* ========== KART YAPISI ========== */
 .card {
-  border: 1px solid #ccc;
-  padding: 20px;
-  margin: 20px;
-  border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: row;
+    gap: 30px;
+    max-width: 900px;
+    width: 100%;
+    background: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    padding: 40px;
 }
+
+/* ========== GİRİŞ BÖLÜMÜ ========== */
+.login-section {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    border-right: 1px solid #e0e0e0;
+    padding-right: 30px;
+}
+
+.login-section h2 {
+    color: #003366;
+    margin-bottom: 20px;
+    font-size: 1.8em;
+}
+
+/* ========== PROFİL BÖLÜMÜ ========== */
+.profile-section {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding-left: 30px;
+}
+
 .profile-info {
-  margin-top: 20px;
+    display: none; /* Başlangıçta gizli */
+    text-align: center;
 }
-.profile-info img {
-  border-radius: 50%;
-  width: 50px;
-  height: 50px;
+
+.profile-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
 }
-#oauth-button button {
-  background-color: #4285F4;
-  color: white;
-  border: none;
-  padding: 10px 20px;
-  border-radius: 5px;
-  cursor: pointer;
+
+/* ========== PROFİL RESİM VE BİLGİLER ========== */
+#profile-pic {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid #4285F4;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
-#oauth-button button:hover {
-  background-color: #357ABD;
+
+#profile-name {
+    font-size: 1.2em;
+    font-weight: 600;
+    color: #333;
+    margin: 10px 0 5px;
 }
+
+#profile-email {
+    color: #666;
+    font-size: 0.9em;
+    margin-bottom: 20px;
+}
+
+/* ========== BUTON STİLLERİ ========== */
+#oauth-button {
+    margin: 20px 0;
+}
+
+.g_id_signin {
+    margin: 0 auto;
+}
+
 #logout-button {
-  display: none;
-  margin-top: 10px;
-  background-color: red;
-  color: white;
-  border: none;
-  padding: 10px 20px;
-  border-radius: 5px;
-  cursor: pointer;
+    display: none;
+    margin-top: 20px;
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    padding: 12px 25px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1em;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
+
+#logout-button:hover {
+    background-color: #c82333;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* ========== ERİŞİM REDDEDİLDİ UYARISI ========== */
 #access-denied {
-  display: none;
-  color: red;
-  margin-top: 20px;
+    display: none;
+    color: #dc3545;
+    font-weight: bold;
+    padding: 15px;
+    background-color: #f8d7da;
+    border-radius: 8px;
+    border: 1px solid #f5c6cb;
+    margin-top: 20px;
+    text-align: center;
+}
+
+/* ========== EARTH LİNK STİLİ ========== */
+.profile-info a {
+    display: inline-block;
+    margin-top: 15px;
+    padding: 10px 20px;
+    background-color: #34a853;
+    color: white;
+    text-decoration: none;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    font-weight: 500;
+}
+
+.profile-info a:hover {
+    background-color: #2d8e47;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* ========== RESPONSIVE TASARIM ========== */
+@media (max-width: 768px) {
+    .card {
+        flex-direction: column;
+        padding: 30px;
+    }
+    
+    .login-section {
+        border-right: none;
+        border-bottom: 1px solid #e0e0e0;
+        padding-right: 0;
+        padding-bottom: 30px;
+        margin-bottom: 30px;
+    }
+    
+    .profile-section {
+        padding-left: 0;
+    }
+}
+
+@media (max-width: 480px) {
+    .card {
+        padding: 20px;
+    }
+    
+    .login-section h2 {
+        font-size: 1.5em;
+    }
+    
+    #profile-pic {
+        width: 70px;
+        height: 70px;
+    }
 }
