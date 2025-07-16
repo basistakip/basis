@@ -1,289 +1,577 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-  <meta charset="UTF-8">
-  <title>Basis Anasayfa</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <!-- Google Identity -->
-  <script src="https://accounts.google.com/gsi/client" async defer></script>
-  <style>
-    * {
-      box-sizing: border-box;
-    }
-    body {
-      margin: 0;
-      font-family: 'Segoe UI', sans-serif;
-      background: #f0f2f5;
-    }
-    .container {
-      display: flex;
-      justify-content: space-between;
-      padding: 20px;
-      gap: 20px;
-    }
-    .left, .center, .right {
-      background: #fff;
-      padding: 20px;
-      border-radius: 10px;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-      flex: 1;
-    }
-    .center {
-      flex: 2;
-    }
-
-    /* Giriş kartı */
-    .card h2 {
-      margin-top: 0;
-    }
-    .profile-info img {
-      border-radius: 50%;
-      width: 50px;
-      height: 50px;
-    }
-    #logout-button {
-      margin-top: 10px;
-      background-color: red;
-      color: white;
-      border: none;
-      padding: 10px 20px;
-      border-radius: 5px;
-      cursor: pointer;
-    }
-    #access-denied {
-      display: none;
-      color: red;
-      margin-top: 20px;
-    }
-
-    /* Butonlar */
-    .system-button {
-      background: #e8f0fe;
-      margin: 5px;
-      padding: 10px;
-      cursor: pointer;
-      border-radius: 8px;
-      text-align: center;
-      font-weight: bold;
-      transition: background 0.2s;
-    }
-    .system-button:hover {
-      background: #d2e3fc;
-    }
-
-    /* Sayaçlar */
-    .counter {
-      background: #f5f5f5;
-      padding: 10px;
-      margin: 10px 0;
-      border-radius: 8px;
-    }
-    .blinking-red {
-      animation: blinkRed 1s infinite;
-    }
-    .blinking-yellow {
-      animation: blinkYellow 1s infinite;
-    }
-    @keyframes blinkRed {
-      0%, 100% { background: #ffd6d6; }
-      50% { background: #ff8a8a; }
-    }
-    @keyframes blinkYellow {
-      0%, 100% { background: #fff8dc; }
-      50% { background: #ffeb99; }
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistem Kontrol Paneli</title>
+    <link rel="shortcut icon" type="png" href="resimler/basis.png">
+    <link rel="stylesheet" href="style.css">
+  
+   
+  
+  
+  
+  
+    <style>
+    
+    </style>
 </head>
 <body>
-  <div class="container">
-    <!-- SOL: Giriş -->
-    <div class="left card">
-      <h2>Google ile Giriş Yap</h2>
-      <div id="oauth-button">
-        <div id="g_id_onload"
-          data-client_id="387277586108-8m32c8tdfb0oemnr5kuv2fao6rtm35c0.apps.googleusercontent.com"
-          data-context="signin"
-          data-ux_mode="popup"
-          data-callback="handleCredentialResponse"
-          data-auto_prompt="false">
+
+    <div class="control-panel">
+        <div class="university-header">
+            <h2>BASİS ANASAYFA </h2>
         </div>
-        <div class="g_id_signin"
-          data-type="standard"
-          data-shape="rectangular"
-          data-theme="outline"
-          data-text="signin_with"
-          data-size="large">
+
+ 
+      
+      
+      
+      
+
+        <div class="section main-systems" id="main-systems-section">
+          
+          
+            <div class="system-button" data-url="https://basistakip.github.io/basis/index.html">
+                <div class="icon banu-icon"></div>
+                <span>BASİS İNTERAKTİF ANASAYFA</span>
+            </div>
+          
+          
+          
+            <div class="system-button search-bar-wide" data-url="/sistem-ara">
+                <div class="search-iframe-container">
+                    <iframe
+                        src="https://basistakip.github.io/basis/aramacubugu2.html"
+                        frameborder="0"
+                        width="100%"
+                        height="80px"
+                        scrolling="yes"
+                        allowfullscreen=""
+                        loading="lazy"
+                        referrerpolicy="no-referrer-when-downgrade">
+                    </iframe>
+                </div>
+            </div>
+            <div class="system-button" data-url="https://drive.google.com/drive/u/0/folders/1LdEk5nnMH5ONEFurrsaJkopXvvuAahlC">
+                <div class="icon basis-drive-icon"></div>
+                <span>Basis Drive</span>
+            </div>
+          
+          
+<div class="system-button" data-url="https://earth.google.com/earth/d/1lqdBlSWVXd42mVtVpKZdv0dVwt5K1eqw?usp=drive_link">
+    <div class="icon map-icon"></div>
+    <span>Haritada Yeri</span>
+</div>
+           
         </div>
-      </div>
 
-      <div id="profile-info" class="profile-info" style="display: none;">
-        <img id="profile-pic" src="" alt="Profil Resmi">
-        <p id="profile-name"></p>
-        <p id="profile-email"></p>
-        <a href="https://earth.google.com/">Earth'e Git</a>
-        <button id="logout-button" onclick="logout()">Çıkış Yap</button>
-      </div>
-      <div id="access-denied"><p>Bu sayfaya erişim izniniz yok.</p></div>
+      
+          <h2>KISA YOLLAR</h2>
+      <!– KISA YOLLAR –>
+                    <div class="section other-systems" id="other-systems-section">
+                  
+                        <div class="section other-systems">
+                          
+                          
+                         <div class="system-button">
+                <div class="person-icon"></div>
+                <span>UBYS</span>
+            </div>          
+                          
+                          
+                          
+              <div class="system-button">
+                <div class="email-icon"></div>
+                <span>E-POSTA</span>
+            </div>
+                          
+                              <div class="system-button">
+                <div class="whatsapp-icon"></div>
+                <span>WHATSAPP</span>
+            </div>                         
+                           <div class="system-button">
+                <div class="duyuru-icon"></div>
+                <span>DUYURU</span>
+            </div>         
+                    
+                          
+                          
+                          
+                    <div class="system-button">
+                <div class="contact-icon"></div>
+                <span>REHBER</span>
+            </div>          
+             
+                          
+                          
+                          
+                          
+                          
+                          
+                          
+        </div>
+                      
+        
+                      
+                      
+                      
+                      
+                      
+                      
+        </div>
+      <!– KISA YOLLAR –>
+      
+      
+       <h2>SAYAÇLAR</h2>
+      <!– SAYAÇLAR –>
+                    <div class="section other-systems" id="other-systems-section">
+                  
+                        <div class="section other-systems">
+        <div class="counter-container" id="counters"></div>
+          
+                          
+        </div>
+                      
+                      
+        </div>
+      <!– SAYAÇLAR –>
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+          <h2>İnteraktif Görünüm</h2>
+    
+    <!-- Sadece masaüstünde gözükecek iframe -->
+    <div class="desktop-only-map">
+        <iframe
+            src="https://basistakip.github.io/basis/interaktif/binalar/binalar.html"
+            width="100%"
+            height="450"
+            style="border:0;"
+            allowfullscreen
+            loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade">
+        </iframe>
     </div>
+      
+      
+      
+ 
+      
+      
+      
+      
+      
+      
+      
+        <h2>GENEL ERİŞİM</h2>
+      
+        <div class="section other-systems" id="other-systems-section">
+          
+          
+                    
+          
+          
+          
+                                          <div class="system-button" data-url="https://drive.google.com/drive/folders/1LeiOLaTU8JixvIOjldPiJVTLPgsZt8t0?usp=drive_link">
+                <div class="icon project-icon"></div>
+                <span>Projeler</span>
+            </div>
+          
+          
+          
+          
+          
+          
+            <div class="system-button" data-url="https://docs.google.com/spreadsheets/d/1RNYkQd9bml7M74ciecpxPbY-VSS28HzbJgkeHUc2axg/edit?gid=109557683#gid=109557683">
+              <div class="talepler-icon"></div>
+                <span>Talepler</span>
+            </div>
+          
+          
+                 <!-- Özel Parçalar -->
+<div class="system-button" data-url="https://docs.google.com/forms/d/e/1FAIpQLSfvjsqoxRrroQo9SqrtTfKC15wPJg90e7v3hu5rvXre69EwOw/viewform?usp=sharing&ouid=109065913370190132825">
+    <div class="talep-yaz-icon"></div>
+    <span>Talep Yaz</span>
+</div>
+          
+          
+          
+          
+          <!-- Özel Parçalar -->
+<div class="system-button" data-url="https://drive.google.com/drive/u/2/folders/1vNMDcIl1oLaqooJWp0UmO-pvrqz09YeV?hl=tr">
+    <div class="icon custom-parts-icon"></div>
+    <span>Özel Parçalar</span>
+</div>
+          
+          
+          <!-- Isıtma/Soğutma -->
+<div class="system-button" data-url="https://drive.google.com/drive/folders/1ThWfUccULckO7tVB7naFKg3K5Qfd4YnF?usp=drive_link">
+    <div class="icon hvac-icon"></div>
+    <span>Isıtma/Soğutma</span>
+</div>
+          
+          
+          
+          
+          
+          
+            <div class="system-button" data-url="https://drive.google.com/drive/folders/1KnjaNFmmKqHedHci7bGuPCFabh2sm-lMOGjAhTQOPTch2UKm_1ifs0Htv3gLO-JJbKVRApEa?usp=sharing">
+                <div class="icon ups-icon"></div>
+                <span>UPS'ler</span>
+            </div>
+          
+          
+        <!-- Jeneratör Butonu -->
+<div class="system-button" data-url="https://drive.google.com/drive/folders/1DEWbIhid2o-aX0FVe5f9Ei7viTUQRg7Z6bJwm06s0rrB_zlNzLhMZEXelP_O0F--vMdZjKBh?usp=drive_link">
+    <div class="icon generator-icon"></div>
+    <span>Jeneratör</span>
+</div>  
+          
+          
+          
+          
+          
+          
+            <div class="system-button" data-url="https://drive.google.com/drive/folders/1LQEMoJIGTYbt_H_AYLF9_TKcnLDfrtPrmDcvxDQ01R0VdeA8YJQWM8k0GNnN9ZTsLFZxkXoa?usp=sharing">
+                <div class="icon fire-icon"></div>
+                <span>Yangın</span>
+            </div>
+          
+          
+           
+           <div class="system-button" data-url="https://drive.google.com/drive/folders/1LQEMoJIGTYbt_H_AYLF9_TKcnLDfrtPrmDcvxDQ01R0VdeA8YJQWM8k0GNnN9ZTsLFZxkXoa?usp=sharing">
+                <div class="icon yanginpanel-icon"></div>
+                <span>Yangın Panelleri</span>
+            </div>     
+          
+          
+          
+          
+            <div class="system-button" data-url="https://drive.google.com/drive/folders/134Q0b-jeuilwSM-8No1sVo6T4U8qDJ3k5gHeZGtymAVqlgmy0eqq7oK3Y4UkA_V7jGG4E8ez?usp=sharing">
+                <div class="icon sliding-door-icon"></div>
+                <span>Kapılar</span>
+            </div>
+          
 
-    <!-- ORTA: Butonlar ve Sayaç -->
-    <div class="center">
-      <h2>Hızlı Erişim</h2>
-      <div class="system-button"><span>UBYS</span></div>
-      <div class="system-button"><span>E-POSTA</span></div>
-      <div class="system-button"><span>WHATSAPP</span></div>
-      <div class="system-button"><span>Duyuru</span></div>
+          
+          
+        
+          
+          
+          
 
-      <h2>Geri Sayım</h2>
-      <div id="counters"></div>
+          
+          
+          
+            <div class="system-button" data-url="https://drive.google.com/drive/folders/1pfgWPMp47KvKXnjopyANH5xGY5imP3UFpo2LglZYYeg1R5mLdNaS7qNT3ltlFcfVZNesUujT?usp=sharing">
+                <div class="icon elevator">
+                    <div class="elevator-shaft">
+                        <div class="elevator-car"></div>
+                    </div>
+                </div>
+                <span>Asansörler</span>
+            </div>
+          
+          
+          <!-- İletişim -->
+<div class="system-button" data-url="https://maps.app.goo.gl/jZFXt7sVMD8Wn3nw7">
+    <div class="icon map-icon"></div>
+    <span>Haritada Yeri</span>
+</div>
+          
+          
+          
+<div class="system-button" data-url="https://docs.google.com/spreadsheets/d/1IGoeo2IxTH43FRJlV7FYIImTVVy6qHjes-7RCZ5opOY/edit?gid=1356505690#gid=1356505690">
+    <div class="icon iletisim-icon"></div>
+    <span>ARA GÜVENLİK İletişim</span>
+</div>
+
+          
+          
+          
+               <div class="system-button">
+                <div class="evrak-icon"></div>
+                <span>EVRAKLAR</span>
+            </div>          
+             
+          
+          
+          
+          
+          
+            <div class="system-button" data-url="https://drive.google.com/drive/folders/1Bq8BgeYdaxkzCyxzWDlGzQOeE9AKBURs?usp=sharing">
+                <div class="icon report-icon"></div>
+                <span>Raporlar</span>
+            </div>
+          
+          
+            <div class="system-button electric-grid" data-url="https://drive.google.com/drive/folders/1L5odcO5nLoAjRGmiUaYsgdKnxJKM1w9NmXtfho5kcJT9ZDjpsce1Lu3ZJsbajZ6vzNnvxeqT?usp=sharing">
+                <div class="icon">
+                    <svg class="electric-icon" viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg">
+                        <path class="tower" d="M40 20 L40 60 M30 30 L50 30 M30 40 L50 40" />
+                        <path class="power-line" d="M10 40 L70 40" />
+                        <circle class="spark" cx="60" cy="50" r="3" />
+                    </svg>
+                </div>
+                <span>Elektrik Yerleşkesi</span>
+            </div>
+          
+          
+
+          
+                        <div class="system-button" data-url="https://drive.google.com/drive/folders/1m2mq4GltRWS1jRyJhNTB9_eLNtEhr6Nvnmz1-KfoYH1Op_fDMi2B-TqatcAkAfT7fZV1tBpJ?usp=drive_link">
+                <div class="icon otomasyon-icon"></div>
+                <span>Aydınlatma Otomayon</span>
+            </div>
+
+          
+          
+          
+                        <div class="system-button" data-url="https://github.com/basistakip/basis">
+                <div class="icon github-web-icon"></div>
+                <span>Github Arkaplan</span>
+            </div>
+          
+          
+      <div class="system-button" data-url="https://drive.google.com/drive/folders/14I1z8AI0bwLcey17y6xwd-dsLcnLCzHb?usp=drive_link">
+                <div class="icon software-icon"></div>
+                <span>YAZILIM TEKNİK</span>
+            </div>
+          
+           <div class="system-button" data-url="https://yedekbutonlink">
+                <div class="icon github-web-icon"></div>
+                <span>YEDEK BUTON</span>
+            </div>
+          
+          
+          
+        </div>
+      
+      
+      
+      
+      
+              <H2>BİNALAR</H2>
+      
+            <!– örnek alan 1 –>
+                    <div class="section other-systems" id="other-systems-section">
+            
+                      
+                      
+                      <div class="system-button" data-url="https://drive.google.com/drive/folders/1843LTVIrIDvvBholUqK34vJ1YNVD1gWvnSS-NMJmcFRvOAbAM1c_awRyRxg41YQpoUdafR6a?usp=drive_link">
+                <div class="icon building-icon"></div>
+                <span>Rektörlük Binası</span>
+            </div>
+            <div class="system-button" data-url="https://drive.google.com/drive/folders/1N-rdUOu98ZSLd_WJLMNd5332qGAJ8HOdDTdRn1qOZ6DfTUgtUb4AuvnbdKUovc19ow1vNtcF">
+                <div class="icon sport-icon"></div>
+                <span>Kapalı Spor Salonu</span>
+            </div>
+            <div class="system-button" data-url="https://drive.google.com/drive/folders/1dLwbe0hBNFASEfx6U_FgmF8KB5lp2pKJX-sgyIUj0RFe803SpiUVP71v28oZbrTHkzfEHot6">
+                <div class="icon sport-academy-icon"></div>
+                <span>Spor Akademisi</span>
+            </div>
+            <div class="system-button" data-url="https://drive.google.com/drive/folders/1r06zRd6eEISG9I326JGR2QL4bbxManul_U9jBU3dY7IWpLqFuezVePQ9odOYrJogy_ortKB9">
+                <div class="icon classroom-icon"></div>
+                <span>Merkezi Derslik</span>
+            </div>
+            <div class="system-button" data-url="https://drive.google.com/drive/folders/1tRwRLRRWVqNk4gHnBeNBlwFNtYvkh1MEl3ZMljFppLKdAEhXCMsiXDL0mW-1H41B99cRhmOn">
+                <div class="icon office-icon"></div>
+                <span>ÖYM</span>
+            </div>
+            <div class="system-button" data-url="https://drive.google.com/drive/folders/1uB4ockbREFNf6CcssejK9mD6PAs9IfAdI3Ux7Svk2Nep9gmdG7c6-9Ltv126R0v9lbgteRzl">
+                <div class="icon engineering-icon"></div>
+                <span>Mühendislik</span>
+            </div>
+            <div class="system-button" data-url="https://drive.google.com/drive/folders/1ZYsVVhI4hydIBoVo1W_J-VoJa5fo7XQ_3jV6TsN7XfM1cWRnRysoUkenNsRLjsUfauAmDerP">
+                <div class="icon maritime-icon"></div>
+                <span>Yeni Denizcilik</span>
+            </div>
+            <div class="system-button" data-url="https://drive.google.com/drive/folders/1843LTVIrIDvvBholUqK34vJ1YNVD1gWvnSS-NMJmcFRvOAbAM1c_awRyRxg41YQpoUdafR6a?usp=drive_link">
+                <div class="icon religion-icon"></div>
+                <span>İlahiyat Binası</span>
+            </div>
+            <div class="system-button" data-url="https://drive.google.com/drive/folders/1QMpzrWtSivxm7S9Mk0dLTTo7d9NMq_KfRSGBHpG8EDnmH-Z-9SVbvHcRfZu_hgqtEn3KE8d0">
+                <div class="icon susurluk-myo-icon"></div>
+                <span>Susurluk MYO</span>
+            </div>
+            <div class="system-button" data-url="https://drive.google.com/drive/folders/1czb0F-Hx6homzZM5uf6eUkX9oh_uXvn2qOeUMB6C-GYtaBDhv_w6EvxOTwp3jmCxe8vKhP9T">
+                <div class="icon erdek-myo-icon"></div>
+                <span>Erdek MYO</span>
+            </div>
+            <div class="system-button" data-url="https://drive.google.com/drive/folders/1HVvf9wcEgRUvJ1Yrlvpq-vG3ALeLanW1UWCDhWjiyspRCovRqfnlHZThVy-qOKW7chN5u3-G">
+                <div class="icon manyas-myo-icon"></div>
+                <span>Manyas MYO</span>
+            </div>
+            <div class="system-button" data-url="https://drive.google.com/drive/folders/16zvos9NdCSDx-YZF1egTdB9wBByS7ygK51BA-IOzKHzsCXaVKHYlG4D9xj14MhbzyNmFpuMX">
+                <div class="icon gonen-myo-icon"></div>
+                <span>Gönen MYO</span>
+            </div>
+            <div class="system-button" data-url="https://drive.google.com/drive/folders/1D26Pcmer3vCRwHtgjMyDLMiyXppXBVyMjzf2-fnLAHggiPEje5OqyQh7xNw5w69wlMFjVWbE">
+                <div class="icon bandirma-myo-icon"></div>
+                <span>Bandırma MYO</span>
+            </div>
+            <div class="system-button" data-url="https://drive.google.com/drive/folders/1aPAoVuyzc14TVujADHvOrtoHV__sQ5UNDh9hbAHr9W6WaOXUCvWInSLpG-QCslAO9LUWeUJo">
+                <div class="icon maritime-myo-icon"></div>
+                <span>Denizcilik MYO</span>
+            </div>
+            <div class="system-button" data-url="https://drive.google.com/drive/folders/1SBCk4EUhkGFliXFfyJoIsJdF98le08PMqn2v-dfkQHikTsgb-SsyL_t3g0Pmc">
+                <div class="icon edincik-myo-icon"></div>
+                <span>Edincik MYO</span>
+            </div>
+        </div>
+      <!– örnek alan 1 –>
+      
+      
+  
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+            <!– örnek alan 1 –>
+                    <div class="section other-systems" id="other-systems-section">
+                  
+                      <div class="system-button" data-url="https://drive.google.com/drive/folders/1jSrb6uypTKJsfYBnC5_1uwocLaubOw2gwwj06WCBpTdrC7l3UETK67D-bUC0MJSkMOuX7b8S?usp=sharing">
+                    
+                <div class="icon elevator">
+                    <div class="elevator-shaft">
+                        <div class="elevator-car"></div>
+                    </div>
+                </div>
+                <span>örnek alan 1</span>
+            </div>
+                
+                
+            <div class="system-button" data-url="https://drive.google.com/drive/folders/1LeiOLaTU8JixvIOjldPiJVTLPgsZt8t0?usp=drive_link">
+                <div class="icon project-icon"></div>
+                <span>örnek alan 1</span>
+            </div>
+        </div>
+      <!– örnek alan 1 –>
+      
+      
+      
+      
+      
+      <!– örnek alan 2 –>
+                    <div class="section other-systems" id="other-systems-section">
+                  
+                      <div class="system-button" data-url="https://drive.google.com/drive/folders/1jSrb6uypTKJsfYBnC5_1uwocLaubOw2gwwj06WCBpTdrC7l3UETK67D-bUC0MJSkMOuX7b8S?usp=sharing">
+                    
+                <div class="icon elevator">
+                    <div class="elevator-shaft">
+                        <div class="elevator-car"></div>
+                    </div>
+                </div>
+                <span>örnek alan 2</span>
+            </div>
+                
+                
+            <div class="system-button" data-url="https://drive.google.com/drive/folders/1LeiOLaTU8JixvIOjldPiJVTLPgsZt8t0?usp=drive_link">
+                <div class="icon project-icon"></div>
+                <span>örnek alan 2</span>
+            </div>
+        </div>
+      <!– örnek alan 2 –>
+      
+      
+      
+      
+      
+      
+      
+              <div class="section other-systems" id="other-systems-section">
+            <div class="system-button" data-url="https://drive.google.com/drive/folders/1jSrb6uypTKJsfYBnC5_1uwocLaubOw2gwwj06WCBpTdrC7l3UETK67D-bUC0MJSkMOuX7b8S?usp=sharing">
+
+                <div class="icon elevator">
+                    <div class="elevator-shaft">
+                        <div class="elevator-car"></div>
+                    </div>
+                </div>
+                <span>Asansörler Burayaı en üste al</span>
+            </div>
+                
+                
+            <div class="system-button" data-url="https://drive.google.com/drive/folders/1LeiOLaTU8JixvIOjldPiJVTLPgsZt8t0?usp=drive_link">
+                <div class="icon project-icon"></div>
+                <span>Projeler</span>
+            </div>
+        </div>
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+
+      
+                       <!– harita –>
+        <div class="section map-section">
+            <h2>Konum Haritası</h2>
+            <div class="map-container">
+                <iframe
+                    src="https://drive.google.com/drive/u/0/folders/1LdEk5nnMH5ONEFurrsaJkopXvvuAahlC"
+                    width="100%"
+                    height="450"
+                    style="border:0;"
+                    allowfullscreen=""
+                    loading="lazy"
+                    referrerpolicy="no-referrer-when-downgrade">
+                </iframe>
+            </div>
+                  
+        </div>
+      <!– harita https://drive.google.com/drive/u/0/folders/1LdEk5nnMH5ONEFurrsaJkopXvvuAahlC
+      
+      https://basistakip.github.io/basis/interaktif/binalar/binalar.html
+      –>
+      
+      
+ 
+      
+
     </div>
-
-    <!-- SAĞ: Ek içerik -->
-    <div class="right">
-      <h2>Ek Bilgiler</h2>
-      <ul>
-        <li><a href="#">Bandırma Rehber</a></li>
-        <li><a href="#">GitHub Sayfamız</a></li>
-        <li><a href="#">Sık Kullanılanlar</a></li>
-      </ul>
-    </div>
-  </div>
-
-  <script>
-    // İzin verilen e-postalar
-    const allowedEmails = [
-      "yapiisleribanu@gmail.com",
-      "mahmutkilicankara@gmail.com",
-      "yapiisleribanuetiket@gmail.com",
-      "mahmutkilic@bandirma.edu.tr"
-    ];
-
-    function handleCredentialResponse(response) {
-      const data = parseJwt(response.credential);
-      if (allowedEmails.includes(data.email)) {
-        document.getElementById('profile-pic').src = data.picture;
-        document.getElementById('profile-name').textContent = data.name;
-        document.getElementById('profile-email').textContent = data.email;
-        document.getElementById('profile-info').style.display = 'block';
-        document.getElementById('oauth-button').style.display = 'none';
-        document.getElementById('logout-button').style.display = 'block';
-        document.getElementById('access-denied').style.display = 'none';
-        localStorage.setItem('googleUser', JSON.stringify(data));
-      } else {
-        document.getElementById('access-denied').style.display = 'block';
-        localStorage.removeItem('googleUser');
-      }
-    }
-
-    function parseJwt(token) {
-      const base64 = token.split('.')[1].replace(/-/g, '+').replace(/_/g, '/');
-      const json = decodeURIComponent(atob(base64).split('').map(c =>
-        '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2)).join(''));
-      return JSON.parse(json);
-    }
-
-    function logout() {
-      localStorage.removeItem('googleUser');
-      window.location.reload();
-    }
-
-    window.onload = function () {
-      const storedUser = localStorage.getItem('googleUser');
-      if (storedUser) {
-        const data = JSON.parse(storedUser);
-        if (allowedEmails.includes(data.email)) {
-          document.getElementById('profile-pic').src = data.picture;
-          document.getElementById('profile-name').textContent = data.name;
-          document.getElementById('profile-email').textContent = data.email;
-          document.getElementById('profile-info').style.display = 'block';
-          document.getElementById('oauth-button').style.display = 'none';
-          document.getElementById('logout-button').style.display = 'block';
-        } else {
-          localStorage.removeItem('googleUser');
-        }
-      }
-
-      // Buton tıklama
-      const buttons = document.querySelectorAll('.system-button');
-      const urls = {
-        'UBYS': 'https://ubys.bandirma.edu.tr/',
-        'E-POSTA': 'https://mail.google.com/',
-        'WHATSAPP': 'https://web.whatsapp.com/',
-        'Duyuru': 'https://www.bandirma.edu.tr/tr/www/Duyuru/Liste?k=-1'
-      };
-      buttons.forEach(btn => {
-        btn.addEventListener('click', () => {
-          const text = btn.querySelector('span')?.textContent.trim();
-          const url = urls[text];
-          if (url) window.open(url, '_blank');
-        });
-      });
-
-      // Sayaçlar
-      const countdowns = [
-        { date: 10, hour: 0, minute: 0, text: 'Sayaç Okuma' },
-        { date: 15, hour: 0, minute: 0, text: 'Sayaç Gönderme' },
-        { date: 24, hour: 0, minute: 0, text: 'Rapor Hazırlama' },
-        { date: 13, hour: 0, minute: 0, text: 'YEDEK 1' },
-        { date: 14, hour: 0, minute: 0, text: 'YEDEK 2' },
-        { date: 15, hour: 0, minute: 0, text: 'YEDEK 3' }
-      ];
-
-      countdowns.forEach(c => createCountdown(c.date, c.hour, c.minute, c.text));
-    };
-
-    function createCountdown(date, hour, minute, text) {
-      const container = document.getElementById('counters');
-      const counter = document.createElement('div');
-      counter.className = 'counter';
-      counter.innerHTML = `<p>${text}</p><p id="timer-${text}"></p><button>Gördüm</button>`;
-      container.appendChild(counter);
-
-      const timer = counter.querySelector('p:nth-child(2)');
-      const button = counter.querySelector('button');
-      let seen = false;
-
-      function getTargetDate() {
-        const now = new Date();
-        let target = new Date(now.getFullYear(), now.getMonth(), date, hour, minute);
-        if (now > target) target.setMonth(target.getMonth() + 1);
-        return target;
-      }
-
-      let targetDate = getTargetDate();
-
-      function update() {
-        const now = new Date();
-        const diff = targetDate - now;
-
-        if (diff <= 0) {
-          timer.textContent = "SÜRE DOLDU!";
-          if (!seen) counter.classList.add('blinking-red');
-          return;
-        }
-
-        const d = Math.floor(diff / (1000 * 60 * 60 * 24));
-        const h = Math.floor((diff / (1000 * 60 * 60)) % 24);
-        const m = Math.floor((diff / (1000 * 60)) % 60);
-        const s = Math.floor((diff / 1000) % 60);
-
-        timer.textContent = `${d}g ${h}s ${m}d ${s}sn`;
-
-        counter.classList.remove('blinking-red', 'blinking-yellow');
-        if (!seen) {
-          if (d <= 2) counter.classList.add('blinking-red');
-          else if (d <= 4) counter.classList.add('blinking-yellow');
-        }
-      }
-
-      button.addEventListener('click', () => {
-        seen = true;
-        counter.style.background = '#e6f2ff';
-      });
-
-      setInterval(update, 1000);
-      update();
-    }
-  </script>
+  
+  
+  
+  
+  
+  
+  
+  
+  
+<script src="script.js"></script>
 </body>
 </html>
