@@ -1,8 +1,7 @@
-  // İzin verilen e-posta adresleri listesi
+    // İzin verilen e-posta adresleri listesi
     const allowedEmails = [
       "yapiisleribanu@gmail.com",
       "mahmutkilicankara@gmail.com",
-       "yapiisleribanuetiket@gmail.com",
       "izinli3@example.com"
     ];
 
