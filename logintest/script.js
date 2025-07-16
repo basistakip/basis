@@ -33,6 +33,10 @@ function handleCredentialResponse(response) {
 
     // Kullanıcı bilgilerini localStorage içine kaydet
     localStorage.setItem('googleUser', JSON.stringify(data));
+    
+    // Show main content
+    document.getElementById('main-content').style.display = 'block';
+    document.getElementById('login-card').style.display = 'none';
   } else {
     console.log("E-posta izinli listede DEĞİL");
     // E-posta adresi izin verilenler listesinde değilse erişim reddedildi mesajını göster
@@ -59,7 +63,7 @@ function parseJwt(token) {
 }
 
 function checkLogin() {
-  console.log("checkLogin çalıştı"); // Konsolda görünüyor mu kontrol edin
+  console.log("checkLogin çalıştı");
   const storedUser = localStorage.getItem('googleUser');
   
   if (storedUser) {
@@ -76,6 +80,10 @@ function checkLogin() {
         document.getElementById('oauth-button').style.display = 'none';
         document.getElementById('logout-button').style.display = 'block';
         document.getElementById('access-denied').style.display = 'none';
+        
+        // Show main content
+        document.getElementById('main-content').style.display = 'block';
+        document.getElementById('login-card').style.display = 'none';
       } else {
         // E-posta izinli listede değilse temizle
         localStorage.removeItem('googleUser');
@@ -99,9 +107,18 @@ function logout() {
   // Kullanıcı oturumunu kapat
   localStorage.removeItem('googleUser');
 
-  // Sayfayı yenileyerek oturumu sıfırla
-  window.location.reload();
+  // Hide main content and show login card
+  document.getElementById('main-content').style.display = 'none';
+  document.getElementById('login-card').style.display = 'block';
+  
+  // Reset login UI
+  document.getElementById('profile-info').style.display = 'none';
+  document.getElementById('oauth-button').style.display = 'block';
+  document.getElementById('logout-button').style.display = 'none';
+  document.getElementById('access-denied').style.display = 'none';
 }
 
 // Sayfa yüklendiğinde oturum kontrolü yap
 window.onload = checkLogin;
+
+// Your existing Basis Anasayfa JavaScript here
