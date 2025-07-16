@@ -2,45 +2,288 @@
 <html lang="tr">
 <head>
   <meta charset="UTF-8">
+  <title>Basis Anasayfa</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Google OAuth 2.0 Entegrasyonu</title>
-  <link rel="stylesheet" href="style.css">
+  <!-- Google Identity -->
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: #f0f2f5;
+    }
+    .container {
+      display: flex;
+      justify-content: space-between;
+      padding: 20px;
+      gap: 20px;
+    }
+    .left, .center, .right {
+      background: #fff;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      flex: 1;
+    }
+    .center {
+      flex: 2;
+    }
+
+    /* Giriş kartı */
+    .card h2 {
+      margin-top: 0;
+    }
+    .profile-info img {
+      border-radius: 50%;
+      width: 50px;
+      height: 50px;
+    }
+    #logout-button {
+      margin-top: 10px;
+      background-color: red;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    #access-denied {
+      display: none;
+      color: red;
+      margin-top: 20px;
+    }
+
+    /* Butonlar */
+    .system-button {
+      background: #e8f0fe;
+      margin: 5px;
+      padding: 10px;
+      cursor: pointer;
+      border-radius: 8px;
+      text-align: center;
+      font-weight: bold;
+      transition: background 0.2s;
+    }
+    .system-button:hover {
+      background: #d2e3fc;
+    }
+
+    /* Sayaçlar */
+    .counter {
+      background: #f5f5f5;
+      padding: 10px;
+      margin: 10px 0;
+      border-radius: 8px;
+    }
+    .blinking-red {
+      animation: blinkRed 1s infinite;
+    }
+    .blinking-yellow {
+      animation: blinkYellow 1s infinite;
+    }
+    @keyframes blinkRed {
+      0%, 100% { background: #ffd6d6; }
+      50% { background: #ff8a8a; }
+    }
+    @keyframes blinkYellow {
+      0%, 100% { background: #fff8dc; }
+      50% { background: #ffeb99; }
+    }
+  </style>
 </head>
 <body>
-  <div class="card">
-    <h2>Google ile Giriş Yap</h2>
-    <div id="oauth-button">
-      <div id="g_id_onload"
-        data-client_id="387277586108-8m32c8tdfb0oemnr5kuv2fao6rtm35c0.apps.googleusercontent.com"
-        data-context="signin"
-        data-ux_mode="popup"
-        data-callback="handleCredentialResponse"
-        data-auto_prompt="false">
+  <div class="container">
+    <!-- SOL: Giriş -->
+    <div class="left card">
+      <h2>Google ile Giriş Yap</h2>
+      <div id="oauth-button">
+        <div id="g_id_onload"
+          data-client_id="387277586108-8m32c8tdfb0oemnr5kuv2fao6rtm35c0.apps.googleusercontent.com"
+          data-context="signin"
+          data-ux_mode="popup"
+          data-callback="handleCredentialResponse"
+          data-auto_prompt="false">
+        </div>
+        <div class="g_id_signin"
+          data-type="standard"
+          data-shape="rectangular"
+          data-theme="outline"
+          data-text="signin_with"
+          data-size="large">
+        </div>
       </div>
-      <div class="g_id_signin"
-        data-type="standard"
-        data-shape="rectangular"
-        data-theme="outline"
-        data-text="signin_with"
-        data-size="large">
+
+      <div id="profile-info" class="profile-info" style="display: none;">
+        <img id="profile-pic" src="" alt="Profil Resmi">
+        <p id="profile-name"></p>
+        <p id="profile-email"></p>
+        <a href="https://earth.google.com/">Earth'e Git</a>
+        <button id="logout-button" onclick="logout()">Çıkış Yap</button>
       </div>
+      <div id="access-denied"><p>Bu sayfaya erişim izniniz yok.</p></div>
     </div>
 
-    <div id="profile-info" class="profile-info" style="display: none;">
-      <img id="profile-pic" src="" alt="Profil Resmi">
-      <p id="profile-name"></p>
-      <p id="profile-email"></p>
-      <a href="https://earth.google.com/earth/d/1lqdBlSWVXd42mVtVpKZdv0dVwt5K1eqw?usp=drive_link">eartha git</a> 
-      <button id="logout-button" onclick="logout()">Çıkış Yap</button>
+    <!-- ORTA: Butonlar ve Sayaç -->
+    <div class="center">
+      <h2>Hızlı Erişim</h2>
+      <div class="system-button"><span>UBYS</span></div>
+      <div class="system-button"><span>E-POSTA</span></div>
+      <div class="system-button"><span>WHATSAPP</span></div>
+      <div class="system-button"><span>Duyuru</span></div>
+
+      <h2>Geri Sayım</h2>
+      <div id="counters"></div>
     </div>
 
-    <div id="access-denied">
-      <p>Bu sayfaya erişim izniniz yok.</p>
+    <!-- SAĞ: Ek içerik -->
+    <div class="right">
+      <h2>Ek Bilgiler</h2>
+      <ul>
+        <li><a href="#">Bandırma Rehber</a></li>
+        <li><a href="#">GitHub Sayfamız</a></li>
+        <li><a href="#">Sık Kullanılanlar</a></li>
+      </ul>
     </div>
   </div>
 
-  <!-- Google Identity Services -->
-  <script src="https://accounts.google.com/gsi/client" async defer></script>
-  <script src="script.js"></script>
+  <script>
+    // İzin verilen e-postalar
+    const allowedEmails = [
+      "yapiisleribanu@gmail.com",
+      "mahmutkilicankara@gmail.com",
+      "yapiisleribanuetiket@gmail.com",
+      "mahmutkilic@bandirma.edu.tr"
+    ];
+
+    function handleCredentialResponse(response) {
+      const data = parseJwt(response.credential);
+      if (allowedEmails.includes(data.email)) {
+        document.getElementById('profile-pic').src = data.picture;
+        document.getElementById('profile-name').textContent = data.name;
+        document.getElementById('profile-email').textContent = data.email;
+        document.getElementById('profile-info').style.display = 'block';
+        document.getElementById('oauth-button').style.display = 'none';
+        document.getElementById('logout-button').style.display = 'block';
+        document.getElementById('access-denied').style.display = 'none';
+        localStorage.setItem('googleUser', JSON.stringify(data));
+      } else {
+        document.getElementById('access-denied').style.display = 'block';
+        localStorage.removeItem('googleUser');
+      }
+    }
+
+    function parseJwt(token) {
+      const base64 = token.split('.')[1].replace(/-/g, '+').replace(/_/g, '/');
+      const json = decodeURIComponent(atob(base64).split('').map(c =>
+        '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2)).join(''));
+      return JSON.parse(json);
+    }
+
+    function logout() {
+      localStorage.removeItem('googleUser');
+      window.location.reload();
+    }
+
+    window.onload = function () {
+      const storedUser = localStorage.getItem('googleUser');
+      if (storedUser) {
+        const data = JSON.parse(storedUser);
+        if (allowedEmails.includes(data.email)) {
+          document.getElementById('profile-pic').src = data.picture;
+          document.getElementById('profile-name').textContent = data.name;
+          document.getElementById('profile-email').textContent = data.email;
+          document.getElementById('profile-info').style.display = 'block';
+          document.getElementById('oauth-button').style.display = 'none';
+          document.getElementById('logout-button').style.display = 'block';
+        } else {
+          localStorage.removeItem('googleUser');
+        }
+      }
+
+      // Buton tıklama
+      const buttons = document.querySelectorAll('.system-button');
+      const urls = {
+        'UBYS': 'https://ubys.bandirma.edu.tr/',
+        'E-POSTA': 'https://mail.google.com/',
+        'WHATSAPP': 'https://web.whatsapp.com/',
+        'Duyuru': 'https://www.bandirma.edu.tr/tr/www/Duyuru/Liste?k=-1'
+      };
+      buttons.forEach(btn => {
+        btn.addEventListener('click', () => {
+          const text = btn.querySelector('span')?.textContent.trim();
+          const url = urls[text];
+          if (url) window.open(url, '_blank');
+        });
+      });
+
+      // Sayaçlar
+      const countdowns = [
+        { date: 10, hour: 0, minute: 0, text: 'Sayaç Okuma' },
+        { date: 15, hour: 0, minute: 0, text: 'Sayaç Gönderme' },
+        { date: 24, hour: 0, minute: 0, text: 'Rapor Hazırlama' },
+        { date: 13, hour: 0, minute: 0, text: 'YEDEK 1' },
+        { date: 14, hour: 0, minute: 0, text: 'YEDEK 2' },
+        { date: 15, hour: 0, minute: 0, text: 'YEDEK 3' }
+      ];
+
+      countdowns.forEach(c => createCountdown(c.date, c.hour, c.minute, c.text));
+    };
+
+    function createCountdown(date, hour, minute, text) {
+      const container = document.getElementById('counters');
+      const counter = document.createElement('div');
+      counter.className = 'counter';
+      counter.innerHTML = `<p>${text}</p><p id="timer-${text}"></p><button>Gördüm</button>`;
+      container.appendChild(counter);
+
+      const timer = counter.querySelector('p:nth-child(2)');
+      const button = counter.querySelector('button');
+      let seen = false;
+
+      function getTargetDate() {
+        const now = new Date();
+        let target = new Date(now.getFullYear(), now.getMonth(), date, hour, minute);
+        if (now > target) target.setMonth(target.getMonth() + 1);
+        return target;
+      }
+
+      let targetDate = getTargetDate();
+
+      function update() {
+        const now = new Date();
+        const diff = targetDate - now;
+
+        if (diff <= 0) {
+          timer.textContent = "SÜRE DOLDU!";
+          if (!seen) counter.classList.add('blinking-red');
+          return;
+        }
+
+        const d = Math.floor(diff / (1000 * 60 * 60 * 24));
+        const h = Math.floor((diff / (1000 * 60 * 60)) % 24);
+        const m = Math.floor((diff / (1000 * 60)) % 60);
+        const s = Math.floor((diff / 1000) % 60);
+
+        timer.textContent = `${d}g ${h}s ${m}d ${s}sn`;
+
+        counter.classList.remove('blinking-red', 'blinking-yellow');
+        if (!seen) {
+          if (d <= 2) counter.classList.add('blinking-red');
+          else if (d <= 4) counter.classList.add('blinking-yellow');
+        }
+      }
+
+      button.addEventListener('click', () => {
+        seen = true;
+        counter.style.background = '#e6f2ff';
+      });
+
+      setInterval(update, 1000);
+      update();
+    }
+  </script>
 </body>
 </html>
