@@ -4,10 +4,13 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Google OAuth 2.0 Entegrasyonu</title>
-  <link rel="stylesheet" href="style.css">
+  <style>
+    /* Your existing CSS will go here */
+  </style>
 </head>
 <body>
-  <div class="card">
+  <!-- Google Login Card -->
+  <div class="card" id="login-card">
     <h2>Google ile Giriş Yap</h2>
     <div id="oauth-button">
       <div id="g_id_onload"
@@ -39,8 +42,15 @@
     </div>
   </div>
 
+  <!-- Basis Anasayfa Content (hidden initially) -->
+  <div class="control-panel" id="main-content" style="display: none;">
+    <!-- Your existing Basis Anasayfa content here -->
+  </div>
+
   <!-- Google Identity Services -->
   <script src="https://accounts.google.com/gsi/client" async defer></script>
-  <script src="script.js"></script>
+  <script>
+    // Your JS will go here
+  </script>
 </body>
 </html>
