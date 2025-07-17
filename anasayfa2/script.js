@@ -61,7 +61,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function showAccessDenied(message) {
         accessDeniedMessage.textContent = message;
-        accessDeniedMessage.style.display = 'block';
+        accessDeniedElement.style.visibility = 'visible';
+accessDeniedElement.style.display = 'block'; // Çift tedbir
+
 
         if (window.accessDeniedTimeout) {
             clearTimeout(window.accessDeniedTimeout);
