@@ -15,38 +15,36 @@ document.addEventListener('DOMContentLoaded', () => {
     ];
 
     window.handleCredentialResponse = (response) => {
-        const idToken = response.credential;
-        const decodedToken = parseJwt(idToken);
+    const idToken = response.credential;
+    const decodedToken = parseJwt(idToken);
 
-        if (decodedToken && decodedToken.email) {
-            const userEmail = decodedToken.email.toLowerCase().trim();
+    if (decodedToken && decodedToken.email) {
+        const userEmail = decodedToken.email.toLowerCase().trim();
 
-            if (allowedEmails.includes(userEmail)) {
-                profilePicture.src = decodedToken.picture;
-                profileName.textContent = decodedToken.name;
-                profileEmail.textContent = userEmail;
-
-                localStorage.setItem('google_id_token', idToken);
-                localStorage.setItem('user_email', userEmail);
-
-                displayAuthorizedUI(decodedToken);
-                google.accounts.id.cancel();
-            } else {
-                showAccessDenied("'" + userEmail + "' ile bu içeriğe erişim izniniz yok. Lütfen yetkili bir hesapla giriş yapın.");
-
-                localStorage.removeItem('google_id_token');
-                localStorage.removeItem('user_email');
-
-                resetUI(true); // giriş butonunu gizle
-                google.accounts.id.cancel();
-            }
+        if (allowedEmails.includes(userEmail)) {
+            // Yetkili kullanıcı
+            profilePicture.src = decodedToken.picture;
+            profileName.textContent = decodedToken.name;
+            profileEmail.textContent = userEmail;
+            localStorage.setItem('google_id_token', idToken);
+            localStorage.setItem('user_email', userEmail);
+            displayAuthorizedUI(decodedToken);
+            google.accounts.id.cancel();
         } else {
-            showAccessDenied("Giriş başarısız oldu. Lütfen tekrar deneyin.");
+            // Yetkisiz kullanıcı
+            showAccessDenied(`'${userEmail}' ile bu içeriğe erişim izniniz yok. Lütfen yetkili bir hesapla giriş yapın.`);
             localStorage.removeItem('google_id_token');
             localStorage.removeItem('user_email');
-            resetUI();
+            resetUI(true); // Google Sign-In butonunu gizle
+            google.accounts.id.cancel();
         }
-    };
+    } else {
+        showAccessDenied("Giriş başarısız oldu. Lütfen tekrar deneyin.");
+        localStorage.removeItem('google_id_token');
+        localStorage.removeItem('user_email');
+        resetUI();
+    }
+};
 
     function parseJwt(token) {
         try {
