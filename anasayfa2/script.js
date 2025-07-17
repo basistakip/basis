@@ -1,5 +1,4 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // HTML elementlerini seç
     const systemButtons = document.querySelectorAll('.system-button');
     const profileInfo = document.getElementById('profile-info');
     const profilePicture = document.getElementById('profile-picture');
@@ -9,15 +8,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const accessDeniedMessage = document.getElementById('access-denied');
     const googleSignInButton = document.querySelector('.g_id_signin');
 
-    // --- İZİN VERİLEN E-POSTA ADRESLERİ LİSTESİ ---
     const allowedEmails = [
-        "mahmutkilicankara@gmail.com", // Kendi e-postanızı buraya ekleyin
+        "mahmutkilicankara@gmail.com",
         "ikinci.izinli.kullanici@example.com",
         "ucuncu.kullanici@gmail.com"
     ];
-    // --------------------------------------------------------
 
-    // Fonksiyon: Google kimlik bilgileri yanıtını işler
     window.handleCredentialResponse = (response) => {
         const idToken = response.credential;
         const decodedToken = parseJwt(idToken);
@@ -31,18 +27,17 @@ document.addEventListener('DOMContentLoaded', () => {
                 profileEmail.textContent = userEmail;
 
                 localStorage.setItem('google_id_token', idToken);
-                localStorage.setItem('user_email', userEmail); 
+                localStorage.setItem('user_email', userEmail);
 
                 displayAuthorizedUI(decodedToken);
                 google.accounts.id.cancel();
             } else {
-                // *** YETKİSİZ E-POSTA DURUMU ***
-                showAccessDenied(`"${userEmail}" ile bu içeriğe erişim izniniz yok. Lütfen yetkili bir hesapla giriş yapın.`);
+                showAccessDenied("'" + userEmail + "' ile bu içeriğe erişim izniniz yok. Lütfen yetkili bir hesapla giriş yapın.");
 
                 localStorage.removeItem('google_id_token');
                 localStorage.removeItem('user_email');
 
-                resetUI(true);
+                resetUI(true); // giriş butonunu gizle
                 google.accounts.id.cancel();
             }
         } else {
@@ -57,12 +52,11 @@ document.addEventListener('DOMContentLoaded', () => {
         try {
             const base64Url = token.split('.')[1];
             const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-            const jsonPayload = decodeURIComponent(atob(base64).split('').map(c =>
-                '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2)
-            ).join(''));
+            const jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
+                return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+            }).join(''));
             return JSON.parse(jsonPayload);
         } catch (e) {
-            console.error("JWT çözümleme hatası:", e);
             return null;
         }
     }
@@ -74,11 +68,10 @@ document.addEventListener('DOMContentLoaded', () => {
         if (window.accessDeniedTimeout) {
             clearTimeout(window.accessDeniedTimeout);
         }
-
         window.accessDeniedTimeout = setTimeout(() => {
             accessDeniedMessage.style.display = 'none';
             window.accessDeniedTimeout = null;
-        }, 8000);
+        }, 8000); // 8 saniye sonra gizle
     }
 
     function displayAuthorizedUI(decodedToken) {
@@ -97,10 +90,10 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     logoutButton.addEventListener('click', () => {
-        google.accounts.id.disableAutoSelect(); 
+        google.accounts.id.disableAutoSelect();
         localStorage.removeItem('google_id_token');
         localStorage.removeItem('user_email');
-        
+
         resetUI();
         alert("Başarıyla çıkış yaptınız. Tekrar giriş yapmak için lütfen Google ile giriş yapın.");
         google.accounts.id.prompt();
@@ -139,7 +132,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 localStorage.removeItem('google_id_token');
                 localStorage.removeItem('user_email');
                 resetUI();
-                google.accounts.id.prompt(); 
+                google.accounts.id.prompt();
             }
         } else {
             resetUI();
@@ -158,5 +151,10 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-
+    const fanBlades = document.querySelectorAll('.klima .fan-blade');
+    if (fanBlades.length === 3) {
+        fanBlades[0].style.setProperty('--angle', '0deg');
+        fanBlades[1].style.setProperty('--angle', '120deg');
+        fanBlades[2].style.setProperty('--angle', '240deg');
+    }
 });
