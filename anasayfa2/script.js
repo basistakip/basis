@@ -15,9 +15,9 @@ document.addEventListener('DOMContentLoaded', () => {
     ];
 
     window.handleCredentialResponse = (response) => {
-        console.log('Received credential response:', response);
+        console.log('Credential response:', response);
         if (!response || !response.credential) {
-            console.error('No credential in response');
+            console.error('No credential received');
             showAccessDenied('Giriş başarısız oldu. Lütfen tekrar deneyin.');
             resetUI();
             return;
@@ -50,7 +50,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 google.accounts.id.cancel();
             }
         } else {
-            console.error('Invalid token or no email in token');
+            console.error('Invalid token or no email');
             showAccessDenied('Giriş başarısız oldu. Lütfen tekrar deneyin.');
             localStorage.removeItem('google_id_token');
             localStorage.removeItem('user_email');
@@ -73,9 +73,10 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function showAccessDenied(message) {
-        console.log('Displaying access denied message:', message);
+        console.log('Showing access denied:', message);
         accessDeniedMessage.textContent = message;
-        accessDeniedMessage.style.display = 'block';
+        accessDeniedMessage.style.display = 'block !important'; // Override CSS
+        alert(message); // Fallback for debugging
         setTimeout(() => {
             accessDeniedMessage.style.display = 'none';
             console.log('Access denied message hidden');
@@ -83,7 +84,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function displayAuthorizedUI() {
-        console.log('Showing authorized UI');
+        console.log('Displaying authorized UI');
         profileInfo.style.display = 'flex';
         logoutButton.style.display = 'block';
         googleSignInButton.style.display = 'none';
@@ -153,7 +154,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // Check if Google API is loaded
     if (typeof google === 'undefined' || !google.accounts) {
         console.error('Google API not loaded');
         showAccessDenied('Google giriş servisi yüklenemedi. Lütfen sayfayı yenileyin.');
