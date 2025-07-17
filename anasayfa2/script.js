@@ -15,7 +15,14 @@ document.addEventListener('DOMContentLoaded', () => {
     ];
 
     window.handleCredentialResponse = (response) => {
-        console.log('Credential response received:', response);
+        console.log('Received credential response:', response);
+        if (!response || !response.credential) {
+            console.error('No credential in response');
+            showAccessDenied('Giriş başarısız oldu. Lütfen tekrar deneyin.');
+            resetUI();
+            return;
+        }
+
         const idToken = response.credential;
         const decodedToken = parseJwt(idToken);
 
@@ -25,31 +32,29 @@ document.addEventListener('DOMContentLoaded', () => {
 
             if (allowedEmails.includes(userEmail)) {
                 console.log('Access granted for:', userEmail);
-                profilePicture.src = decodedToken.picture;
-                profileName.textContent = decodedToken.name;
+                profilePicture.src = decodedToken.picture || '';
+                profileName.textContent = decodedToken.name || 'Bilinmeyen Kullanıcı';
                 profileEmail.textContent = userEmail;
 
                 localStorage.setItem('google_id_token', idToken);
                 localStorage.setItem('user_email', userEmail);
 
-                displayAuthorizedUI(decodedToken);
+                displayAuthorizedUI();
                 google.accounts.id.cancel();
             } else {
                 console.log('Access denied for:', userEmail);
                 showAccessDenied(`'${userEmail}' ile bu içeriğe erişim izniniz yok. Lütfen yetkili bir hesapla giriş yapın.`);
-
                 localStorage.removeItem('google_id_token');
                 localStorage.removeItem('user_email');
-
-                resetUI(false); // Keep Google sign-in button visible
+                resetUI();
                 google.accounts.id.cancel();
             }
         } else {
-            console.log('Invalid token or email not found');
-            showAccessDenied("Giriş başarısız oldu. Lütfen tekrar deneyin.");
+            console.error('Invalid token or no email in token');
+            showAccessDenied('Giriş başarısız oldu. Lütfen tekrar deneyin.');
             localStorage.removeItem('google_id_token');
             localStorage.removeItem('user_email');
-            resetUI(false); // Keep Google sign-in button visible
+            resetUI();
         }
     };
 
@@ -68,18 +73,17 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function showAccessDenied(message) {
-        console.log('Showing access denied message:', message);
+        console.log('Displaying access denied message:', message);
         accessDeniedMessage.textContent = message;
         accessDeniedMessage.style.display = 'block';
-
-        // Hide the message after 8 seconds
         setTimeout(() => {
             accessDeniedMessage.style.display = 'none';
+            console.log('Access denied message hidden');
         }, 8000);
     }
 
-    function displayAuthorizedUI(decodedToken) {
-        console.log('Displaying authorized UI for:', decodedToken.email);
+    function displayAuthorizedUI() {
+        console.log('Showing authorized UI');
         profileInfo.style.display = 'flex';
         logoutButton.style.display = 'block';
         googleSignInButton.style.display = 'none';
@@ -94,11 +98,11 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('other-systems-section').style.display = 'grid';
     }
 
-    function resetUI(hideGoogleSignIn = false) {
-        console.log('Resetting UI, hideGoogleSignIn:', hideGoogleSignIn);
+    function resetUI() {
+        console.log('Resetting UI');
         profileInfo.style.display = 'none';
         logoutButton.style.display = 'none';
-        googleSignInButton.style.display = hideGoogleSignIn ? 'none' : 'block';
+        googleSignInButton.style.display = 'block';
         accessDeniedMessage.style.display = 'none';
 
         document.getElementById('main-systems-section').style.display = 'none';
@@ -111,13 +115,12 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     logoutButton.addEventListener('click', () => {
-        console.log('Logout button clicked');
+        console.log('Logout triggered');
         google.accounts.id.disableAutoSelect();
         localStorage.removeItem('google_id_token');
         localStorage.removeItem('user_email');
-
-        resetUI(false);
-        alert("Başarıyla çıkış yaptınız. Tekrar giriş yapmak için lütfen Google ile giriş yapın.");
+        resetUI();
+        alert('Başarıyla çıkış yaptınız. Tekrar giriş yapmak için lütfen Google ile giriş yapın.');
         google.accounts.id.prompt();
     });
 
@@ -132,31 +135,37 @@ document.addEventListener('DOMContentLoaded', () => {
 
             if (decodedToken && !isTokenExpired && allowedEmails.includes(savedEmail)) {
                 console.log('Restoring session for:', savedEmail);
-                profilePicture.src = decodedToken.picture;
-                profileName.textContent = decodedToken.name;
+                profilePicture.src = decodedToken.picture || '';
+                profileName.textContent = decodedToken.name || 'Bilinmeyen Kullanıcı';
                 profileEmail.textContent = savedEmail;
-                displayAuthorizedUI(decodedToken);
+                displayAuthorizedUI();
             } else {
-                console.log('Invalid or expired session, resetting');
+                console.log('Invalid or expired session');
                 localStorage.removeItem('google_id_token');
                 localStorage.removeItem('user_email');
-                resetUI(false);
+                resetUI();
                 google.accounts.id.prompt();
             }
         } else {
-            console.log('No saved session, resetting UI');
-            resetUI(false);
+            console.log('No saved session');
+            resetUI();
             google.accounts.id.prompt();
         }
     }
 
-    initializeAuthFlow();
+    // Check if Google API is loaded
+    if (typeof google === 'undefined' || !google.accounts) {
+        console.error('Google API not loaded');
+        showAccessDenied('Google giriş servisi yüklenemedi. Lütfen sayfayı yenileyin.');
+    } else {
+        initializeAuthFlow();
+    }
 
     systemButtons.forEach(button => {
         button.addEventListener('click', () => {
             const url = button.dataset.url;
             if (url) {
-                console.log('Opening URL:', url);
+                console.log('Navigating to:', url);
                 window.open(url, '_blank');
             }
         });
