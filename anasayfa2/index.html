@@ -4,7 +4,49 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Google OAuth 2.0 Entegrasyonu</title>
-
+  <style>
+    .card {
+      border: 1px solid #ccc;
+      padding: 20px;
+      margin: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+    .profile-info {
+      margin-top: 20px;
+    }
+    .profile-info img {
+      border-radius: 50%;
+      width: 50px;
+      height: 50px;
+    }
+    #oauth-button button {
+      background-color: #4285F4;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    #oauth-button button:hover {
+      background-color: #357ABD;
+    }
+    #logout-button {
+      display: none;
+      margin-top: 10px;
+      background-color: red;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    #access-denied {
+      display: none;
+      color: red;
+      margin-top: 20px;
+    }
+  </style>
 </head>
 <body>
   <div class="card">
