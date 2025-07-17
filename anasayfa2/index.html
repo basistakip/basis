@@ -7,71 +7,6 @@
     <link rel="shortcut icon" type="png" href="resimler/basis.png">
     <link rel="stylesheet" href="style.css">
     <script src="https://accounts.google.com/gsi/client" async defer></script>
-    <style>
-        .control-panel .section {
-            display: none;
-        }
-        .university-header {
-            background-color: #007bff;
-            color: white;
-            padding: 15px;
-            border-radius: 8px;
-            margin-bottom: 2px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            text-align: center;
-        }
-        .profile-info {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 15px;
-            padding: 10px;
-            border-top: 1px solid #eee;
-            margin-top: 15px;
-            flex-wrap: wrap;
-        }
-        .profile-container {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        #profile-picture {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 2px solid #007bff;
-        }
-        .profile-text {
-            display: flex;
-            flex-direction: column;
-            text-align: left;
-        }
-        #logout-button {
-            background-color: #dc3545;
-            color: white;
-            border: none;
-            padding: 8px 15px;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 0.9em;
-            transition: background-color 0.3s ease;
-        }
-        #logout-button:hover {
-            background-color: #c82333;
-        }
-        #access-denied {
-            color: red;
-            font-weight: bold;
-            margin-top: 15px;
-            text-align: center;
-            display: none;
-        }
-        .g_id_signin {
-            margin: 0 auto;
-            display: inline-block;
-        }
-    </style>
 </head>
 <body>
     <div class="control-panel">
@@ -79,7 +14,7 @@
             <h2>BASİS/ANASAYFA</h2>
         </div>
 
-        <div class="university-header" style="background-color: #f0f2f5; color: #333; padding: 10px 0; border-radius: 5px; box-shadow: none;">
+        <div class="login-section">
             <div id="g_id_onload"
                  data-client_id="387277586108-8m32c8tdfb0oemnr5kuv2fao6rtm35c0.apps.googleusercontent.com"
                  data-context="signin"
