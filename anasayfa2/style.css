@@ -832,9 +832,7 @@ body {
 }
 #access-denied {
     display: none;
-    color: red;
+    color: #dc3545;
+    margin-top: 20px;
     font-weight: bold;
-    text-align: center;
-    margin-top: 1rem;
 }
-
