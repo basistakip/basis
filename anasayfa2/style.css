@@ -830,10 +830,11 @@ body {
 #logout-button:hover {
     background-color: #c82333;
 }
-
 #access-denied {
     display: none;
-    color: #dc3545;
-    margin-top: 20px;
+    color: red;
     font-weight: bold;
+    text-align: center;
+    margin-top: 1rem;
 }
+
