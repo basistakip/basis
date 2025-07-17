@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <title>Google Girişli Yetki Kontrol</title>
+  <meta name="google-signin-client_id" content="YOUR_CLIENT_ID.apps.googleusercontent.com">
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
+  <style>
+    #access-denied {
+      display: none;
+      color: red;
+      font-weight: bold;
+      margin-top: 20px;
+    }
+    #profile-info {
+      display: none;
+      margin-top: 20px;
+    }
+    .section {
+      display: none;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Google Girişli Sayfa</h1>
+
+  <div id="g_id_onload"
+       data-client_id="YOUR_CLIENT_ID.apps.googleusercontent.com"
+       data-callback="handleCredentialResponse"
+       data-auto_prompt="true">
+  </div>
+
+  <div class="g_id_signin"
+       data-type="standard"
+       data-size="large"
+       data-theme="outline"
+       data-text="sign_in_with"
+       data-shape="rectangular"
+       data-logo_alignment="left">
+  </div>
+
+  <p id="access-denied">Bu içeriğe erişim izniniz yok.</p>
+
+  <div id="profile-info">
+    <p><strong>Ad:</strong> <span id="user-name"></span></p>
+    <p><strong>Email:</strong> <span id="user-email"></span></p>
+  </div>
+
+  <div class="section">Yetkili kullanıcıya özel içerik</div>
+
+  <script src="script.js"></script>
+</body>
+</html>
