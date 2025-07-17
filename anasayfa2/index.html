@@ -8,12 +8,9 @@
     <link rel="stylesheet" href="style.css">
     <script src="https://accounts.google.com/gsi/client" async defer></script>
     <style>
-        /* Kontrol panelini ve içindeki ana bölümleri başlangıçta gizli tut */
         .control-panel .section {
             display: none;
         }
-
-        /* Giriş ve profil alanları için stil */
         .university-header {
             background-color: #007bff;
             color: white;
@@ -68,8 +65,8 @@
             font-weight: bold;
             margin-top: 15px;
             text-align: center;
+            display: none;
         }
-        /* Google giriş butonu ve One-Tap div'i için düzenleme */
         .g_id_signin {
             margin: 0 auto;
             display: inline-block;
@@ -110,7 +107,7 @@
                 </div>
                 <button id="logout-button">Çıkış Yap</button>
             </div>
-            <p id="access-denied" style="display: none;"></p>
+            <p id="access-denied"></p>
         </div>
 
         <div class="section main-systems" id="main-systems-section">
