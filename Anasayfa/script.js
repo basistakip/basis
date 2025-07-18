@@ -89,7 +89,7 @@ document.addEventListener('DOMContentLoaded', () => {
             clearTimeout(window.accessDeniedTimeout);
         }
         window.accessDeniedTimeout = setTimeout(() => {
-          //  accessDeniedMessage.style.display = 'none';
+        accessDeniedMessage.style.display = 'none';
             window.accessDeniedTimeout = null;
             console.log("Erişim engellendi mesajı gizlendi.");
         }, 8000); // 8 saniye sonra gizle
