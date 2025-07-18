@@ -40,21 +40,34 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 displayAuthorizedUI(decodedToken);
                 google.accounts.id.cancel(); // Başarılı girişten sonra One-Tap'ı kapat
-            } else {
-                // *** YETKİSİZ E-POSTA DURUMU ***
-                console.warn("Yetkisiz e-posta: " + userEmail + ". Erişim reddedildi.");
-                
-                // Mesajı göster ve arayüzü sıfırla
-                showAccessDenied("'" + userEmail + "' ile bu içeriğe erişim izniniz yok. Lütfen yetkili bir hesapla giriş yapın.");
-                
-                localStorage.removeItem('google_id_token');
-                localStorage.removeItem('user_email');
-                
-                // Yetkisiz kullanıcılar için sadece çıkış butonu gösterilir, giriş butonu gizlenir
-                resetUI(true); // Parametre göndererek giriş butonunu gizli tutuyoruz
-                
-                google.accounts.id.cancel(); // One-Tap'ı kapat
-            }
+            }  else {
+    console.warn("Yetkisiz e-posta: " + userEmail + ". Erişim reddedildi.");
+    
+    // YETKİSİZ KULLANICI İÇİN ARAYÜZ YÖNETİMİ
+    // Profili ve çıkış butonunu gizle
+    profileInfo.style.display = 'none';
+    logoutButton.style.display = 'none';
+
+    // Google giriş butonunu görünür yap (kullanıcının tekrar denemesini sağlamak için)
+    googleSignInButton.style.display = 'block';
+
+    // İçeriği gizle
+    document.getElementById('main-systems-section').style.display = 'none';
+    document.getElementById('other-systems-section').style.display = 'none';
+    
+    // Uyarı mesajını göster ve içeriği kilitli hale getir
+    showAccessDenied("'" + userEmail + "' ile bu içeriğe erişim izniniz yok. Lütfen yetkili bir hesapla giriş yapın.");
+    
+    // Linklerin çalışmasını engelle (butonları pasif hale getir)
+    systemButtons.forEach(button => {
+        button.style.pointerEvents = 'none';
+        button.style.opacity = '0.5';
+    });
+
+    localStorage.removeItem('google_id_token');
+    localStorage.removeItem('user_email');
+    google.accounts.id.cancel();
+}
         } else {
             console.error("Kimlik doğrulama başarısız: E-posta bulunamadı veya token geçersiz.");
             showAccessDenied("Giriş başarısız oldu. Lütfen tekrar deneyin.");
