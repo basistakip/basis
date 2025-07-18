@@ -171,15 +171,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Uygulamayı başlat
     initializeAuthFlow();
 
-    // Buton tıklama olayları
-    systemButtons.forEach(button => {
-        button.addEventListener('click', () => {
-            const url = button.dataset.url;
-            if (url) {
-                window.open(url, '_blank');
-            }
-        });
-    });
+
 
 
 });
