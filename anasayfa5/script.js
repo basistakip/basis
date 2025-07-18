@@ -181,11 +181,5 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // Klima Santrali ikonundaki pervaneleri döndür
-    const fanBlades = document.querySelectorAll('.klima .fan-blade');
-    if (fanBlades.length === 3) {
-        fanBlades[0].style.setProperty('--angle', '0deg');
-        fanBlades[1].style.setProperty('--angle', '120deg');
-        fanBlades[2].style.setProperty('--angle', '240deg');
-    }
+
 });
