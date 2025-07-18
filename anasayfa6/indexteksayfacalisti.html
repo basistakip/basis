@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Sistemi</title>
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: #f0f2f5;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .login-container {
+            background: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            padding: 40px;
+            text-align: center;
+            max-width: 400px;
+            width: 100%;
+        }
+
+        .login-header {
+            background-color: #003366;
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+        }
+
+        .login-header h2 {
+            margin: 0;
+            font-size: 1.5em;
+            font-weight: 600;
+        }
+
+        .google-signin-section {
+            background-color: #f0f2f5;
+            color: #333;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .profile-info {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background-color: #f9f9f9;
+        }
+
+        .profile-container {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        #profile-picture {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid #007bff;
+        }
+
+        .profile-text {
+            display: flex;
+            flex-direction: column;
+            text-align: left;
+        }
+
+        #profile-name {
+            font-weight: bold;
+            color: #333;
+        }
+
+        #profile-email {
+            font-size: 0.9em;
+            color: #555;
+        }
+
+        #logout-button {
+            background-color: #dc3545;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.9em;
+            transition: background-color 0.3s ease;
+        }
+
+        #logout-button:hover {
+            background-color: #c82333;
+        }
+
+        #access-denied {
+            color: #dc3545;
+            font-weight: bold;
+            margin-top: 20px;
+            padding: 15px;
+            border: 1px solid #dc3545;
+            border-radius: 5px;
+            background-color: #f8d7da;
+        }
+
+        .content-area {
+            margin-top: 30px;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background-color: #f9f9f9;
+            display: none;
+        }
+
+        .content-area h3 {
+            margin: 0 0 15px 0;
+            color: #333;
+        }
+
+        .content-area p {
+            color: #666;
+            line-height: 1.6;
+        }
+
+        .g_id_signin {
+            margin: 0 auto;
+            display: inline-block;
+        }
+
+        /* Responsive */
+        @media (max-width: 480px) {
+            .login-container {
+                padding: 20px;
+            }
+            
+            .profile-container {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .profile-text {
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <div class="login-header">
+            <h2>Giriş Sistemi</h2>
+        </div>
+
+        <div class="google-signin-section">
+            <div id="g_id_onload"
+                 data-client_id="387277586108-8m32c8tdfb0oemnr5kuv2fao6rtm35c0.apps.googleusercontent.com" 
+                 data-context="signin"
+                 data-ux_mode="popup"
+                 data-callback="handleCredentialResponse"
+                 data-auto_prompt="false" 
+                 data-auto_select="true">
+            </div>
+            <div class="g_id_signin" id="google-signin-button"
+                 data-type="standard"
+                 data-shape="rectangular"
+                 data-theme="outline"
+                 data-text="signin_with"
+                 data-size="large"
+                 data-logo_alignment="left">
+            </div>
+
+            <div id="profile-info" class="profile-info" style="display: none;">
+                <div class="profile-container">
+                    <img id="profile-picture" src="" alt="Profil Resmi">
+                    <div class="profile-text">
+                        <span id="profile-name"></span>
+                        <span id="profile-email"></span>
+                    </div>
+                </div>
+                <button id="logout-button">Çıkış Yap</button>
+            </div>
+            
+            <div id="access-denied" style="display: none;">Bu içeriğe erişim izniniz yok.</div>
+        </div>
+
+        <!-- İçerik alanı - giriş yapıldığında gösterilir -->
+        <div class="content-area" id="content-area">
+            <h3>Hoş Geldiniz!</h3>
+            <p>Başarılı bir şekilde giriş yaptınız. Bu alan sadece yetkili kullanıcılar tarafından görülebilir.</p>
+            
+            <!-- Buraya kendi içeriğinizi ekleyebilirsiniz -->
+            <div id="user-content">
+                <!-- Dinamik içerik buraya gelecek -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // HTML elementlerini seç
+            const profileInfo = document.getElementById('profile-info');
+            const profilePicture = document.getElementById('profile-picture');
+            const profileName = document.getElementById('profile-name');
+            const profileEmail = document.getElementById('profile-email');
+            const logoutButton = document.getElementById('logout-button');
+            const accessDeniedMessage = document.getElementById('access-denied');
+            const googleSignInButton = document.querySelector('.g_id_signin');
+            const contentArea = document.getElementById('content-area');
+
+            // --- İZİN VERİLEN E-POSTA ADRESLERİ LİSTESİ ---
+            const allowedEmails = [
+                "mahmutkilicankara@gmail.com",
+                "ikinci.izinli.kullanici@example.com",
+                "ucuncu.kullanici@gmail.com"
+            ];
+            // --------------------------------------------------------
+
+            // Global fonksiyon: Google kimlik bilgileri yanıtını işler
+            window.handleCredentialResponse = (response) => {
+                const idToken = response.credential;
+                const decodedToken = parseJwt(idToken);
+
+                if (decodedToken && decodedToken.email) {
+                    const userEmail = decodedToken.email.toLowerCase().trim();
+
+                    if (allowedEmails.includes(userEmail)) {
+                        // Yetkili kullanıcı
+                        profilePicture.src = decodedToken.picture;
+                        profileName.textContent = decodedToken.name;
+                        profileEmail.textContent = userEmail;
+
+                        // localStorage yerine sessionStorage kullanabiliriz
+                        sessionStorage.setItem('google_id_token', idToken);
+                        sessionStorage.setItem('user_email', userEmail);
+
+                        displayAuthorizedUI(decodedToken);
+                        google.accounts.id.cancel();
+                    } else {
+                        // Yetkisiz kullanıcı
+                        console.warn("Yetkisiz e-posta: " + userEmail);
+                        showAccessDenied("'" + userEmail + "' ile bu içeriğe erişim izniniz yok. Lütfen yetkili bir hesapla giriş yapın.");
+                        
+                        // Sadece giriş butonunu gizle, erişim reddi mesajını göster
+                        googleSignInButton.style.display = 'none';
+                        profileInfo.style.display = 'none';
+                        contentArea.style.display = 'none';
+                        
+                        sessionStorage.removeItem('google_id_token');
+                        sessionStorage.removeItem('user_email');
+                        google.accounts.id.cancel();
+                    }
+                } else {
+                    console.error("Kimlik doğrulama başarısız.");
+                    showAccessDenied("Giriş başarısız oldu. Lütfen tekrar deneyin.");
+                    resetUI();
+                }
+            };
+
+            // JWT çözümleme fonksiyonu
+            function parseJwt(token) {
+                try {
+                    const base64Url = token.split('.')[1];
+                    const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+                    const jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
+                        return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+                    }).join(''));
+                    return JSON.parse(jsonPayload);
+                } catch (e) {
+                    console.error("JWT çözümleme hatası:", e);
+                    return null;
+                }
+            }
+
+            // Erişim engellendi mesajını göster
+            function showAccessDenied(message) {
+                accessDeniedMessage.textContent = message;
+                accessDeniedMessage.style.display = 'block';
+                if (window.accessDeniedTimeout) {
+                    clearTimeout(window.accessDeniedTimeout);
+                }
+                window.accessDeniedTimeout = setTimeout(() => {
+                    accessDeniedMessage.style.display = 'none';
+                    window.accessDeniedTimeout = null;
+                    // Mesaj gizlendikten sonra giriş butonunu tekrar göster
+                    googleSignInButton.style.display = 'block';
+                }, 8000);
+            }
+
+            // Yetkili kullanıcı UI'ını göster
+            function displayAuthorizedUI(decodedToken) {
+                profileInfo.style.display = 'flex';
+                googleSignInButton.style.display = 'none';
+                accessDeniedMessage.style.display = 'none';
+                contentArea.style.display = 'block';
+
+                // Burada özel içerik ekleyebilirsiniz
+                document.getElementById('user-content').innerHTML = `
+                    <p><strong>Kullanıcı Bilgileri:</strong></p>
+                    <p>Ad: ${decodedToken.name}</p>
+                    <p>E-posta: ${decodedToken.email}</p>
+                    <p>Giriş Zamanı: ${new Date().toLocaleString('tr-TR')}</p>
+                `;
+            }
+
+            // UI'ı başlangıç durumuna sıfırla
+            function resetUI() {
+                profileInfo.style.display = 'none';
+                googleSignInButton.style.display = 'block';
+                accessDeniedMessage.style.display = 'none';
+                contentArea.style.display = 'none';
+            }
+
+            // Çıkış yap butonu
+            logoutButton.addEventListener('click', () => {
+                google.accounts.id.disableAutoSelect();
+                sessionStorage.removeItem('google_id_token');
+                sessionStorage.removeItem('user_email');
+                resetUI();
+                alert("Başarıyla çıkış yaptınız.");
+                google.accounts.id.prompt();
+            });
+
+            // Sayfa yüklendiğinde oturum kontrolü
+            function initializeAuthFlow() {
+                const savedToken = sessionStorage.getItem('google_id_token');
+                const savedEmail = sessionStorage.getItem('user_email');
+                
+                if (savedToken && savedEmail) {
+                    const decodedToken = parseJwt(savedToken);
+                    const isTokenExpired = decodedToken && decodedToken.exp * 1000 < Date.now();
+
+                    if (decodedToken && !isTokenExpired && allowedEmails.includes(savedEmail)) {
+                        console.log("Kayıtlı ve geçerli oturum bulundu.");
+                        profilePicture.src = decodedToken.picture;
+                        profileName.textContent = decodedToken.name;
+                        profileEmail.textContent = savedEmail;
+                        displayAuthorizedUI(decodedToken);
+                    } else {
+                        console.warn("Kayıtlı oturum geçersiz veya süresi dolmuş.");
+                        sessionStorage.removeItem('google_id_token');
+                        sessionStorage.removeItem('user_email');
+                        resetUI();
+                        google.accounts.id.prompt();
+                    }
+                } else {
+                    console.log("Kayıtlı oturum bulunamadı.");
+                    resetUI();
+                    google.accounts.id.prompt();
+                }
+            }
+
+            // Uygulamayı başlat
+            initializeAuthFlow();
+
+            // Global erişim için fonksiyonları dışa aktar (isteğe bağlı)
+            window.loginSystem = {
+                isLoggedIn: () => !!sessionStorage.getItem('google_id_token'),
+                getCurrentUser: () => {
+                    const token = sessionStorage.getItem('google_id_token');
+                    return token ? parseJwt(token) : null;
+                },
+                logout: () => logoutButton.click()
+            };
+        });
+    </script>
+</body>
+</html>
