@@ -263,54 +263,71 @@
     <script>
         /* Yetkili e-posta adresleri listesi */
         const authorizedEmails = [
-            'banuyapiisleri@gmail.com', // Lütfen bu kısmı yetkili e-posta adreslerinizle güncelleyin.
+            'banuyapiisleri@gmail.com', // Lütfen kendi yetkili e-posta adreslerinizi ekleyin
             'fatih-oktay@hotmail.com',
-                'mahmutkilicankara@gmail.com',
             'diger-eposta@gmail.com'
         ];
 
-        /* Google One Tap ile giriş yapan kullanıcının verilerini işleyen fonksiyon */
-        function handleCredentialResponse(response) {
-            const responsePayload = decodeJwtResponse(response.credential);
-            const userEmail = responsePayload.email;
-
+        /* Oturum durumuna göre arayüzü güncelleyen ana fonksiyon */
+        function updateUI(isLoggedIn, email, name, picture) {
             const loginContainer = document.getElementById('login-container');
             const contentContainer = document.getElementById('content-container');
             const mainSections = document.querySelectorAll('.section');
             const accessDeniedMessage = document.getElementById('access-denied');
 
-            // Başlangıçta tüm içeriği gizle
-            loginContainer.style.display = 'none';
-            contentContainer.style.display = 'none';
-            mainSections.forEach(section => section.style.display = 'none');
-            accessDeniedMessage.style.display = 'none';
+            if (isLoggedIn) {
+                // Başarılı giriş: İçeriği göster, giriş alanını gizle
+                loginContainer.style.display = 'none';
+                contentContainer.style.display = 'block';
+                mainSections.forEach(section => section.style.display = 'grid');
+                accessDeniedMessage.style.display = 'none';
 
-            // E-posta yetkili listesinde mi kontrol et
-            if (authorizedEmails.includes(userEmail)) {
-                // Yetkili Kullanıcı: İçerik alanını göster
-                document.getElementById('profile-picture').src = responsePayload.picture;
-                document.getElementById('profile-name').innerText = responsePayload.name;
-                document.getElementById('profile-email').innerText = userEmail;
-
-                contentContainer.style.display = 'block'; // İçerik konteynerini göster
-                mainSections.forEach(section => section.style.display = 'grid'); // Butonları göster
+                // Profil bilgilerini güncelle
+                document.getElementById('profile-picture').src = picture;
+                document.getElementById('profile-name').innerText = name;
+                document.getElementById('profile-email').innerText = email;
             } else {
-                // Yetkisiz Kullanıcı: Giriş alanını ve hata mesajını göster
-                loginContainer.style.display = 'block'; // Giriş konteynerini göster
-                accessDeniedMessage.style.display = 'block'; // Hata mesajını göster
+                // Çıkış yapıldı veya yetkisiz giriş: Giriş alanını göster, içeriği gizle
+                loginContainer.style.display = 'block';
+                contentContainer.style.display = 'none';
+                mainSections.forEach(section => section.style.display = 'none');
+            }
+        }
+        
+        /* Google One Tap'ten gelen kimlik doğrulama yanıtını işleme */
+        function handleCredentialResponse(response) {
+            const responsePayload = decodeJwtResponse(response.credential);
+            const userEmail = responsePayload.email;
+            
+            if (authorizedEmails.includes(userEmail)) {
+                // Oturum durumunu kaydet
+                localStorage.setItem('isLoggedIn', 'true');
+                localStorage.setItem('userEmail', userEmail);
+                localStorage.setItem('userName', responsePayload.name);
+                localStorage.setItem('userPicture', responsePayload.picture);
+                
+                // Arayüzü güncelle
+                updateUI(true, userEmail, responsePayload.name, responsePayload.picture);
+            } else {
+                // Yetkisiz kullanıcı, hata mesajını göster
+                const accessDeniedMessage = document.getElementById('access-denied');
+                accessDeniedMessage.style.display = 'block';
+                // Oturumu sil
+                localStorage.removeItem('isLoggedIn');
                 console.error("Erişim reddedildi: Yetkisiz e-posta adresi.");
             }
         }
 
         /* Çıkış Yapma Fonksiyonu */
         function signOut() {
-            const loginContainer = document.getElementById('login-container');
-            const contentContainer = document.getElementById('content-container');
-            const mainSections = document.querySelectorAll('.section');
-
-            loginContainer.style.display = 'block';
-            contentContainer.style.display = 'none';
-            mainSections.forEach(section => section.style.display = 'none');
+            localStorage.removeItem('isLoggedIn'); // Oturum durumunu sil
+            updateUI(false); // Arayüzü giriş durumuna geri döndür
+            google.accounts.id.revoke(localStorage.getItem('userEmail'), () => {
+                console.log('revoke success');
+                localStorage.removeItem('userEmail');
+                localStorage.removeItem('userName');
+                localStorage.removeItem('userPicture');
+            });
         }
 
         /* JWT Token'ı çözme yardımcı fonksiyonu */
@@ -322,19 +339,31 @@
             }).join(''));
             return JSON.parse(jsonPayload);
         }
-
+        
         // "Çıkış Yap" butonuna tıklama olayını ekle
         document.getElementById('logout-button').addEventListener('click', signOut);
 
-        /* Sayfa yüklendiğinde, eğer token varsa otomatik giriş yapmayı tetikle */
+        /* Sayfa yüklendiğinde oturum kontrolü */
         window.onload = function () {
-            // Google One Tap kütüphanesinin yüklenmesini bekleyin.
-            if (typeof google !== 'undefined' && google.accounts.id) {
-                google.accounts.id.initialize({
-                    client_id: "387277586108-8m32c8tdfb0oemnr5kuv2fao6rtm35c0.apps.googleusercontent.com",
-                    callback: handleCredentialResponse
-                });
-                google.accounts.id.prompt();
+            // Oturumun kaydedilip kaydedilmediğini kontrol et
+            const isLoggedIn = localStorage.getItem('isLoggedIn');
+
+            if (isLoggedIn) {
+                // Oturum varsa, kullanıcı bilgilerini localStorage'dan çek
+                const userEmail = localStorage.getItem('userEmail');
+                const userName = localStorage.getItem('userName');
+                const userPicture = localStorage.getItem('userPicture');
+                updateUI(true, userEmail, userName, userPicture);
+            } else {
+                // Oturum yoksa, Google One Tap girişini başlat
+                if (typeof google !== 'undefined' && google.accounts.id) {
+                    google.accounts.id.initialize({
+                        client_id: "387277586108-8m32c8tdfb0oemnr5kuv2fao6rtm35c0.apps.googleusercontent.com",
+                        callback: handleCredentialResponse
+                    });
+                    google.accounts.id.prompt();
+                }
+                updateUI(false); // Arayüzü giriş durumuna ayarla
             }
         };
     </script>
