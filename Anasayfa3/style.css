@@ -16,31 +16,41 @@ body {
     display: none; /* Sistem butonlarını ve diğer bölümleri gizle */
 }
 
+/* Üniversite başlık stili */
 .university-header {
     background-color: #003366;
     color: white;
-    padding: 10px 0; /* Padding'i biraz artırdık */
+    padding: 12px 0;
     text-align: center;
-    border-radius: 0;
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
     width: 100%;
-    position: relative;
-    margin: 0; /* Margin'leri sıfırladık */
-    top: 0; /* Top değerini sıfırladık */
+    margin-bottom: 20px; /* Kontrol paneli ile arasına boşluk */
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
 }
 
 .university-header h2 {
     margin: 0;
-    padding: 0 15px; /* Yanlardan biraz boşluk ekledik */
-    font-size: 1.5em;
-    font-weight: bold;
-    line-height: 1.3; /* Satır yüksekliğini artırdık */
-    letter-spacing: 0.5px;
-    white-space: nowrap; /* Metnin tek satırda kalmasını sağlar */
-    overflow: visible; /* Taşan içeriği göster */
-    text-overflow: clip; /* Metin kesilmesini engeller */
+    padding: 0 15px;
+    font-size: 1.8em;
+    font-weight: 600;
+    line-height: 1.2;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
+/* Kontrol paneli stili (eski margin/padding ayarlarını kaldırıyoruz) */
+.control-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    max-width: 1000px;
+    width: 100%;
+    background: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    padding: 30px;
+    margin: 0 auto; /* Ortalamak için */
+}
 .card {
     border: 1px solid #ccc;
     border-top: none;
@@ -52,17 +62,7 @@ body {
     top: -8px; /* Body margin'ini compensate eder */
 }
 
-.control-panel {
-    display: flex;
-    flex-direction: column; /* Bölümleri dikey olarak sırala */
-    gap: 5px; /* Bölümler arası boşluk */
-    max-width: 1000px; /* Maksimum genişliği artırıldı */
-    width: 100%;
-    background: #ffffff; /* Ana panelin arkaplanı */
-    border-radius: 12px;
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
-    padding: 30px;
-}
+
 
 .section {
     padding: 20px;
