@@ -1,9 +1,9 @@
 /* Yetkili e-posta adresleri listesi */
 const authorizedEmails = [
     'basis_bilgi_islem@example.com', /* Örnek yetkili e-posta */
-        "yapiisleribanu@gmail.com",
-      "mahmutkilicankara@gmail.com",
-        "mahmutkilic@bandirma.edu.tr",
+ 'yapiisleribanu@gmail.com',
+     'mahmutkilicankara@gmail.com',
+     'mahmutkilic@bandirma.edu.t',
     'ikincimevcut@gmail.com', /* Örnek ikinci yetkili e-posta */
     'banuyapiisleri@gmail.com' /* Örnek e-posta: Lütfen kendi e-postanızla değiştirin */
 ];
