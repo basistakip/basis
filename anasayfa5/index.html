@@ -251,7 +251,11 @@
                         // Yetkisiz kullanıcı
                         console.warn("Yetkisiz e-posta: " + userEmail);
                         showAccessDenied("'" + userEmail + "' ile bu içeriğe erişim izniniz yok. Lütfen yetkili bir hesapla giriş yapın.");
-                        resetUI();
+                        
+                        // Sadece giriş butonunu gizle, erişim reddi mesajını göster
+                        googleSignInButton.style.display = 'none';
+                        profileInfo.style.display = 'none';
+                        contentArea.style.display = 'none';
                         
                         sessionStorage.removeItem('google_id_token');
                         sessionStorage.removeItem('user_email');
@@ -289,6 +293,8 @@
                 window.accessDeniedTimeout = setTimeout(() => {
                     accessDeniedMessage.style.display = 'none';
                     window.accessDeniedTimeout = null;
+                    // Mesaj gizlendikten sonra giriş butonunu tekrar göster
+                    googleSignInButton.style.display = 'block';
                 }, 8000);
             }
 
