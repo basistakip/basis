@@ -3,24 +3,174 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sistem Kontrol Paneli</title>
-    <link rel="shortcut icon" type="png" href="resimler/basis.png">
-    <link rel="stylesheet" href="style.css">
+    <title>Login Sistemi</title>
     <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: #f0f2f5;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .login-container {
+            background: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            padding: 40px;
+            text-align: center;
+            max-width: 400px;
+            width: 100%;
+        }
+
+        .login-header {
+            background-color: #003366;
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+        }
+
+        .login-header h2 {
+            margin: 0;
+            font-size: 1.5em;
+            font-weight: 600;
+        }
+
+        .google-signin-section {
+            background-color: #f0f2f5;
+            color: #333;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .profile-info {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background-color: #f9f9f9;
+        }
+
+        .profile-container {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        #profile-picture {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid #007bff;
+        }
+
+        .profile-text {
+            display: flex;
+            flex-direction: column;
+            text-align: left;
+        }
+
+        #profile-name {
+            font-weight: bold;
+            color: #333;
+        }
+
+        #profile-email {
+            font-size: 0.9em;
+            color: #555;
+        }
+
+        #logout-button {
+            background-color: #dc3545;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.9em;
+            transition: background-color 0.3s ease;
+        }
+
+        #logout-button:hover {
+            background-color: #c82333;
+        }
+
+        #access-denied {
+            color: #dc3545;
+            font-weight: bold;
+            margin-top: 20px;
+            padding: 15px;
+            border: 1px solid #dc3545;
+            border-radius: 5px;
+            background-color: #f8d7da;
+        }
+
+        .content-area {
+            margin-top: 30px;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background-color: #f9f9f9;
+            display: none;
+        }
+
+        .content-area h3 {
+            margin: 0 0 15px 0;
+            color: #333;
+        }
+
+        .content-area p {
+            color: #666;
+            line-height: 1.6;
+        }
+
+        .g_id_signin {
+            margin: 0 auto;
+            display: inline-block;
+        }
+
+        /* Responsive */
+        @media (max-width: 480px) {
+            .login-container {
+                padding: 20px;
+            }
+            
+            .profile-container {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .profile-text {
+                text-align: center;
+            }
+        }
+    </style>
 </head>
 <body>
-
-    <div class="control-panel">
-        <div class="university-header">
-            <h2>BASİS/ANASAYFA</h2>
+    <div class="login-container">
+        <div class="login-header">
+            <h2>Giriş Sistemi</h2>
         </div>
 
-        <div class="university-header" style="background-color: #f0f2f5; color: #333; padding: 10px 0; border-radius: 5px; box-shadow: none;">
+        <div class="google-signin-section">
             <div id="g_id_onload"
-                 data-client_id="387277586108-8m32c8tdfb0oemnr5kuv2fao6rtm35c0.apps.googleusercontent.com" data-context="signin"
+                 data-client_id="387277586108-8m32c8tdfb0oemnr5kuv2fao6rtm35c0.apps.googleusercontent.com" 
+                 data-context="signin"
                  data-ux_mode="popup"
                  data-callback="handleCredentialResponse"
-                 data-auto_prompt="false" data-auto_select="true">
+                 data-auto_prompt="false" 
+                 data-auto_select="true">
             </div>
             <div class="g_id_signin" id="google-signin-button"
                  data-type="standard"
@@ -35,158 +185,189 @@
                 <div class="profile-container">
                     <img id="profile-picture" src="" alt="Profil Resmi">
                     <div class="profile-text">
-                        <span id="profile-name" style="font-weight: bold;"></span>
-                        <span id="profile-email" style="font-size: 0.9em; color: #555;"></span>
+                        <span id="profile-name"></span>
+                        <span id="profile-email"></span>
                     </div>
                 </div>
                 <button id="logout-button">Çıkış Yap</button>
             </div>
-            <p id="access-denied" style="display: none;">Bu içeriğe erişim izniniz yok.</p>
+            
+            <div id="access-denied" style="display: none;">Bu içeriğe erişim izniniz yok.</div>
         </div>
 
-        <div class="section main-systems" id="main-systems-section">
-            <div class="system-button" data-url="https://basistakip.github.io/basis/index.html">
-                <div class="icon banu-icon"></div>
-                <span>BASİS ANASAYFA</span>
-            </div>
-            <div class="system-button search-bar-wide" data-url="/sistem-ara">
-                <div class="search-iframe-container">
-                    <iframe
-                        src="https://basistakip.github.io/basis/aramacubugu2.html"
-                        frameborder="0"
-                        width="100%"
-                        height="80px"
-                        scrolling="yes"
-                        allowfullscreen=""
-                        loading="lazy"
-                        referrerpolicy="no-referrer-when-downgrade">
-                    </iframe>
-                </div>
-            </div>
-            <div class="system-button" data-url="https://drive.google.com/drive/u/0/folders/1LdEk5nnMH5ONEFurrsaJkopXvvuAahlC">
-                <div class="icon basis-drive-icon"></div>
-                <span>Basis Drive</span>
-            </div>
-            <div class="system-button">
-                <div class="icon github-web-icon"></div>
-                <span>GitHub Web Yapiisleribanu_</span>
-            </div>
-            <div class="system-button" data-url="https://drive.google.com/drive/folders/1843LTVIrIDvvBholUqK34vJ1YNVD1gWvnSS-NMJmcFRvOAbAM1c_awRyRxg41YQpoUdafR6a">
-                <div class="icon building-icon"></div>
-                <span>Rektörlük Binası</span>
-            </div>
-            <div class="system-button" data-url="https://drive.google.com/drive/folders/1N-rdUOu98ZSLd_WJLMNd5332qGAJ8HOdDTdRn1qOZ6DfTUgtUb4AuvnbdKUovc19ow1vNtcF">
-                <div class="icon sport-icon"></div>
-                <span>Kapalı Spor Salonu</span>
-            </div>
-            <div class="system-button" data-url="https://drive.google.com/drive/folders/1dLwbe0hBNFASEfx6U_FgmF8KB5lp2pKJX-sgyIUj0RFe803SpiUVP71v28oZbrTHkzfEHot6">
-                <div class="icon sport-academy-icon"></div>
-                <span>Spor Akademisi</span>
-            </div>
-            <div class="system-button" data-url="https://drive.google.com/drive/folders/1r06zRd6eEISG9I326JGR2QL4bbxManul_U9jBU3dY7IWpLqFuezVePQ9odOYrJogy_ortKB9">
-                <div class="icon classroom-icon"></div>
-                <span>Merkezi Derslik</span>
-            </div>
-            <div class="system-button" data-url="https://drive.google.com/drive/folders/1tRwRLRRWVqNk4gHnBeNBlwFNtYvkh1MEl3ZMljFppLKdAEhXCMsiXDL0mW-1H41B99cRhmOn">
-                <div class="icon office-icon"></div>
-                <span>ÖYM</span>
-            </div>
-            <div class="system-button" data-url="https://drive.google.com/drive/folders/1uB4ockbREFNf6CcssejK9mD6PAs9IfAdI3Ux7Svk2Nep9gmdG7c6-9Ltv126R0v9lbgteRzl">
-                <div class="icon engineering-icon"></div>
-                <span>Mühendislik</span>
-            </div>
-            <div class="system-button" data-url="https://drive.google.com/drive/folders/1ZYsVVhI4hydIBoVo1W_J-VoJa5fo7XQ_3jV6TsN7XfM1cWRnRysoUkenNsRLjsUfauAmDerP">
-                <div class="icon maritime-icon"></div>
-                <span>Denizcilik</span>
-            </div>
-            <div class="system-button" data-url="https://drive.google.com/drive/folders/1zqqeHVUV7rTb8tQ_8n7ZbG10Y4idNLPV6FYvkbli4a2KYmyp3rV1tT8rGM59pSGHjvyhuMk-">
-                <div class="icon religion-icon"></div>
-                <span>İlahiyat Binası</span>
-            </div>
-            <div class="system-button" data-url="https://drive.google.com/drive/folders/1QMpzrWtSivxm7S9Mk0dLTTo7d9NMq_KfRSGBHpG8EDnmH-Z-9SVbvHcRfZu_hgqtEn3KE8d0">
-                <div class="icon susurluk-myo-icon"></div>
-                <span>Susurluk MYO</span>
-            </div>
-            <div class="system-button" data-url="https://drive.google.com/drive/folders/1czb0F-Hx6homzZM5uf6eUkX9oh_uXvn2qOeUMB6C-GYtaBDhv_w6EvxOTwp3jmCxe8vKhP9T">
-                <div class="icon erdek-myo-icon"></div>
-                <span>Erdek MYO</span>
-            </div>
-            <div class="system-button" data-url="https://drive.google.com/drive/folders/1HVvf9wcEgRUvJ1Yrlvpq-vG3ALeLanW1UWCDhWjiyspRCovRqfnlHZThVy-qOKW7chN5u3-G">
-                <div class="icon manyas-myo-icon"></div>
-                <span>Manyas MYO</span>
-            </div>
-            <div class="system-button" data-url="https://drive.google.com/drive/folders/16zvos9NdCSDx-YZF1egTdB9wBByS7ygK51BA-IOzKHzsCXaVKHYlG4D9xj14MhbzyNmFpuMX">
-                <div class="icon gonen-myo-icon"></div>
-                <span>Gönen MYO</span>
-            </div>
-            <div class="system-button" data-url="https://drive.google.com/drive/folders/1D26Pcmer3vCRwHtgjMyDLMiyXppXBVyMjzf2-fnLAHggiPEje5OqyQh7xNw5w69wlMFjVWbE">
-                <div class="icon bandirma-myo-icon"></div>
-                <span>Bandırma MYO</span>
-            </div>
-            <div class="system-button" data-url="https://drive.google.com/drive/folders/1aPAoVuyzc14TVujADHvOrtoHV__sQ5UNDh9hbAHr9W6WaOXUCvWInSLpG-QCslAO9LUWeUJo">
-                <div class="icon maritime-myo-icon"></div>
-                <span>Denizcilik MYO</span>
-            </div>
-            <div class="system-button" data-url="https://drive.google.com/drive/folders/1SBCk4EUhkGFliXFfyJoIsJdF98le08PMqn2v-dfkQHikTsgb-SsyL_t3g0Pmc">
-                <div class="icon edincik-myo-icon"></div>
-                <span>Edincik MYO</span>
-            </div>
-        </div>
-
-        <div class="section other-systems" id="other-systems-section">
-            <div class="system-button" data-url="https://drive.google.com/drive/folders/1jSrb6uypTKJsfYBnC5_1uwocLaubOw2gwwj06WCBpTdrC7l3UETK67D-bUC0MJSkMOuX7b8S?usp=sharing">
-                <div class="icon building-icon"></div>
-                <span>Binalar/Talepler</span>
-            </div>
-            <div class="system-button" data-url="https://drive.google.com/drive/folders/1KnjaNFmmKqHedHci7bGuPCFabh2sm-lMOGjAhTQOPTch2UKm_1ifs0Htv3gLO-JJbKVRApEa?usp=sharing">
-                <div class="icon ups-icon"></div>
-                <span>UPS'ler</span>
-            </div>
-            <div class="system-button" data-url="https://drive.google.com/drive/folders/1LQEMoJIGTYbt_H_AYLF9_TKcnLDfrtPrmDcvxDQ01R0VdeA8YJQWM8k0GNnN9ZTsLFZxkXoa?usp=sharing">
-                <div class="icon fire-icon"></div>
-                <span>Yangın</span>
-            </div>
-            <div class="system-button" data-url="https://drive.google.com/drive/folders/134Q0b-jeuilwSM-8No1sVo6T4U8qDJ3k5gHeZGtymAVqlgmy0eqq7oK3Y4UkA_V7jGG4E8ez?usp=sharing">
-                <div class="icon sliding-door-icon"></div>
-                <span>Kapılar</span>
-            </div>
-            <div class="system-button" data-url="https://drive.google.com/drive/folders/1Bq8BgeYdaxkzCyxzWDlGzQOeE9AKBURs?usp=sharing">
-                <div class="icon report-icon"></div>
-                <span>Raporlar</span>
-            </div>
-            <div class="system-button electric-grid" data-url="https://drive.google.com/drive/folders/1L5odcO5nLoAjRGmiUaYsgdKnxJKM1w9NmXtfho5kcJT9ZDjpsce1Lu3ZJsbajZ6vzNnvxeqT?usp=sharing">
-                <div class="icon">
-                    <svg class="electric-icon" viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg">
-                        <path class="tower" d="M40 20 L40 60 M30 30 L50 30 M30 40 L50 40" />
-                        <path class="power-line" d="M10 40 L70 40" />
-                        <circle class="spark" cx="60" cy="50" r="3" />
-                    </svg>
-                </div>
-                <span>Elektrik Yerleşkesi</span>
-            </div>
-            <div class="system-button" data-url="/klima-santrali">
-                <div class="icon klima">
-                    <div class="fan-blade" style="--angle: 0deg;"></div>
-                    <div class="fan-blade" style="--angle: 120deg;"></div>
-                    <div class="fan-blade" style="--angle: 240deg;"></div>
-                </div>
-                <span>Klima Santrali</span>
-            </div>
-            <div class="system-button" data-url="https://drive.google.com/drive/folders/1pfgWPMp47KvKXnjopyANH5xGY5imP3UFpo2LglZYYeg1R5mLdNaS7qNT3ltlFcfVZNesUujT?usp=sharing">
-                <div class="icon elevator">
-                    <div class="elevator-shaft">
-                        <div class="elevator-car"></div>
-                    </div>
-                </div>
-                <span>Asansörler</span>
-            </div>
-            <div class="system-button" data-url="https://drive.google.com/drive/folders/1LeiOLaTU8JixvIOjldPiJVTLPgsZt8t0?usp=drive_link">
-                <div class="icon project-icon"></div>
-                <span>Projeler</span>
+        <!-- İçerik alanı - giriş yapıldığında gösterilir -->
+        <div class="content-area" id="content-area">
+            <h3>Hoş Geldiniz!</h3>
+            <p>Başarılı bir şekilde giriş yaptınız. Bu alan sadece yetkili kullanıcılar tarafından görülebilir.</p>
+            
+            <!-- Buraya kendi içeriğinizi ekleyebilirsiniz -->
+            <div id="user-content">
+                <!-- Dinamik içerik buraya gelecek -->
             </div>
         </div>
     </div>
-    
-    <script src="script.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // HTML elementlerini seç
+            const profileInfo = document.getElementById('profile-info');
+            const profilePicture = document.getElementById('profile-picture');
+            const profileName = document.getElementById('profile-name');
+            const profileEmail = document.getElementById('profile-email');
+            const logoutButton = document.getElementById('logout-button');
+            const accessDeniedMessage = document.getElementById('access-denied');
+            const googleSignInButton = document.querySelector('.g_id_signin');
+            const contentArea = document.getElementById('content-area');
+
+            // --- İZİN VERİLEN E-POSTA ADRESLERİ LİSTESİ ---
+            const allowedEmails = [
+                "mahmutkilicankara@gmail.com",
+                "ikinci.izinli.kullanici@example.com",
+                "ucuncu.kullanici@gmail.com"
+            ];
+            // --------------------------------------------------------
+
+            // Global fonksiyon: Google kimlik bilgileri yanıtını işler
+            window.handleCredentialResponse = (response) => {
+                const idToken = response.credential;
+                const decodedToken = parseJwt(idToken);
+
+                if (decodedToken && decodedToken.email) {
+                    const userEmail = decodedToken.email.toLowerCase().trim();
+
+                    if (allowedEmails.includes(userEmail)) {
+                        // Yetkili kullanıcı
+                        profilePicture.src = decodedToken.picture;
+                        profileName.textContent = decodedToken.name;
+                        profileEmail.textContent = userEmail;
+
+                        // localStorage yerine sessionStorage kullanabiliriz
+                        sessionStorage.setItem('google_id_token', idToken);
+                        sessionStorage.setItem('user_email', userEmail);
+
+                        displayAuthorizedUI(decodedToken);
+                        google.accounts.id.cancel();
+                    } else {
+                        // Yetkisiz kullanıcı
+                        console.warn("Yetkisiz e-posta: " + userEmail);
+                        showAccessDenied("'" + userEmail + "' ile bu içeriğe erişim izniniz yok. Lütfen yetkili bir hesapla giriş yapın.");
+                        resetUI();
+                        
+                        sessionStorage.removeItem('google_id_token');
+                        sessionStorage.removeItem('user_email');
+                        google.accounts.id.cancel();
+                    }
+                } else {
+                    console.error("Kimlik doğrulama başarısız.");
+                    showAccessDenied("Giriş başarısız oldu. Lütfen tekrar deneyin.");
+                    resetUI();
+                }
+            };
+
+            // JWT çözümleme fonksiyonu
+            function parseJwt(token) {
+                try {
+                    const base64Url = token.split('.')[1];
+                    const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+                    const jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
+                        return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+                    }).join(''));
+                    return JSON.parse(jsonPayload);
+                } catch (e) {
+                    console.error("JWT çözümleme hatası:", e);
+                    return null;
+                }
+            }
+
+            // Erişim engellendi mesajını göster
+            function showAccessDenied(message) {
+                accessDeniedMessage.textContent = message;
+                accessDeniedMessage.style.display = 'block';
+                if (window.accessDeniedTimeout) {
+                    clearTimeout(window.accessDeniedTimeout);
+                }
+                window.accessDeniedTimeout = setTimeout(() => {
+                    accessDeniedMessage.style.display = 'none';
+                    window.accessDeniedTimeout = null;
+                }, 8000);
+            }
+
+            // Yetkili kullanıcı UI'ını göster
+            function displayAuthorizedUI(decodedToken) {
+                profileInfo.style.display = 'flex';
+                googleSignInButton.style.display = 'none';
+                accessDeniedMessage.style.display = 'none';
+                contentArea.style.display = 'block';
+
+                // Burada özel içerik ekleyebilirsiniz
+                document.getElementById('user-content').innerHTML = `
+                    <p><strong>Kullanıcı Bilgileri:</strong></p>
+                    <p>Ad: ${decodedToken.name}</p>
+                    <p>E-posta: ${decodedToken.email}</p>
+                    <p>Giriş Zamanı: ${new Date().toLocaleString('tr-TR')}</p>
+                `;
+            }
+
+            // UI'ı başlangıç durumuna sıfırla
+            function resetUI() {
+                profileInfo.style.display = 'none';
+                googleSignInButton.style.display = 'block';
+                accessDeniedMessage.style.display = 'none';
+                contentArea.style.display = 'none';
+            }
+
+            // Çıkış yap butonu
+            logoutButton.addEventListener('click', () => {
+                google.accounts.id.disableAutoSelect();
+                sessionStorage.removeItem('google_id_token');
+                sessionStorage.removeItem('user_email');
+                resetUI();
+                alert("Başarıyla çıkış yaptınız.");
+                google.accounts.id.prompt();
+            });
+
+            // Sayfa yüklendiğinde oturum kontrolü
+            function initializeAuthFlow() {
+                const savedToken = sessionStorage.getItem('google_id_token');
+                const savedEmail = sessionStorage.getItem('user_email');
+                
+                if (savedToken && savedEmail) {
+                    const decodedToken = parseJwt(savedToken);
+                    const isTokenExpired = decodedToken && decodedToken.exp * 1000 < Date.now();
+
+                    if (decodedToken && !isTokenExpired && allowedEmails.includes(savedEmail)) {
+                        console.log("Kayıtlı ve geçerli oturum bulundu.");
+                        profilePicture.src = decodedToken.picture;
+                        profileName.textContent = decodedToken.name;
+                        profileEmail.textContent = savedEmail;
+                        displayAuthorizedUI(decodedToken);
+                    } else {
+                        console.warn("Kayıtlı oturum geçersiz veya süresi dolmuş.");
+                        sessionStorage.removeItem('google_id_token');
+                        sessionStorage.removeItem('user_email');
+                        resetUI();
+                        google.accounts.id.prompt();
+                    }
+                } else {
+                    console.log("Kayıtlı oturum bulunamadı.");
+                    resetUI();
+                    google.accounts.id.prompt();
+                }
+            }
+
+            // Uygulamayı başlat
+            initializeAuthFlow();
+
+            // Global erişim için fonksiyonları dışa aktar (isteğe bağlı)
+            window.loginSystem = {
+                isLoggedIn: () => !!sessionStorage.getItem('google_id_token'),
+                getCurrentUser: () => {
+                    const token = sessionStorage.getItem('google_id_token');
+                    return token ? parseJwt(token) : null;
+                },
+                logout: () => logoutButton.click()
+            };
+        });
+    </script>
 </body>
 </html>
