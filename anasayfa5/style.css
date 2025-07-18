@@ -171,7 +171,23 @@ body {
     border-radius: 10px; /* Köşeleri yuvarla (iframe konteyneri yerine burada da olabilir) */
     border: 1px solid #ddd; /* Çerçeve (iframe konteyneri yerine burada da olabilir) */
 }
+#loading-text {
+    color: #555;
+    font-size: 14px;
+    padding: 10px;
+    text-align: center;
+    margin: 10px 0;
+}
 
+#access-denied {
+    color: #d32f2f;
+    background-color: #fde0e0;
+    padding: 12px;
+    border-radius: 4px;
+    margin: 10px 0;
+    display: none;
+    font-weight: bold;
+}
 /* .search-bar-wide üzerine gelindiğinde transform olmasın */
 .search-bar-wide:hover {
     transform: none;
