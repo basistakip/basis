@@ -459,7 +459,25 @@ body {
     left: 8px;
     box-shadow: 0 2px 5px rgba(0,0,0,0.1);
 }
+#auth-loading {
+    color: #555;
+    padding: 10px;
+    text-align: center;
+    font-weight: bold;
+    display: none;
+    margin: 10px 0;
+}
 
+#access-denied {
+    color: #d32f2f;
+    background: #fde0e0;
+    padding: 12px;
+    border-radius: 4px;
+    text-align: center;
+    font-weight: bold;
+    display: none;
+    margin: 10px 0;
+}
 .inventory-items {
     position: absolute;
     width: 100%;
