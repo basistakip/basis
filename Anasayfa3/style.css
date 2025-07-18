@@ -62,8 +62,6 @@ body {
     top: -8px; /* Body margin'ini compensate eder */
 }
 
-
-
 .section {
     padding: 20px;
     border: 1px solid #e0e0e0; /* Bölüm çerçevesi */
@@ -512,97 +510,6 @@ body {
 }
 
 /* Yeni ikon stilleri */
-.basis-drive-icon::before {
-    content: "🚀";
-    font-size: 36px;
-    line-height: 1;
-    color: #FF5722;
-}
-.map-icon::before {
-    content: "🗺️";  /* Harita emojisi */
-    font-size: 36px; /* Aynı boyut */
-    line-height: 1;  /* Aynı satır yüksekliği */
-    color: #4CAF50;  /* Harita temasına uygun yeşil */
-}
-.evrak-icon::before {
-    content: "📄"; /* Dosya ikonu */
-    font-size: 36px;
-    line-height: 1;
-    color: #795548;
-}
-
-.rehber-icon::before {
-    content: "📘";
-    font-size: 36px;
-    line-height: 1;
-    color: #2196F3;
-}
-
-.banu-icon::before {
-    content: "🏫";
-    font-size: 36px;
-    line-height: 1;
-    color: #673AB7;
-}
-
-.ubys-icon::before {
-    content: "💼";
-    font-size: 36px;
-    line-height: 1;
-    color: #009688;
-}
-
-.email-icon::before {
-    content: "✉️";
-    font-size: 36px;
-    line-height: 1;
-    color: #FF9800;
-}
-
-.talep-icon::before {
-    content: "📝";
-    font-size: 36px;
-    line-height: 1;
-    color: #E91E63;
-}
-
-.otomasyon-icon::before {
-    content: "💡";
-    font-size: 36px;
-    line-height: 1;
-    color: #FFC107;
-}
-
-.destek-icon::before {
-    content: "🛠️";
-    font-size: 36px;
-    line-height: 1;
-    color: #607D8B;
-}
-
-.kisisel-icon::before {
-    content: "👤";
-    font-size: 36px;
-    line-height: 1;
-    color: #4CAF50;
-}
-
-.egitim-icon::before {
-    content: "🎓";
-    font-size: 36px;
-    line-height: 1;
-    color: #3F51B5;
-}
-
-.teknik-icon::before {
-    content: "📚";
-    font-size: 36px;
-    line-height: 1;
-    color: #9C27B0;
-}
-
-/* YENİ İKON TANIMLARI */
-/* BASIS DRIVE BUTON STİLİ */
 .basis-drive-icon::before {
     content: "📂";
     font-size: 36px;
