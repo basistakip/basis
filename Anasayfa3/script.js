@@ -8,10 +8,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const logoutButton = document.getElementById('logout-button');
     const accessDeniedMessage = document.getElementById('access-denied');
     const googleSignInButton = document.querySelector('.g_id_signin');
+    const mainSystemsSection = document.getElementById('main-systems-section');
+    const otherSystemsSection = document.getElementById('other-systems-section');
 
     // --- İZİN VERİLEN E-POSTA ADRESLERİ LİSTESİ ---
     const allowedEmails = [
-        "mahmutkilicankara@gmail.com", // Kendi e-postanızı buraya ekleyin
+        "mahmutkilicankara@gmail.com",
         "ikinci.izinli.kullanici@example.com",
         "ucuncu.kullanici@gmail.com"
     ];
@@ -19,60 +21,50 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Fonksiyon: Google kimlik bilgileri yanıtını işler
     window.handleCredentialResponse = (response) => {
-        console.log("handleCredentialResponse çağrıldı.");
         const idToken = response.credential;
         const decodedToken = parseJwt(idToken);
 
         if (decodedToken && decodedToken.email) {
             const userEmail = decodedToken.email.toLowerCase().trim();
 
-            console.log("Giriş denemesi e-postası: " + userEmail);
-            console.log("E-posta izin verilenler listesinde mi? " + allowedEmails.includes(userEmail));
-
             if (allowedEmails.includes(userEmail)) {
-                console.log("E-posta yetkili: " + userEmail);
+                // Yetkili kullanıcı
                 profilePicture.src = decodedToken.picture;
                 profileName.textContent = decodedToken.name;
                 profileEmail.textContent = userEmail;
 
                 localStorage.setItem('google_id_token', idToken);
-                localStorage.setItem('user_email', userEmail); 
+                localStorage.setItem('user_email', userEmail);
 
                 displayAuthorizedUI(decodedToken);
-                google.accounts.id.cancel(); // Başarılı girişten sonra One-Tap'ı kapat
-            }  else {
-    console.warn("Yetkisiz e-posta: " + userEmail + ". Erişim reddedildi.");
-    
-    // YETKİSİZ KULLANICI İÇİN ARAYÜZ YÖNETİMİ
-    // Profili ve çıkış butonunu gizle
-    profileInfo.style.display = 'none';
-    logoutButton.style.display = 'none';
+                google.accounts.id.cancel();
+            } else {
+                // *** YETKİSİZ KULLANICI DURUMU: MESAJIN GÖRÜNMESİNİ SAĞLA ***
+                console.warn("Yetkisiz e-posta: " + userEmail);
 
-    // Google giriş butonunu görünür yap (kullanıcının tekrar denemesini sağlamak için)
-    googleSignInButton.style.display = 'block';
+                // UI'ı sadece gerekli kısımları gizleyerek sıfırla
+                profileInfo.style.display = 'none';
+                logoutButton.style.display = 'none';
+                googleSignInButton.style.display = 'block';
 
-    // İçeriği gizle
-    document.getElementById('main-systems-section').style.display = 'none';
-    document.getElementById('other-systems-section').style.display = 'none';
-    
-    // Uyarı mesajını göster ve içeriği kilitli hale getir
-    showAccessDenied("'" + userEmail + "' ile bu içeriğe erişim izniniz yok. Lütfen yetkili bir hesapla giriş yapın.");
-    
-    // Linklerin çalışmasını engelle (butonları pasif hale getir)
-    systemButtons.forEach(button => {
-        button.style.pointerEvents = 'none';
-        button.style.opacity = '0.5';
-    });
+                mainSystemsSection.style.display = 'none';
+                otherSystemsSection.style.display = 'none';
 
-    localStorage.removeItem('google_id_token');
-    localStorage.removeItem('user_email');
-    google.accounts.id.cancel();
-}
+                systemButtons.forEach(button => {
+                    button.style.pointerEvents = 'none';
+                    button.style.opacity = '0.5';
+                });
+
+                // Hata mesajını göster
+                showAccessDenied("'" + userEmail + "' ile bu içeriğe erişim izniniz yok. Lütfen yetkili bir hesapla giriş yapın.");
+
+                localStorage.removeItem('google_id_token');
+                localStorage.removeItem('user_email');
+                google.accounts.id.cancel();
+            }
         } else {
-            console.error("Kimlik doğrulama başarısız: E-posta bulunamadı veya token geçersiz.");
+            console.error("Kimlik doğrulama başarısız.");
             showAccessDenied("Giriş başarısız oldu. Lütfen tekrar deneyin.");
-            localStorage.removeItem('google_id_token');
-            localStorage.removeItem('user_email');
             resetUI();
         }
     };
@@ -96,97 +88,83 @@ document.addEventListener('DOMContentLoaded', () => {
     function showAccessDenied(message) {
         accessDeniedMessage.textContent = message;
         accessDeniedMessage.style.display = 'block';
-        console.log("Erişim engellendi mesajı gösterildi: " + message);
-
         if (window.accessDeniedTimeout) {
             clearTimeout(window.accessDeniedTimeout);
         }
         window.accessDeniedTimeout = setTimeout(() => {
-        accessDeniedMessage.style.display = 'none';
+            accessDeniedMessage.style.display = 'none';
             window.accessDeniedTimeout = null;
-            console.log("Erişim engellendi mesajı gizlendi.");
-        }, 8000); // 8 saniye sonra gizle
+        }, 8000);
     }
 
     // Arayüzü yetkili kullanıcıya göre ayarla
     function displayAuthorizedUI(decodedToken) {
         profileInfo.style.display = 'flex';
         logoutButton.style.display = 'block';
-        googleSignInButton.style.display = 'none'; // Giriş butonu gizli kalmalı
-        accessDeniedMessage.style.display = 'none'; // Yetkili kullanıcıda hata mesajı gizli olmalı
+        googleSignInButton.style.display = 'none';
+        accessDeniedMessage.style.display = 'none';
+
+        mainSystemsSection.style.display = 'grid';
+        otherSystemsSection.style.display = 'grid';
 
         systemButtons.forEach(button => {
             button.style.pointerEvents = 'auto';
             button.style.opacity = '1';
         });
-        
-        document.getElementById('main-systems-section').style.display = 'grid';
-        document.getElementById('other-systems-section').style.display = 'grid';
     }
 
     // Çıkış yap butonu dinleyicisi
     logoutButton.addEventListener('click', () => {
-        google.accounts.id.disableAutoSelect(); 
+        google.accounts.id.disableAutoSelect();
         localStorage.removeItem('google_id_token');
         localStorage.removeItem('user_email');
-        
-        resetUI(); // Arayüzü sıfırla, bu durumda giriş butonu görünecek
+        resetUI();
         alert("Başarıyla çıkış yaptınız. Tekrar giriş yapmak için lütfen Google ile giriş yapın.");
-        google.accounts.id.prompt(); // One-Tap'ı tekrar tetikle
+        google.accounts.id.prompt();
     });
 
-    // Arayüzü başlangıç durumuna sıfırla (yani giriş yapılmamış durum)
-    // showGoogleSignIn parametresi, Google giriş butonunun gösterilip gösterilmeyeceğini kontrol eder.
-    function resetUI(hideGoogleSignIn = false) { // Varsayılan olarak gösterme açıktır
+    // Arayüzü başlangıç durumuna sıfırla
+    function resetUI() {
         profileInfo.style.display = 'none';
         logoutButton.style.display = 'none';
-        
-        // Sadece hideGoogleSignIn true ise Google giriş butonunu gizle
-        if (hideGoogleSignIn) {
-            googleSignInButton.style.display = 'none'; 
-        } else {
-            googleSignInButton.style.display = 'block'; // Varsayılan olarak göster
-        }
-        
-        accessDeniedMessage.style.display = 'none'; // resetUI çağrıldığında mesajı gizle
+        googleSignInButton.style.display = 'block';
+        accessDeniedMessage.style.display = 'none';
 
-        document.getElementById('main-systems-section').style.display = 'none';
-        document.getElementById('other-systems-section').style.display = 'none';
+        mainSystemsSection.style.display = 'none';
+        otherSystemsSection.style.display = 'none';
 
         systemButtons.forEach(button => {
             button.style.pointerEvents = 'none';
             button.style.opacity = '0.5';
         });
-        console.log("UI sıfırlandı.");
     }
 
     // --- Sayfa Yüklendiğinde Oturum Kontrol ve Başlatma Mantığı ---
     function initializeAuthFlow() {
         const savedToken = localStorage.getItem('google_id_token');
         const savedEmail = localStorage.getItem('user_email');
-
+        
         if (savedToken && savedEmail) {
             const decodedToken = parseJwt(savedToken);
             const isTokenExpired = decodedToken && decodedToken.exp * 1000 < Date.now();
 
             if (decodedToken && !isTokenExpired && allowedEmails.includes(savedEmail)) {
-                console.log("Kayıtlı ve geçerli oturum bulundu: " + savedEmail);
+                console.log("Kayıtlı ve geçerli oturum bulundu.");
                 profilePicture.src = decodedToken.picture;
                 profileName.textContent = decodedToken.name;
                 profileEmail.textContent = savedEmail;
                 displayAuthorizedUI(decodedToken);
-                // Oturum açık olduğu için One-Tap'ı tetikleme!
             } else {
                 console.warn("Kayıtlı oturum geçersiz, süresi dolmuş veya yetkisiz. Temizleniyor.");
                 localStorage.removeItem('google_id_token');
                 localStorage.removeItem('user_email');
-                resetUI(); // Yetkisizse normal sıfırlama, giriş butonu görünecek
-                google.accounts.id.prompt(); 
+                resetUI();
+                google.accounts.id.prompt();
             }
         } else {
             console.log("Kayıtlı oturum bulunamadı. Google One-Tap tetikleniyor.");
-            resetUI(); // Oturum yoksa normal sıfırlama, giriş butonu görünecek
-            google.accounts.id.prompt(); // One-Tap pop-up'ını tetikle
+            resetUI();
+            google.accounts.id.prompt();
         }
     }
 
