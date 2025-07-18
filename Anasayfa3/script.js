@@ -1,4 +1,3 @@
-
 /* Yetkili e-posta adresleri listesi */
 const authorizedEmails = [
     'basis_bilgi_islem@example.com', /* Örnek yetkili e-posta */
