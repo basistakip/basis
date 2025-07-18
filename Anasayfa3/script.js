@@ -3,7 +3,7 @@ const authorizedEmails = [
     'basis_bilgi_islem@example.com', /* Örnek yetkili e-posta */
  'yapiisleribanu@gmail.com',
      'mahmutkilicankara@gmail.com',
-     'mahmutkilic@bandirma.edu.t',
+     'mahmutkilic@bandirma.edu.tr',
     'ikincimevcut@gmail.com', /* Örnek ikinci yetkili e-posta */
     'banuyapiisleri@gmail.com' /* Örnek e-posta: Lütfen kendi e-postanızla değiştirin */
 ];
