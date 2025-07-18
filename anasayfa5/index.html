@@ -1,1 +1,290 @@
 
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistem Kontrol Paneli</title>
+    <link rel="shortcut icon" type="png" href="resimler/basis.png">
+    <link rel="stylesheet" href="style.css">
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+</head>
+<body>
+
+    <div class="control-panel">
+        <div class="university-header">
+            <h2>BASİS/ANASAYFA</h2>
+        </div>
+
+        <div class="university-header auth-section" style="background-color: #f0f2f5; color: #333; padding: 10px 0; border-radius: 5px; box-shadow: none;">
+            <div id="g_id_onload"
+                 data-client_id="387277586108-8m32c8tdfb0oemnr5kuv2fao6rtm35c0.apps.googleusercontent.com" 
+                 data-context="signin"
+                 data-ux_mode="popup"
+                 data-callback="handleCredentialResponse"
+                 data-auto_prompt="false" 
+                 data-auto_select="true">
+            </div>
+            
+            <div class="g_id_signin" id="google-signin-button"
+                 data-type="standard"
+                 data-shape="rectangular"
+                 data-theme="outline"
+                 data-text="signin_with"
+                 data-size="large"
+                 data-logo_alignment="left">
+            </div>
+
+            <div id="profile-info" class="profile-info" style="display: none;">
+                <div class="profile-container">
+                    <img id="profile-picture" src="" alt="Profil Resmi" crossorigin="anonymous">
+                    <div class="profile-text">
+                        <span id="profile-name" style="font-weight: bold;"></span>
+                        <span id="profile-email" style="font-size: 0.9em; color: #555;"></span>
+                    </div>
+                </div>
+                <button id="logout-button" class="logout-btn">Çıkış Yap</button>
+            </div>
+            <p id="access-denied" class="access-denied-message" style="display: none;"></p>
+        </div>
+
+        <div class="section main-systems" id="main-systems-section">
+            <div class="system-button" data-url="https://basistakip.github.io/basis/index.html">
+                <div class="icon banu-icon"></div>
+                <span>BASİS ANASAYFA</span>
+            </div>
+            <div class="system-button search-bar-wide" data-url="/sistem-ara">
+                <div class="search-iframe-container">
+                    <iframe
+                        src="https://basistakip.github.io/basis/aramacubugu2.html"
+                        width="100%"
+                        height="80px"
+                        allowfullscreen
+                        loading="lazy"
+                        referrerpolicy="no-referrer-when-downgrade"
+                        style="border: none;">
+                    </iframe>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Diğer sistemler bölümü -->
+        <div class="section other-systems" id="other-systems-section" style="display: none;">
+            <!-- İçerik dinamik olarak yüklenecek -->
+        </div>
+    </div>
+    
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        // Element referansları
+        const elements = {
+            systemButtons: document.querySelectorAll('.system-button'),
+            profileInfo: document.getElementById('profile-info'),
+            profilePicture: document.getElementById('profile-picture'),
+            profileName: document.getElementById('profile-name'),
+            profileEmail: document.getElementById('profile-email'),
+            logoutButton: document.getElementById('logout-button'),
+            accessDeniedMessage: document.getElementById('access-denied'),
+            googleSignInButton: document.querySelector('.g_id_signin'),
+            mainSystemsSection: document.getElementById('main-systems-section'),
+            otherSystemsSection: document.getElementById('other-systems-section'),
+            authSection: document.querySelector('.auth-section')
+        };
+
+        // Yapılandırma
+        const config = {
+            allowedEmails: [
+                "mahmutkilicankara@gmail.com",
+                "ikinci.izinli.kullanici@example.com",
+                "ucuncu.kullanici@gmail.com"
+            ],
+            sessionTimeout: 30 * 60 * 1000 // 30 dakika
+        };
+
+        // Google API kontrolü
+        function checkGoogleAPI() {
+            return new Promise((resolve) => {
+                const checkInterval = setInterval(() => {
+                    if (typeof google !== 'undefined' && google.accounts && google.accounts.id) {
+                        clearInterval(checkInterval);
+                        resolve(true);
+                    }
+                }, 100);
+                
+                setTimeout(() => {
+                    clearInterval(checkInterval);
+                    resolve(false);
+                }, 5000);
+            });
+        }
+
+        // JWT decode
+        function parseJwt(token) {
+            try {
+                const base64Url = token.split('.')[1];
+                const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+                const jsonPayload = decodeURIComponent(atob(base64).split('').map(c => 
+                    '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2)).join(''));
+                return JSON.parse(jsonPayload);
+            } catch (e) {
+                console.error("JWT çözümleme hatası:", e);
+                return null;
+            }
+        }
+
+        // Token geçerlilik kontrolü
+        function isTokenValid(token) {
+            if (!token) return false;
+            const decoded = parseJwt(token);
+            return decoded && decoded.exp * 1000 > Date.now();
+        }
+
+        // Yetkili arayüz
+        function displayAuthorizedUI(userData) {
+            elements.profilePicture.src = userData.picture;
+            elements.profileName.textContent = userData.name;
+            elements.profileEmail.textContent = userData.email;
+            
+            elements.profileInfo.style.display = 'flex';
+            elements.logoutButton.style.display = 'block';
+            elements.googleSignInButton.style.display = 'none';
+            elements.accessDeniedMessage.style.display = 'none';
+            
+            elements.mainSystemsSection.style.display = 'grid';
+            elements.otherSystemsSection.style.display = 'grid';
+            
+            elements.systemButtons.forEach(button => {
+                button.style.pointerEvents = 'auto';
+                button.style.opacity = '1';
+            });
+        }
+
+        // Arayüzü sıfırla
+        function resetUI() {
+            elements.profileInfo.style.display = 'none';
+            elements.logoutButton.style.display = 'none';
+            elements.googleSignInButton.style.display = 'block';
+            elements.accessDeniedMessage.style.display = 'none';
+            
+            elements.mainSystemsSection.style.display = 'none';
+            elements.otherSystemsSection.style.display = 'none';
+            
+            elements.systemButtons.forEach(button => {
+                button.style.pointerEvents = 'none';
+                button.style.opacity = '0.5';
+            });
+        }
+
+        // Erişim reddedildi mesajı
+        function showAccessDenied(message) {
+            elements.accessDeniedMessage.textContent = message;
+            elements.accessDeniedMessage.style.display = 'block';
+            
+            if (window.accessDeniedTimeout) {
+                clearTimeout(window.accessDeniedTimeout);
+            }
+            
+            window.accessDeniedTimeout = setTimeout(() => {
+                elements.accessDeniedMessage.style.display = 'none';
+            }, 8000);
+        }
+
+        // Oturum yönetimi
+        async function initializeAuth() {
+            const isGoogleAPILoaded = await checkGoogleAPI();
+            if (!isGoogleAPILoaded) {
+                showAccessDenied("Sistem geçici bir sorun yaşıyor. Lütfen daha sonra tekrar deneyin.");
+                return;
+            }
+
+            const savedToken = localStorage.getItem('google_id_token');
+            const savedEmail = localStorage.getItem('user_email');
+            
+            if (savedToken && savedEmail && isTokenValid(savedToken)) {
+                const decodedToken = parseJwt(savedToken);
+                if (decodedToken && config.allowedEmails.includes(savedEmail)) {
+                    displayAuthorizedUI(decodedToken);
+                    return;
+                }
+            }
+            
+            // Geçersiz oturum verilerini temizle
+            localStorage.removeItem('google_id_token');
+            localStorage.removeItem('user_email');
+            resetUI();
+            google.accounts.id.prompt();
+        }
+
+        // Google yanıt işleyici
+        window.handleCredentialResponse = async (response) => {
+            try {
+                if (!response || !response.credential) {
+                    throw new Error("Geçersiz yanıt");
+                }
+
+                const decodedToken = parseJwt(response.credential);
+                if (!decodedToken || !decodedToken.email) {
+                    throw new Error("Geçersiz token");
+                }
+
+                const userEmail = decodedToken.email.toLowerCase().trim();
+                
+                if (config.allowedEmails.includes(userEmail)) {
+                    localStorage.setItem('google_id_token', response.credential);
+                    localStorage.setItem('user_email', userEmail);
+                    displayAuthorizedUI(decodedToken);
+                } else {
+                    showAccessDenied(`'${userEmail}' ile erişim izniniz yok.`);
+                    resetUI();
+                }
+            } catch (error) {
+                console.error("Giriş hatası:", error);
+                showAccessDenied("Giriş sırasında bir hata oluştu. Lütfen tekrar deneyin.");
+                resetUI();
+            }
+        };
+
+        // Çıkış işlemi
+        elements.logoutButton.addEventListener('click', () => {
+            if (typeof google !== 'undefined' && google.accounts && google.accounts.id) {
+                google.accounts.id.disableAutoSelect();
+            }
+            
+            localStorage.removeItem('google_id_token');
+            localStorage.removeItem('user_email');
+            resetUI();
+            
+            setTimeout(() => {
+                if (typeof google !== 'undefined' && google.accounts && google.accounts.id) {
+                    google.accounts.id.prompt();
+                }
+            }, 1000);
+        });
+
+        // Sistem butonlarına tıklama
+        elements.systemButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const url = button.dataset.url;
+                if (url) {
+                    window.open(url, '_blank', 'noopener,noreferrer');
+                }
+            });
+        });
+
+        // Oturum zaman aşımı kontrolü
+        setInterval(() => {
+            const token = localStorage.getItem('google_id_token');
+            if (token && !isTokenValid(token)) {
+                localStorage.removeItem('google_id_token');
+                localStorage.removeItem('user_email');
+                resetUI();
+                showAccessDenied("Oturum süreniz doldu. Lütfen tekrar giriş yapın.");
+            }
+        }, 60000); // Her dakika kontrol
+
+        // Uygulamayı başlat
+        initializeAuth();
+    });
+    </script>
+</body>
+</html>
