@@ -1,4 +1,4 @@
-   body {
+ body {
             display: flex;
             justify-content: center;
             align-items: center;
@@ -147,3 +147,1309 @@
                 text-align: center;
             }
         }
+
+
+
+/* TEMEL STİLLER    display: flex; */
+body {
+  
+       justify-content: center;
+    align-items: center;
+
+    min-height: 100vh;
+    background: #f0f2f5; /* Açık gri arkaplan */
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+
+
+
+
+
+
+
+ /* aşağısı sayaçlar ve yanıp sönme  */
+
+/* ========== GERİ SAYIM PANELİ STİLLERİ ========== */
+
+.counter-container {
+    display: grid; /* Grid layout kullanımı */
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); /* Esnek grid yapısı - minimum 250px, maksimum eşit dağılım */
+    gap: 15px; /* Kutular arası boşluk */
+    margin-top: 20px; /* Üst boşluk eklendi */
+}
+
+.counter {
+    padding: 20px; /* İç boşluk */
+    border: 2px solid #e0e0e0; /* Kenarlık */
+    border-radius: 10px; /* Köşe yuvarlama */
+    background: #fdfdfd; /* Arkaplan rengi */
+    text-align: center; /* Metin ortalaması */
+    transition: all 0.3s; /* Geçiş efekti süresi */
+    min-height: 120px; /* Minimum yükseklik */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08); /* Gölge efekti */
+}
+
+.counter p {
+    margin: 10px 0; /* Paragraf boşlukları */
+    font-size: 1.1em; /* Yazı boyutu */
+    color: #333; /* Yazı rengi */
+}
+
+.counter p:first-child {
+    font-weight: bold; /* Kalın yazı */
+    color: #003366; /* Yazı rengi */
+    font-size: 1.2em; /* Büyük yazı boyutu */
+    margin-bottom: 10px; /* Alt boşluk */
+}
+
+.counter button {
+    margin-top: 15px; /* Üst boşluk */
+    padding: 8px 20px; /* İç boşluk */
+    background-color: #003366; /* Arkaplan rengi */
+    color: white; /* Yazı rengi */
+    border: none; /* Kenarlık kaldırma */
+    border-radius: 5px; /* Köşe yuvarlama */
+    cursor: pointer; /* İmleç tipi */
+    font-size: 0.9em; /* Yazı boyutu */
+    transition: background-color 0.3s ease; /* Renk geçiş efekti */
+}
+
+.counter button:hover {
+    background-color: #004080; /* Fare üzerine gelince arkaplan rengi */
+}
+
+/* TAM KIRMIZI YANIP SÖNME */
+.blinking-red {
+    animation: blink-red 0.7s infinite; /* Kırmızı yanıp sönme animasyonu */
+}
+
+@keyframes blink-red {
+    0%, 100% { 
+        background: #FF0000; /* Tam kırmızı arkaplan */
+        border-color: #FF0000; /* Kırmızı kenarlık */
+        color: white; /* Beyaz yazı */ 
+    }
+    50% { 
+        background: #FF6666; /* Açık kırmızı arkaplan */
+        border-color: #FF6666; /* Açık kırmızı kenarlık */
+        color: black; /* Siyah yazı */ 
+    }
+}
+
+/* TAM SARI YANIP SÖNME */
+.blinking-yellow {
+    animation: blink-yellow 0.7s infinite; /* Sarı yanıp sönme animasyonu */
+}
+
+@keyframes blink-yellow {
+    0%, 100% { 
+        background: #FFFF00; /* Tam sarı arkaplan */
+        border-color: #FFD700; /* Altın rengi kenarlık */
+        color: black; /* Siyah yazı */ 
+    }
+    50% { 
+        background: #FFEA00; /* Açık sarı arkaplan */
+        border-color: #FFC400; /* Açık altın rengi kenarlık */
+    }
+}
+/* ========== GERİ SAYIM PANELİ STİLLERİ biitiş ========== */
+
+
+/* RESPONSIVE AYARLAR */
+@media (max-width: 768px) {
+    .counter-container {
+        grid-template-columns: 1fr;
+    }
+    
+    .counter {
+        padding: 15px;
+        min-height: 100px;
+    }
+}
+
+@media (max-width: 480px) {
+    .counter p {
+        font-size: 1em;
+    }
+    
+    .counter p:first-child {
+        font-size: 1.1em;
+    }
+}
+ /* yukarısı sayaçlar ve yanıp sönme  */
+
+
+        /* Mobilde (767px'den küçük ekranlarda) haritayı gizle */
+           /* Harita konteynerını tam genişlik ve yükseklikte ayarla */
+        .map-container {
+            width: 100%;
+            height: 100vh; /* Viewport yüksekliği kadar (tam ekran) */
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Iframe'i tam kaplayacak şekilde ayarla */
+        .map-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: 0;
+        }
+
+        /* Mobilde gizle (isteğe bağlı) */
+        @media (max-width: 767px) {
+            .map-container {
+                display: none;
+            }
+        }
+
+
+/* UNIVERSITY HEADER - TAM SIKI DÜZEN */
+.university-header {
+    background-color: #003366;
+    color: white;
+  
+    padding: 4px 0; /* Minimum padding */
+    text-align: center;
+    border-radius: 0;
+    box-shadow: 0 1px 1px rgba(0,0,0,0.1); /* Daha hafif gölge */
+    width: 100%;
+    position: relative; /* Kenar boşluklarını kesin sıfırlamak için */
+    top: -20px; /* Varsayılan body margin'i dengelemek için */
+    margin-bottom: -25px; /* Aşağıdaki boşluğu sıfırlar */
+}
+
+.university-header h2 {
+    margin: 0;
+    padding: 0;
+    font-size: 1.5em;
+    font-weight: bold;
+    line-height: 1.1; /* Çok sıkışık görünmesin diye */
+    letter-spacing: 0.5px; /* Okunabilirlik için */
+}
+
+.card {
+    border: 1px solid #ccc;
+    border-top: none;
+    padding: 10px 15px 15px; /* Üst padding daha da azaltıldı */
+    margin: 0;
+    border-radius: 0 0 5px 5px;
+    box-shadow: none; /* Gölgeyi kaldırdık, header'ın gölgesi yeterli */
+    position: relative;
+    top: -8px; /* Body margin'ini compensate eder */
+}
+
+.control-panel {
+    display: flex;
+    flex-direction: column; /* Bölümleri dikey olarak sırala */
+    gap: 5px; /* Bölümler arası boşluk */
+    max-width: 1000px; /* Maksimum genişliği artırıldı */
+    width: 100%;
+    background: #ffffff; /* Ana panelin arkaplanı */
+    border-radius: 12px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    padding: 30px;
+}
+
+.section {
+    padding: 20px;
+    border: 1px solid #e0e0e0; /* Bölüm çerçevesi */
+    border-radius: 10px;
+    background: #fdfdfd; /* Bölüm içi arkaplan */
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+/* Arama bölümü için stil (artık .main-systems içinde) */
+.search-section {
+    display: block; /* Flex etkisini kaldır */
+    padding: 0;
+}
+
+/* Yeni iframe konteyneri için stiller */
+.search-iframe-container {
+    width: 100%;
+    height: 160px; /* Bu değeri artırdık (iki katına çıkarmak için 160px iyi bir başlangıç) */
+    /* max-width: 600px; */ /* Grid il kontrol ediliyor */
+    border: 1px solid #ddd; /* Arama çubuğunun önceki çerçevesine benzer */
+    border-radius: 10px; /* Köşeleri yuvarla */
+    /* overflow: hidden; */ /* Dikey taşmayı engelleme kaldırıldı */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05); /* Hafif bir gölge */
+    background-color: #ffffff; /* İframe yüklenirken görünen arka plan */
+}
+
+.search-iframe-container iframe {
+    display: block; /* Bazı tarayıcıların iframe altına eklediği boşluğu kaldırır */
+    height: 180px; /* Başlangıç yüksekliği */
+}
+
+.main-systems, .other-systems {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 20px;
+}
+/* Sistem butonları için temel stil */
+.system-button {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 25px 15px;
+    border-radius: 10px;
+    background: #ffffff; /* Normal durumda beyaz arkaplan */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+    cursor: pointer;
+    transition: all 0.3s ease; /* Tüm özellikler için geçiş efekti */
+    text-align: center;
+    min-height: 120px;
+    border: 1px solid #e0e0e0; /* Hafif bir border ekledik */
+}
+
+/* Hover durumunda stil değişiklikleri */
+.system-button:hover {
+    transform: translateY(-8px); /* Yukarı hareket */
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+    background-color: #e6f2ff; /* Açık mavi arkaplan */
+    border-color: #b3d1ff; /* Border rengini de uyumlu yapalım */
+}
+
+/* İkon container için hover efekti */
+.system-button:hover .icon {
+    background-color: #cce0ff; /* İkon arkaplanı biraz daha koyu */
+    transform: scale(1.1); /* İkonu biraz büyüt */
+}
+
+/* Metin rengi hover efekti */
+.system-button:hover span {
+    color: #0056b3;
+    font-weight: 700; /* Yazıyı biraz kalınlaştıralım */
+}
+
+/* Özel olarak generator-icon için ekstra stil */
+.generator-icon::before {
+    content: "⚡"; /* Şimşek ikonuna çevirdik */
+    font-size: 36px;
+    line-height: 1;
+    color: #FFC107;
+    transition: all 0.3s ease; /* İkon için de geçiş efekti */
+}
+
+/* Generator buton hover özel efekti */
+.system-button:hover .generator-icon::before {
+    color: #FF9800; /* Hover'da turuncuya dönsün */
+    transform: rotate(10deg); /* Hafif döndürme efekti */
+}
+
+.icon {
+    position: relative;
+    width: 60px;
+    height: 60px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #e6f2ff; /* İkonların arkasındaki hafif renkli daire */
+    border-radius: 50%;
+    box-shadow: inset 0 0 5px rgba(0,0,0,0.05);
+    overflow: hidden; /* İçerik taşmasını engellemek için */
+}
+
+
+/* En üst taraf sitil başlangıç */
+    /* CSS'iniz buraya veya style.css dosyanıza ekleyin */
+        /* Kontrol panelini ve içindeki ana bölümleri başlangıçta gizli tut 
+      
+      js içinde bunu önüne çift salaş at // initializeAuthFlow(); ve html içinde ki   display: none;  de kapat o zaman login ekranından kurtulursun
+      */
+    
+        .control-panel .section {
+             /* altdakini silersen logini okumaz 
+           display: none; */
+          
+          /* Sistem butonlarını ve diğer bölümleri gizle */
+        /*   display: block !important; Tüm bölümleri göster */
+        }
+
+        /* Giriş ve profil alanları için stil (örnek, stil.css'inizde daha detaylı olabilir) */
+        .university-header {
+            background-color: #007bff;
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 2px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        .profile-info {
+            display: flex;
+            align-items: center;
+            justify-content: center; /* Ortalamak için */
+            gap: 15px;
+            padding: 10px;
+            border-top: 1px solid #eee;
+            margin-top: 15px;
+            flex-wrap: wrap; /* Küçük ekranlarda alt alta gelmesi için */
+        }
+        .profile-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        #profile-picture {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid #007bff;
+        }
+        .profile-text {
+            display: flex;
+            flex-direction: column;
+            text-align: left; /* Metni sola hizala */
+        }
+        #logout-button {
+            background-color: #dc3545;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.9em;
+            transition: background-color 0.3s ease;
+        }
+        #logout-button:hover {
+            background-color: #c82333;
+        }
+        #access-denied {
+            color: red;
+            font-weight: bold;
+            margin-top: 15px;
+        }
+        /* Google giriş butonu ve One-Tap div'i için düzenleme */
+        .g_id_signin {
+            margin: 0 auto; /* Butonu ortalamak için */
+            display: inline-block; /* Ortalamak için gerekli */
+        }
+
+/* En üst taraf sitil bitiş */
+
+
+
+/* YENİ ARAMA ÇUBUĞU BUTONU STİLİ */
+.search-bar-wide {
+    /* Bu arama çubuğunun iki sütun kaplamasını sağlar */
+    grid-column: span 2; /* Burası anahtar kısım */
+    flex-direction: row; /* İçeriğin yatay hizalanması için */
+    justify-content: center; /* İç iframe'i ortala */
+    align-items: center;
+    padding: 10px; /* Biraz iç boşluk eklendi */
+    min-height: auto; /* Kendi yüksekliği iframe'den gelsin */
+    background: none; /* Arka planı kaldır, iframe konteyneri yönetsin */
+    box-shadow: none; /* Kendi gölgesi olmasın, iframe konteyneri yönetsin */
+    cursor: default; /* Hover efekti olmasın */
+    transition: none; /* Hover animasyonları olmasın */
+    border-radius: 10px; /* Köşeleri yuvarla (iframe konteyneri yerine burada da olabilir) */
+    border: 1px solid #ddd; /* Çerçeve (iframe konteyneri yerine burada da olabilir) */
+}
+
+/* .search-bar-wide üzerine gelindiğinde transform olmasın */
+.search-bar-wide:hover {
+    transform: none;
+    box-shadow: none;
+}
+
+/* YENİ İKON STİLLERİ (Basit CSS Çizimler/Temsiller) 🗺️ */
+
+.interaktifharita-icon::before {
+    content: "🗺️"; /* Bina ikonu */
+    font-size: 36px;
+    line-height: 1;
+    color: #8BC34A;
+}
+
+.project-icon::before {
+    content: "📋"; /* Pano veya belge ikonu gibi */
+    font-size: 36px;
+    line-height: 1;
+    color: #4CAF50;
+}
+
+.building-icon::before {
+    content: "🏢"; /* Bina ikonu */
+    font-size: 36px;
+    line-height: 1;
+    color: #8BC34A;
+}
+
+.ups-icon::before {
+    content: "🔋"; /* Şimşek veya pil ikonu */
+    font-size: 36px;
+    line-height: 1;
+    color: #FFC107;
+}
+
+.fire-icon::before {
+    content: "🔥"; /* Ateş ikonu */
+    font-size: 36px;
+    line-height: 1;
+    color: #FF5722;
+}
+.whatsapp-icon::before {
+    content: "🟩"; /* DUYURU ikonu */
+    font-size: 36px;
+    line-height: 1;
+    color: #00BCD4;
+}
+.duyuru-icon::before {
+    content: "📢"; /* DUYURU ikonu */
+    font-size: 36px;
+    line-height: 1;
+    color: #00BCD4;
+}
+.sliding-door-icon::before {
+    content: "↔️"; /* Oklar ile kayar kapı temsili */
+    font-size: 36px;
+    line-height: 1;
+    color: #607D8B;
+}
+
+.report-icon::before {
+    content: "📊"; /* Grafik veya rapor ikonu */
+    font-size: 36px;
+    line-height: 1;
+    color: #00BCD4;
+}
+
+.software-icon::before {
+    content: "💻"; /* Laptop veya kod ikonu */
+    font-size: 36px;
+    line-height: 1;
+    color: #3F51B5;
+}
+.email-icon::before {
+    content: "\f0e0"; /* Font Awesome e-posta ikonu */
+    font-family: 'Font Awesome 6 Free';
+    font-weight: 900;
+    font-size: 36px;
+    color: #9C27B0;
+}
+.contact-icon::before {
+    content: "☎️"; /* Telefon ikonu */
+    font-size: 36px;
+    line-height: 1;
+    color: #9C27B0;
+}
+
+
+
+.research-icon::before {
+    content: "🔍"; /* Büyüteç ikonu */
+    font-size: 36px;
+    line-height: 1;
+    color: #673AB7;
+}
+
+.person-icon::before {
+    content: "👨‍💼"; /* kişi ikonu */
+    font-size: 36px;
+    line-height: 1;
+    color: #673AB7;
+}
+
+
+.tag-icon::before {
+    content: "🏷️"; /* Etiket ikonu */
+    font-size: 36px;
+    line-height: 1;
+    color: #F44336;
+}
+
+.notes-icon::before {
+    content: "📝"; /* Not defteri ikonu */
+    font-size: 36px;
+    line-height: 1;
+    color: #FF9800;
+}
+
+.general-tech-icon::before {
+    content: "⚙️"; /* Dişli çark ikonu */
+    font-size: 36px;
+    line-height: 1;
+    color: #795548;
+}
+
+.meter-invoice-icon::before {
+    content: "🧾"; /* Fiş/fatura ikonu */
+    font-size: 36px;
+    line-height: 1;
+    color: #607D8B;
+}
+
+.others-icon::before {
+    content: "• • •"; /* Üç nokta ikonu */
+    font-size: 28px; /* Daha küçük yapıldı */
+    line-height: 1;
+    color: #9E9E9E;
+}
+
+.iletisim-icon::before {
+    content: "📞"; /* Telefon emojisi */
+    color: #25D366; /* WhatsApp yeşili */
+    font-size: 36px;
+}
+.yanginpanel-icon::before { content: "🧑‍🚒"; color: #FF5722;   font-size: 36px; }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* KLİMA SANTRALİ STİLLERİ (Animasyon kaldırıldı) */
+.klima .fan-blade {
+    position: absolute;
+    width: 25px;
+    height: 8px;
+    background: #2196f3;
+    border-radius: 2px;
+    top: 50%;
+    left: 50%;
+    transform-origin: 0% 50%;
+    transform: translate(-50%, -50%) rotate(var(--angle));
+    opacity: 0.9;
+}
+
+/* ASANSÖR STİLLERİ (Animasyon kaldırıldı) */
+.elevator-shaft {
+    width: 40px;
+    height: 50px;
+    background: #cfd8dc;
+    border: 2px solid #78909c;
+    position: relative;
+    overflow: hidden;
+    border-radius: 3px;
+}
+
+.elevator-car {
+    width: 30px;
+    height: 20px;
+    background: #607d8b;
+    position: absolute;
+    bottom: 3px;
+    left: 5px;
+    border-radius: 2px;
+}
+
+/* VRF SİSTEMİ STİLLERİ (Animasyonlar kaldırıldı) */
+.vrf-system .heat-exchange {
+    width: 40px;
+    height: 40px;
+    background: radial-gradient(circle, #4caf50 30%, transparent 70%);
+    border-radius: 50%;
+    position: absolute;
+    top: 10px;
+    left: 10px;
+}
+
+.vrf-system .pipe {
+    position: absolute;
+    background: #8bc34a;
+    width: 6px;
+    border-radius: 3px;
+}
+
+.vrf-system .pipe-1 {
+    height: 25px;
+    top: 5px;
+    left: 5px;
+    transform: rotate(45deg);
+    transform-origin: top left;
+}
+
+.vrf-system .pipe-2 {
+    height: 25px;
+    bottom: 5px;
+    right: 5px;
+    transform: rotate(45deg);
+    transform-origin: bottom right;
+}
+
+/* CHILLER STİLLERİ (Animasyonlar kaldırıldı) */
+.chiller .compressor {
+    width: 35px;
+    height: 20px;
+    background: #0288d1;
+    position: absolute;
+    top: 10px;
+    left: 12px;
+    border-radius: 3px;
+}
+
+.chiller .coolant {
+    width: 50px;
+    height: 8px;
+    background: #4fc3f7;
+    position: absolute;
+    bottom: 10px;
+    left: 5px;
+    border-radius: 2px;
+}
+
+.chiller .fan {
+    position: absolute;
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    border: 3px solid #01579b;
+    top: 18px;
+    right: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.chiller .fan::before {
+    content: "";
+    position: absolute;
+    width: 15px;
+    height: 3px;
+    background: #01579b;
+    border-radius: 1.5px;
+    transform-origin: center;
+}
+
+.university-header {
+    background-color: #003366;
+    color: white;
+    padding: 6px 0; /* Daha da daralttık */
+    text-align: center;
+    border-radius: 0;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+    width: 100%;
+}
+
+/* MALZEME/ENVANTER STİLLERİ (Animasyon kaldırıldı) */
+.inventory-box {
+    width: 45px;
+    height: 35px;
+    background: #81c784;
+    border-radius: 4px;
+    position: absolute;
+    top: 12px;
+    left: 8px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.inventory-items {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+}
+
+.inventory-item {
+    width: 10px;
+    height: 10px;
+    background: #4caf50;
+    border-radius: 2px;
+    position: absolute;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+}
+
+.inventory-item:nth-child(1) { top: 10px; left: 10px; }
+.inventory-item:nth-child(2) { top: 25px; left: 30px; }
+.inventory-item:nth-child(3) { top: 15px; left: 40px; }
+
+/* JENERATÖR STİLLERİ (Animasyonlar kaldırıldı) */
+.generator-body {
+    width: 45px;
+    height: 30px;
+    background: #ffa000;
+    border-radius: 5px;
+    position: absolute;
+    top: 15px;
+    left: 8px;
+}
+
+.engine-piston {
+    width: 7px;
+    height: 15px;
+    background: #5d4037;
+    position: absolute;
+    top: 20px;
+    left: 28px;
+}
+
+.exhaust-pipe {
+    width: 12px;
+    height: 7px;
+    background: #6d4c41;
+    position: absolute;
+    top: 10px;
+    right: 8px;
+    border-radius: 0 4px 4px 0;
+}
+
+.engine-fan {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    border: 2px solid #ffc107;
+    position: absolute;
+    top: 22px;
+    left: 35px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.engine-fan::before {
+    content: "";
+    position: absolute;
+    width: 12px;
+    height: 3px;
+    background: #ff8f00;
+    border-radius: 1.5px;
+    transform-origin: center;
+}
+
+/* ELEKTRİK YERLEŞKESİ STİLLERİ (Animasyonlar kaldırıldı) */
+.github-web-icon::before {
+    content: "🐙"; /* GitHub octopus */
+    font-size: 36px;
+    color: #333;
+}
+
+.electric-icon {
+    width: 60px;
+    height: 60px;
+}
+
+.tower {
+    stroke: #616161;
+    stroke-width: 3;
+    stroke-linecap: round;
+}
+
+.power-line {
+    stroke: #FFD600;
+    stroke-width: 2;
+    stroke-dasharray: 5 3;
+    filter: drop-shadow(0 0 3px #FFEB3B);
+}
+
+.spark {
+    fill: #FFC107;
+}
+
+/* Yeni ikon stilleri */
+.basis-drive-icon::before {
+    content: "🚀";
+    font-size: 36px;
+    line-height: 1;
+    color: #FF5722;
+}
+.map-icon::before {
+    content: "🗺️";  /* Harita emojisi */
+    font-size: 36px; /* Aynı boyut */
+    line-height: 1;  /* Aynı satır yüksekliği */
+    color: #4CAF50;  /* Harita temasına uygun yeşil */
+}
+.evrak-icon::before {
+    content: "📄"; /* Dosya ikonu */
+    font-size: 36px;
+    line-height: 1;
+    color: #795548;
+}
+
+.rehber-icon::before {
+    content: "📘";
+    font-size: 36px;
+    line-height: 1;
+    color: #2196F3;
+}
+
+.banu-icon::before {
+    content: "🏫";
+    font-size: 36px;
+    line-height: 1;
+    color: #673AB7;
+}
+
+.ubys-icon::before {
+    content: "💼";
+    font-size: 36px;
+    line-height: 1;
+    color: #009688;
+}
+
+.email-icon::before {
+    content: "✉️";
+    font-size: 36px;
+    line-height: 1;
+    color: #FF9800;
+}
+
+.talep-icon::before {
+    content: "📝";
+    font-size: 36px;
+    line-height: 1;
+    color: #E91E63;
+}
+
+.otomasyon-icon::before {
+    content: "💡";
+    font-size: 36px;
+    line-height: 1;
+    color: #FFC107;
+}
+
+.destek-icon::before {
+    content: "🛠️";
+    font-size: 36px;
+    line-height: 1;
+    color: #607D8B;
+}
+
+.kisisel-icon::before {
+    content: "👤";
+    font-size: 36px;
+    line-height: 1;
+    color: #4CAF50;
+}
+
+.egitim-icon::before {
+    content: "🎓";
+    font-size: 36px;
+    line-height: 1;
+    color: #3F51B5;
+}
+
+.teknik-icon::before {
+    content: "📚";
+    font-size: 36px;
+    line-height: 1;
+    color: #9C27B0;
+}
+
+/* YENİ İKON TANIMLARI */
+
+/* Özel Parçalar İkonu */
+.custom-parts-icon::before {
+       content: "🔌"; /* Fiş simgesi */
+    font-size: 36px;
+    line-height: 1;
+    color: #FF9800; /* Turuncu */
+}
+
+
+/* Harita İkonu */
+.map-icon::before {
+    content: "📍"; /* Harita işaretçisi */
+    font-size: 36px;
+    line-height: 1;
+    color: #F44336; /* Kırmızı */
+}
+
+
+
+
+
+/* Isıtma/Soğutma İkonu */
+.hvac-icon::before {
+    content: "❄️"; /* Kar tanesi ve güneş kombinasyonu */
+    font-size: 36px;
+    line-height: 1;
+    color: #2196F3; /* Mavi */
+}
+
+
+
+/* BASIS DRIVE BUTON STİLİ */
+.basis-drive-icon::before {
+    content: "📂";
+    font-size: 36px;
+    line-height: 1;
+    color: #4285F4; /* Google Drive mavisi */
+    position: relative;
+}
+.building-icon::before {
+    content: "👑";
+    font-size: 36px;
+    line-height: 1;
+    color: #3F51B5;
+}
+
+.sport-icon::before {
+    content: "⚽";
+    font-size: 36px;
+    line-height: 1;
+    color: #4CAF50;
+}
+/* Spor Akademisi için yeni ikon */
+.sport-academy-icon::before {
+    content: "🏋️";  /* Halter emojisi */
+    font-size: 36px;
+    line-height: 1;
+    color: #FF5722;  /* Turuncu renk */
+}
+
+.classroom-icon::before {
+    content: "🏫";
+    font-size: 36px;
+    line-height: 1;
+    color: #FF9800;
+}
+
+.office-icon::before {
+    content: "🏢";
+    font-size: 36px;
+    line-height: 1;
+    color: #607D8B;
+}
+
+.engineering-icon::before {
+    content: "⚙️";
+    font-size: 36px;
+    line-height: 1;
+    color: #795548;
+}
+
+.maritime-icon::before {
+    content: "⚓";
+    font-size: 36px;
+    line-height: 1;
+    color: #2196F3;
+}
+/* Jeneratör İkonu */
+.generator-icon::before {
+   content: "🏭"; /* Fabrika simgesi */ /* Şimşek ikonu (jeneratör enerji simgesi) */
+    font-size: 36px;
+    line-height: 1;
+    color: #FFC107; /* Sarı (enerji vurgusu) */
+}
+.religion-icon::before {
+    content: "🕌";
+    font-size: 36px;
+    line-height: 1;
+    color: #9C27B0;
+}
+
+.talep-yaz-icon::before { content: "✏️";     font-size: 36px;
+    line-height: 1; color: #FF9800; }
+
+.talepler-icon::before {
+    content: "📨"; /* Gelen mektup emojisi */
+      font-size: 36px;
+    line-height: 1;
+    color: #2196F3; /* Mavi */
+}
+
+/* ORTAK MYO İKON STİLİ */
+[class$="-myo-icon"]::before {
+    content: "🏛️"; /* Tüm MYO'lar için bina ikonu */
+    font-size: 36px;
+    line-height: 1;
+}
+
+/* Map Bölümü Stilleri */
+.map-section {
+    padding: 0; /* İç dolguyu kaldırın, iframe kendi dolgusunu yönetecek */
+    border: none; /* Harita bölümünün kendi çerçevesine ihtiyacı yok */
+    box-shadow: none; /* Gölgeye ihtiyacı yok */
+    background: none; /* Arkaplana ihtiyacı yok */
+    text-align: center; /* Başlığı ortalamak için */
+}
+
+.map-section h2 {
+    margin-bottom: 20px;
+    color: #333;
+    font-size: 1.5em;
+    font-weight: 600;
+}
+
+.map-container {
+    overflow: hidden; /* Iframe'in dışına taşmasını engellemek için */
+    border-radius: 10px; /* Köşeleri yuvarla */
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1); /* Harita için hafif gölge */
+    background-color: #f5f5f5; /* Yüklenirken görünen arka plan */
+}
+
+.map-container iframe {
+    display: block; /* Tarayıcıların iframe altına eklediği boşluğu kaldırır */
+}
+
+/* Duyarlı Tasarım */
+@media (max-width: 992px) { /* Tablet boyutları için */
+    .control-panel {
+        max-width: 768px;
+    }
+    .main-systems, .other-systems {
+        grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+        gap: 15px;
+    }
+    .system-button {
+        padding: 20px 10px;
+    }
+    .system-button span {
+        font-size: 0.95em;
+    }
+    .icon {
+        width: 50px;
+        height: 50px;
+    }
+    /* Arama çubuğu burada da 2 sütun kaplasın */
+    .search-bar-wide {
+        grid-column: span 2;
+    }
+    /* Yeni ikonların boyutunu responsive olarak ayarla */
+    .project-icon::before, .building-icon::before, .ups-icon::before,
+    .fire-icon::before, .sliding-door-icon::before, .report-icon::before,
+    .software-icon::before, .contact-icon::before, .light-automation-icon::before,
+    .research-icon::before, .tag-icon::before, .notes-icon::before,
+    .general-tech-icon::before, .meter-invoice-icon::before, .others-icon::before {
+        font-size: 30px;
+    }
+}
+
+@media (max-width: 768px) { /* Küçük tabletler ve büyük telefonlar için */
+    .control-panel {
+        padding: 20px;
+        max-width: 90%;
+    }
+    .main-systems, .other-systems {
+        grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+        gap: 12px;
+    }
+    .system-button span {
+        font-size: 0.9em;
+    }
+    .icon {
+        width: 45px;
+        height: 45px;
+    }
+    /* Mobil görünümde arama çubuğu tam genişlikte tek sütun kaplasın */
+    .search-bar-wide {
+        grid-column: span 1; /* Tek sütun */
+    }
+    /* Yeni ikonların boyutunu responsive olarak ayarla */
+    .project-icon::before, .building-icon::before, .ups-icon::before,
+    .fire-icon::before, .sliding-door-icon::before, .report-icon::before,
+    .software-icon::before, .contact-icon::before, .light-automation-icon::before,
+    .research-icon::before, .tag-icon::before, .notes-icon::before,
+    .general-tech-icon::before, .meter-invoice-icon::before, .others-icon::before {
+        font-size: 26px;
+    }
+    .others-icon::before { /* Özel ayar */
+        font-size: 22px;
+    }
+}
+
+@media (max-width: 480px) { /* Telefonlar için */
+    .control-panel {
+        padding: 15px;
+        gap: 20px;
+    }
+    .main-systems, .other-systems {
+        grid-template-columns: 1fr; /* Tek sütun */
+    }
+    /* Mobil görünümde arama çubuğu tam genişlikte tek sütun kaplasın */
+    .search-bar-wide {
+        grid-column: span 1; /* Tek sütun */
+    }
+    .system-button {
+        padding: 18px 10px;
+        min-height: 100px;
+    }
+    .system-button span {
+        font-size: 0.9em;
+    }
+    /* Yeni ikonların boyutunu responsive olarak ayarla */
+    .project-icon::before, .building-icon::before, .ups-icon::before,
+    .fire-icon::before, .sliding-door-icon::before, .report-icon::before,
+    .software-icon::before, .contact-icon::before, .light-automation-icon::before,
+    .research-icon::before, .tag-icon::before, .notes-icon::before,
+    .general-tech-icon::before, .meter-invoice-icon::before, .others-icon::before {
+        font-size: 24px;
+    }
+    .others-icon::before { /* Özel ayar */
+        font-size: 20px;
+    }
+}
+
+/* Google Login için ek CSS */
+.profile-info {
+    margin-top: 20px;
+    text-align: center;
+}
+
+.profile-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+}
+
+.profile-text {
+    display: flex;
+    flex-direction: column;
+}
+
+.profile-info img {
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+}
+
+#logout-button {
+    display: none;
+    margin-top: 10px;
+    background-color: #dc3545; /* Kırmızı renk */
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 0.9em;
+    transition: background-color 0.3s ease;
+}
+
+#logout-button:hover {
+    background-color: #c82333;
+}
+
+#access-denied {
+    display: none;
+    color: #dc3545;
+    margin-top: 20px;
+    font-weight: bold;
+}
+
+
+#copyright-footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background-color: #333;
+    color: white;
+    text-align: center;
+    padding: 10px 0;
+    font-size: 14px;
+    z-index: 1000;
+}
+
+#author-name {
+    font-weight: bold;
+    color: #4CAF50;
+}
+
+
+
+
+
+
+
+
+
+
+
+/* sayaçlar YANIP SÖNME başlangıç*/
+.control-panel {
+    width: 100%;
+    max-width: 1000px;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    padding: 30px;
+}
+
+.counter-container {
+   display: flex; 
+  
+  
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 10px;
+}
+
+.counter {
+    padding: 10px;
+    border: 2px solid #e0e0e0;
+    border-radius: 10px;
+    background: #fdfdfd;
+    text-align: center;
+    transition: all 0.3s;
+    min-height: 120px;
+}
+
+.counter p {
+    margin: 10px 0;
+    font-size: 1.1em;
+}
+
+.counter p:first-child {
+    font-weight: bold;
+    color: #003366;
+    font-size: 1.2em;
+}
+
+.counter button {
+    margin-top: 15px;
+    padding: 8px 20px;
+    background: #003366;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+/* TAM KIRMIZI YANIP SÖNME */
+.blinking-red {
+    animation: blink-red 0.7s infinite;
+}
+
+@keyframes blink-red {
+    0% { background: #FF0000; border-color: #FF0000; color: white; }
+    50% { background: #FF6666; border-color: #FF6666; color: black; }
+    100% { background: #FF0000; border-color: #FF0000; color: white; }
+}
+
+/* Sarı efekt */
+/* YENİ HALİ (BUYLA DEĞİŞTİRİN) */
+.blinking-yellow {
+    animation: blink-yellow 0.7s infinite;
+}
+
+@keyframes blink-yellow {
+    0% { background: #FFFF00; border-color: #FFD700; color: black; } /* Tam sarı (#FFFF00) */
+    50% { background: #FFEA00; border-color: #FFC400; color: black; } /* Biraz koyu sarı */
+    100% { background: #FFFF00; border-color: #FFD700; color: black; } /* Tekrar tam sarı */
+}
+
+@media (max-width: 768px) {
+    .counter-container {
+        grid-template-columns: 1fr;
+    }
+}
+/* sayaçlar YANIP SÖNME bitiş*/
+
+
+
+
