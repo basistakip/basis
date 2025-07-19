@@ -1,1455 +1,319 @@
- body {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            background: #f0f2f5;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            margin: 0;
-            padding: 20px;
-            box-sizing: border-box;
-        }
+        document.addEventListener('DOMContentLoaded', () => {
+            // HTML elementlerini seç
+            const profileInfo = document.getElementById('profile-info');
+            const profilePicture = document.getElementById('profile-picture');
+            const profileName = document.getElementById('profile-name');
+            const profileEmail = document.getElementById('profile-email');
+            const logoutButton = document.getElementById('logout-button');
+            const accessDeniedMessage = document.getElementById('access-denied');
+            const googleSignInButton = document.querySelector('.g_id_signin');
+            const contentArea = document.getElementById('content-area');
 
-        .login-container {
-            background: #ffffff;
-            border-radius: 12px;
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
-            padding: 40px;
-            text-align: center;
-            max-width: 400px;
-            width: 100%;
-        }
+            // --- İZİN VERİLEN E-POSTA ADRESLERİ LİSTESİ ---
+            const allowedEmails = [
+                "mahmutkilicankara@gmail.com",
+                "ikinci.izinli.kullanici@example.com",
+                "ucuncu.kullanici@gmail.com"
+            ];
+            // --------------------------------------------------------
 
-        .login-header {
-            background-color: #003366;
-            color: white;
-            padding: 15px;
-            border-radius: 8px;
-            margin-bottom: 30px;
-        }
+            // Global fonksiyon: Google kimlik bilgileri yanıtını işler
+            window.handleCredentialResponse = (response) => {
+                const idToken = response.credential;
+                const decodedToken = parseJwt(idToken);
 
-        .login-header h2 {
-            margin: 0;
-            font-size: 1.5em;
-            font-weight: 600;
-        }
+                if (decodedToken && decodedToken.email) {
+                    const userEmail = decodedToken.email.toLowerCase().trim();
 
-        .google-signin-section {
-            background-color: #f0f2f5;
-            color: #333;
-            padding: 20px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-        }
+                    if (allowedEmails.includes(userEmail)) {
+                        // Yetkili kullanıcı
+                        profilePicture.src = decodedToken.picture;
+                        profileName.textContent = decodedToken.name;
+                        profileEmail.textContent = userEmail;
 
-        .profile-info {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 15px;
-            padding: 20px;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            background-color: #f9f9f9;
-        }
+                        // localStorage yerine sessionStorage kullanabiliriz
+                        sessionStorage.setItem('google_id_token', idToken);
+                        sessionStorage.setItem('user_email', userEmail);
 
-        .profile-container {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
+                        displayAuthorizedUI(decodedToken);
+                        google.accounts.id.cancel();
+                    } else {
+                        // Yetkisiz kullanıcı
+                        console.warn("Yetkisiz e-posta: " + userEmail);
+                        showAccessDenied("'" + userEmail + "' ile bu içeriğe erişim izniniz yok. Lütfen yetkili bir hesapla giriş yapın.");
+                        
+                        // Sadece giriş butonunu gizle, erişim reddi mesajını göster
+                        googleSignInButton.style.display = 'none';
+                        profileInfo.style.display = 'none';
+                        contentArea.style.display = 'none';
+                        
+                        sessionStorage.removeItem('google_id_token');
+                        sessionStorage.removeItem('user_email');
+                        google.accounts.id.cancel();
+                    }
+                } else {
+                    console.error("Kimlik doğrulama başarısız.");
+                    showAccessDenied("Giriş başarısız oldu. Lütfen tekrar deneyin.");
+                    resetUI();
+                }
+            };
 
-        #profile-picture {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 2px solid #007bff;
-        }
-
-        .profile-text {
-            display: flex;
-            flex-direction: column;
-            text-align: left;
-        }
-
-        #profile-name {
-            font-weight: bold;
-            color: #333;
-        }
-
-        #profile-email {
-            font-size: 0.9em;
-            color: #555;
-        }
-
-        #logout-button {
-            background-color: #dc3545;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 0.9em;
-            transition: background-color 0.3s ease;
-        }
-
-        #logout-button:hover {
-            background-color: #c82333;
-        }
-
-        #access-denied {
-            color: #dc3545;
-            font-weight: bold;
-            margin-top: 20px;
-            padding: 15px;
-            border: 1px solid #dc3545;
-            border-radius: 5px;
-            background-color: #f8d7da;
-        }
-
-        .content-area {
-            margin-top: 30px;
-            padding: 20px;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            background-color: #f9f9f9;
-            display: none;
-        }
-
-        .content-area h3 {
-            margin: 0 0 15px 0;
-            color: #333;
-        }
-
-        .content-area p {
-            color: #666;
-            line-height: 1.6;
-        }
-
-        .g_id_signin {
-            margin: 0 auto;
-            display: inline-block;
-        }
-
-        /* Responsive */
-        @media (max-width: 480px) {
-            .login-container {
-                padding: 20px;
+            // JWT çözümleme fonksiyonu
+            function parseJwt(token) {
+                try {
+                    const base64Url = token.split('.')[1];
+                    const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+                    const jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
+                        return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+                    }).join(''));
+                    return JSON.parse(jsonPayload);
+                } catch (e) {
+                    console.error("JWT çözümleme hatası:", e);
+                    return null;
+                }
             }
+
+            // Erişim engellendi mesajını göster
+            function showAccessDenied(message) {
+                accessDeniedMessage.textContent = message;
+                accessDeniedMessage.style.display = 'block';
+                if (window.accessDeniedTimeout) {
+                    clearTimeout(window.accessDeniedTimeout);
+                }
+                window.accessDeniedTimeout = setTimeout(() => {
+                    accessDeniedMessage.style.display = 'none';
+                    window.accessDeniedTimeout = null;
+                    // Mesaj gizlendikten sonra giriş butonunu tekrar göster
+                    googleSignInButton.style.display = 'block';
+                }, 8000);
+            }
+
+            // Yetkili kullanıcı UI'ını göster
+            function displayAuthorizedUI(decodedToken) {
+                profileInfo.style.display = 'flex';
+                googleSignInButton.style.display = 'none';
+                accessDeniedMessage.style.display = 'none';
+                contentArea.style.display = 'block';
+
+                // Burada özel içerik ekleyebilirsiniz
+                document.getElementById('user-content').innerHTML = `
+                    <p><strong>Kullanıcı Bilgileri:</strong></p>
+                    <p>Ad: ${decodedToken.name}</p>
+                    <p>E-posta: ${decodedToken.email}</p>
+                    <p>Giriş Zamanı: ${new Date().toLocaleString('tr-TR')}</p>
+                `;
+            }
+
+            // UI'ı başlangıç durumuna sıfırla
+            function resetUI() {
+                profileInfo.style.display = 'none';
+                googleSignInButton.style.display = 'block';
+                accessDeniedMessage.style.display = 'none';
+                contentArea.style.display = 'none';
+            }
+
+            // Çıkış yap butonu
+            logoutButton.addEventListener('click', () => {
+                google.accounts.id.disableAutoSelect();
+                sessionStorage.removeItem('google_id_token');
+                sessionStorage.removeItem('user_email');
+                resetUI();
+                alert("Başarıyla çıkış yaptınız.");
+                google.accounts.id.prompt();
+            });
+
+            // Sayfa yüklendiğinde oturum kontrolü
+            function initializeAuthFlow() {
+                const savedToken = sessionStorage.getItem('google_id_token');
+                const savedEmail = sessionStorage.getItem('user_email');
+                
+                if (savedToken && savedEmail) {
+                    const decodedToken = parseJwt(savedToken);
+                    const isTokenExpired = decodedToken && decodedToken.exp * 1000 < Date.now();
+
+                    if (decodedToken && !isTokenExpired && allowedEmails.includes(savedEmail)) {
+                        console.log("Kayıtlı ve geçerli oturum bulundu.");
+                        profilePicture.src = decodedToken.picture;
+                        profileName.textContent = decodedToken.name;
+                        profileEmail.textContent = savedEmail;
+                        displayAuthorizedUI(decodedToken);
+                    } else {
+                        console.warn("Kayıtlı oturum geçersiz veya süresi dolmuş.");
+                        sessionStorage.removeItem('google_id_token');
+                        sessionStorage.removeItem('user_email');
+                        resetUI();
+                        google.accounts.id.prompt();
+                    }
+                } else {
+                    console.log("Kayıtlı oturum bulunamadı.");
+                    resetUI();
+                    google.accounts.id.prompt();
+                }
+            }
+
+            // Uygulamayı başlat
+            initializeAuthFlow();
+
+            // Global erişim için fonksiyonları dışa aktar (isteğe bağlı)
+            window.loginSystem = {
+                isLoggedIn: () => !!sessionStorage.getItem('google_id_token'),
+                getCurrentUser: () => {
+                    const token = sessionStorage.getItem('google_id_token');
+                    return token ? parseJwt(token) : null;
+                },
+                logout: () => logoutButton.click()
+            };
+        });// --- BUTON TIKLAMA YÖNETİMİ BAŞLANGIÇ ---
+document.addEventListener('DOMContentLoaded', function() {
+    // Tüm system-button elementlerini seç
+    const buttons = document.querySelectorAll('.system-button');
+    
+    // Buton URL'leri (data-url attribute'undan alınacak)
+    const buttonUrls = {
+        // Ana Sistemler
+        'BASİS İNTERAKTİF ANASAYFA': 'https://basistakip.github.io/basis/index.html',
+        'Basis Drive': 'https://drive.google.com/drive/u/0/folders/1LdEk5nnMH5ONEFurrsaJkopXvvuAahlC',
+        'Haritada Yeri': 'HARITA_LINKİ',
+        
+        // Kısayollar
+        'UBYS': 'https://ubys.bandirma.edu.tr/',
+        'E-POSTA': 'https://mail.google.com/',
+        'WHATSAPP': 'https://web.whatsapp.com/',
+        'DUYURU': 'https://www.bandirma.edu.tr/tr/www/Duyuru/Liste?k=-1',
+        'REHBER': 'https://rehber.bandirma.edu.tr/',
+        
+        // Genel Erişim
+        'Projeler': 'https://drive.google.com/drive/folders/1LeiOLaTU8JixvIOjldPiJVTLPgsZt8t0?usp=drive_link',
+        'Talepler': 'https://docs.google.com/spreadsheets/d/1RNYkQd9bml7M74ciecpxPbY-VSS28HzbJgkeHUc2axg/edit?gid=109557683#gid=109557683',
+        'Talep Yaz': 'TALEP_YAZ_LINKI',
+        'Özel Parçalar': 'OZEL_PARCA_LINKI',
+        'Isıtma/Soğutma': 'ISITMA_SOGUTMA_LINKI',
+        'UPS\'ler': 'https://drive.google.com/drive/folders/1KnjaNFmmKqHedHci7bGuPCFabh2sm-lMOGjAhTQOPTch2UKm_1ifs0Htv3gLO-JJbKVRApEa?usp=sharing',
+        'Jeneratör': 'JENERATOR_LINKI',
+        'Yangın': 'https://drive.google.com/drive/folders/1LQEMoJIGTYbt_H_AYLF9_TKcnLDfrtPrmDcvxDQ01R0VdeA8YJQWM8k0GNnN9ZTsLFZxkXoa?usp=sharing',
+        'Kapılar': 'https://drive.google.com/drive/folders/134Q0b-jeuilwSM-8No1sVo6T4U8qDJ3k5gHeZGtymAVqlgmy0eqq7oK3Y4UkA_V7jGG4E8ez?usp=sharing',
+        'Asansörler': 'https://drive.google.com/drive/folders/1pfgWPMp47KvKXnjopyANH5xGY5imP3UFpo2LglZYYeg1R5mLdNaS7qNT3ltlFcfVZNesUujT?usp=sharing',
+        'ARA GÜVENLİK İletişim': 'ILETISIM_LINKI',
+        'EVRAKLAR': 'https://drive.google.com/drive/folders/1FPuI4a8XbyKh10ybDIeF_GIBf1g8_k-90EqCUl3WfvlydGvjVi-FmZZE9i068iBh_kTHNRJR?usp=drive_link',
+        'Raporlar': 'https://drive.google.com/drive/folders/1Bq8BgeYdaxkzCyxzWDlGzQOeE9AKBURs?usp=sharing',
+        'Elektrik Yerleşkesi': 'https://drive.google.com/drive/folders/1L5odcO5nLoAjRGmiUaYsgdKnxJKM1w9NmXtfho5kcJT9ZDjpsce1Lu3ZJsbajZ6vzNnvxeqT?usp=sharing',
+        'Aydınlatma Otomayon': 'OTOMASYON_LINKI',
+        'GitHub Web Yapiisleribanu_': 'GITHUB_LINKI',
+        
+        // Binalar
+        'Rektörlük Binası': 'https://drive.google.com/drive/folders/1jSrb6uypTKJsfYBnC5_1uwocLaubOw2gwwj06WCBpTdrC7l3UETK67D-bUC0MJSkMOuX7b8S?usp=sharing',
+        'Kapalı Spor Salonu': 'https://drive.google.com/drive/folders/1N-rdUOu98ZSLd_WJLMNd5332qGAJ8HOdDTdRn1qOZ6DfTUgtUb4AuvnbdKUovc19ow1vNtcF',
+        'Spor Akademisi': 'https://drive.google.com/drive/folders/1dLwbe0hBNFASEfx6U_FgmF8KB5lp2pKJX-sgyIUj0RFe803SpiUVP71v28oZbrTHkzfEHot6',
+        'Merkezi Derslik': 'https://drive.google.com/drive/folders/1r06zRd6eEISG9I326JGR2QL4bbxManul_U9jBU3dY7IWpLqFuezVePQ9odOYrJogy_ortKB9',
+        'ÖYM': 'https://drive.google.com/drive/folders/1tRwRLRRWVqNk4gHnBeNBlwFNtYvkh1MEl3ZMljFppLKdAEhXCMsiXDL0mW-1H41B99cRhmOn',
+        'Mühendislik': 'https://drive.google.com/drive/folders/1uB4ockbREFNf6CcssejK9mD6PAs9IfAdI3Ux7Svk2Nep9gmdG7c6-9Ltv126R0v9lbgteRzl',
+        'Denizcilik': 'https://drive.google.com/drive/folders/1ZYsVVhI4hydIBoVo1W_J-VoJa5fo7XQ_3jV6TsN7XfM1cWRnRysoUkenNsRLjsUfauAmDerP',
+        'İlahiyat Binası': 'https://drive.google.com/drive/folders/1zqqeHVUV7rTb8tQ_8n7ZbG10Y4idNLPV6FYvkbli4a2KYmyp3rV1tT8rGM59pSGHjvyhuMk-',
+        'Susurluk MYO': 'https://drive.google.com/drive/folders/1QMpzrWtSivxm7S9Mk0dLTTo7d9NMq_KfRSGBHpG8EDnmH-Z-9SVbvHcRfZu_hgqtEn3KE8d0',
+        'Erdek MYO': 'https://drive.google.com/drive/folders/1czb0F-Hx6homzZM5uf6eUkX9oh_uXvn2qOeUMB6C-GYtaBDhv_w6EvxOTwp3jmCxe8vKhP9T',
+        'Manyas MYO': 'https://drive.google.com/drive/folders/1HVvf9wcEgRUvJ1Yrlvpq-vG3ALeLanW1UWCDhWjiyspRCovRqfnlHZThVy-qOKW7chN5u3-G',
+        'Gönen MYO': 'https://drive.google.com/drive/folders/16zvos9NdCSDx-YZF1egTdB9wBByS7ygK51BA-IOzKHzsCXaVKHYlG4D9xj14MhbzyNmFpuMX',
+        'Bandırma MYO': 'https://drive.google.com/drive/folders/1D26Pcmer3vCRwHtgjMyDLMiyXppXBVyMjzf2-fnLAHggiPEje5OqyQh7xNw5w69wlMFjVWbE',
+        'Denizcilik MYO': 'https://drive.google.com/drive/folders/1aPAoVuyzc14TVujADHvOrtoHV__sQ5UNDh9hbAHr9W6WaOXUCvWInSLpG-QCslAO9LUWeUJo',
+        'Edincik MYO': 'https://drive.google.com/drive/folders/1SBCk4EUhkGFliXFfyJoIsJdF98le08PMqn2v-dfkQHikTsgb-SsyL_t3g0Pmc'
+    };
+
+    // Her buton için click eventi ekle
+    buttons.forEach(button => {
+        button.addEventListener('click', function() {
+            // Buton içindeki span metnini bul
+            const buttonText = button.querySelector('span')?.textContent.trim();
             
-            .profile-container {
-                flex-direction: column;
-                text-align: center;
+            // Eğer bu bir arama butonuysa veya özel bir iframe içeriyorsa işlem yapma
+            if (button.classList.contains('search-bar-wide') || button.querySelector('iframe')) {
+                return;
             }
+
+            // URL'yi bul
+            const url = button.getAttribute('data-url') || buttonUrls[buttonText];
             
-            .profile-text {
-                text-align: center;
+            if (url && url !== '#') {
+                window.open(url, '_blank', 'noopener,noreferrer');
             }
+        });
+    });
+});
+// --- BUTON TIKLAMA YÖNETİMİ BİTİŞ ---
+
+// --- GERİ SAYIM KODLARI BAŞLANGIÇ ---
+const countdowns = [
+    { date: 10, hour: 0, minute: 0, text: 'Sayaç Okuma' },
+    { date: 15, hour: 0, minute: 0, text: 'Sayaç Gönderme' },
+    { date: 24, hour: 0, minute: 0, text: 'Rapor Hazırlama' },
+    { date: 13, hour: 0, minute: 0, text: 'YEDEK 1' },
+    { date: 14, hour: 0, minute: 0, text: 'YEDEK 2' },
+    { date: 15, hour: 0, minute: 0, text: 'YEDEK 3' }
+];
+
+function createCountdown(date, hour, minute, text) {
+    const counter = document.createElement('div');
+    counter.className = 'counter';
+    counter.innerHTML = `
+        <p>${text}</p>
+        <p id="timer-${text.replace(/\s+/g, '-')}"></p>
+        <button>Gördüm</button>
+    `;
+
+    document.getElementById('counters').appendChild(counter);
+    const timer = counter.querySelector('p:nth-child(2)');
+    const button = counter.querySelector('button');
+
+    let targetDate;
+    let seen = false;
+
+    function getNextTargetDate() {
+        const now = new Date();
+        let target = new Date(now.getFullYear(), now.getMonth(), date, hour, minute, 0);
+        
+        if (now > target) {
+            target.setMonth(target.getMonth() + 1);
+        }
+        return target;
+    }
+
+    function update() {
+        const now = new Date();
+        const diff = targetDate - now;
+
+        if (diff <= 0) {
+            timer.textContent = "SÜRE DOLDU!";
+            if (!seen) counter.classList.add('blinking-red');
+            return;
         }
 
+        const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const mins = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+        const secs = Math.floor((diff % (1000 * 60)) / 1000);
 
+        timer.textContent = `${days}g ${Math.floor(hours)}s ${mins}d ${secs}sn`;
 
-/* TEMEL STİLLER    display: flex; */
-body {
-  
-       justify-content: center;
-    align-items: center;
-
-    min-height: 100vh;
-    background: #f0f2f5; /* Açık gri arkaplan */
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    margin: 0;
-    padding: 20px;
-    box-sizing: border-box;
-}
-
-
-
-
-
-
-
-
- /* aşağısı sayaçlar ve yanıp sönme  */
-
-/* ========== GERİ SAYIM PANELİ STİLLERİ ========== */
-
-.counter-container {
-    display: grid; /* Grid layout kullanımı */
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); /* Esnek grid yapısı - minimum 250px, maksimum eşit dağılım */
-    gap: 15px; /* Kutular arası boşluk */
-    margin-top: 20px; /* Üst boşluk eklendi */
-}
-
-.counter {
-    padding: 20px; /* İç boşluk */
-    border: 2px solid #e0e0e0; /* Kenarlık */
-    border-radius: 10px; /* Köşe yuvarlama */
-    background: #fdfdfd; /* Arkaplan rengi */
-    text-align: center; /* Metin ortalaması */
-    transition: all 0.3s; /* Geçiş efekti süresi */
-    min-height: 120px; /* Minimum yükseklik */
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08); /* Gölge efekti */
-}
-
-.counter p {
-    margin: 10px 0; /* Paragraf boşlukları */
-    font-size: 1.1em; /* Yazı boyutu */
-    color: #333; /* Yazı rengi */
-}
-
-.counter p:first-child {
-    font-weight: bold; /* Kalın yazı */
-    color: #003366; /* Yazı rengi */
-    font-size: 1.2em; /* Büyük yazı boyutu */
-    margin-bottom: 10px; /* Alt boşluk */
-}
-
-.counter button {
-    margin-top: 15px; /* Üst boşluk */
-    padding: 8px 20px; /* İç boşluk */
-    background-color: #003366; /* Arkaplan rengi */
-    color: white; /* Yazı rengi */
-    border: none; /* Kenarlık kaldırma */
-    border-radius: 5px; /* Köşe yuvarlama */
-    cursor: pointer; /* İmleç tipi */
-    font-size: 0.9em; /* Yazı boyutu */
-    transition: background-color 0.3s ease; /* Renk geçiş efekti */
-}
-
-.counter button:hover {
-    background-color: #004080; /* Fare üzerine gelince arkaplan rengi */
-}
-
-/* TAM KIRMIZI YANIP SÖNME */
-.blinking-red {
-    animation: blink-red 0.7s infinite; /* Kırmızı yanıp sönme animasyonu */
-}
-
-@keyframes blink-red {
-    0%, 100% { 
-        background: #FF0000; /* Tam kırmızı arkaplan */
-        border-color: #FF0000; /* Kırmızı kenarlık */
-        color: white; /* Beyaz yazı */ 
-    }
-    50% { 
-        background: #FF6666; /* Açık kırmızı arkaplan */
-        border-color: #FF6666; /* Açık kırmızı kenarlık */
-        color: black; /* Siyah yazı */ 
-    }
-}
-
-/* TAM SARI YANIP SÖNME */
-.blinking-yellow {
-    animation: blink-yellow 0.7s infinite; /* Sarı yanıp sönme animasyonu */
-}
-
-@keyframes blink-yellow {
-    0%, 100% { 
-        background: #FFFF00; /* Tam sarı arkaplan */
-        border-color: #FFD700; /* Altın rengi kenarlık */
-        color: black; /* Siyah yazı */ 
-    }
-    50% { 
-        background: #FFEA00; /* Açık sarı arkaplan */
-        border-color: #FFC400; /* Açık altın rengi kenarlık */
-    }
-}
-/* ========== GERİ SAYIM PANELİ STİLLERİ biitiş ========== */
-
-
-/* RESPONSIVE AYARLAR */
-@media (max-width: 768px) {
-    .counter-container {
-        grid-template-columns: 1fr;
-    }
-    
-    .counter {
-        padding: 15px;
-        min-height: 100px;
-    }
-}
-
-@media (max-width: 480px) {
-    .counter p {
-        font-size: 1em;
-    }
-    
-    .counter p:first-child {
-        font-size: 1.1em;
-    }
-}
- /* yukarısı sayaçlar ve yanıp sönme  */
-
-
-        /* Mobilde (767px'den küçük ekranlarda) haritayı gizle */
-           /* Harita konteynerını tam genişlik ve yükseklikte ayarla */
-        .map-container {
-            width: 100%;
-            height: 100vh; /* Viewport yüksekliği kadar (tam ekran) */
-            position: relative;
-            overflow: hidden;
+        // Efektleri yönet
+        counter.classList.remove('blinking-red', 'blinking-yellow');
+        if (!seen) {
+            if (days <= 2) counter.classList.add('blinking-red');
+            else if (days <= 4) counter.classList.add('blinking-yellow');
         }
-
-        /* Iframe'i tam kaplayacak şekilde ayarla */
-        .map-container iframe {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            border: 0;
-        }
-
-        /* Mobilde gizle (isteğe bağlı) */
-        @media (max-width: 767px) {
-            .map-container {
-                display: none;
-            }
-        }
-
-
-/* UNIVERSITY HEADER - TAM SIKI DÜZEN */
-.university-header {
-    background-color: #003366;
-    color: white;
-  
-    padding: 4px 0; /* Minimum padding */
-    text-align: center;
-    border-radius: 0;
-    box-shadow: 0 1px 1px rgba(0,0,0,0.1); /* Daha hafif gölge */
-    width: 100%;
-    position: relative; /* Kenar boşluklarını kesin sıfırlamak için */
-    top: -20px; /* Varsayılan body margin'i dengelemek için */
-    margin-bottom: -25px; /* Aşağıdaki boşluğu sıfırlar */
-}
-
-.university-header h2 {
-    margin: 0;
-    padding: 0;
-    font-size: 1.5em;
-    font-weight: bold;
-    line-height: 1.1; /* Çok sıkışık görünmesin diye */
-    letter-spacing: 0.5px; /* Okunabilirlik için */
-}
-
-.card {
-    border: 1px solid #ccc;
-    border-top: none;
-    padding: 10px 15px 15px; /* Üst padding daha da azaltıldı */
-    margin: 0;
-    border-radius: 0 0 5px 5px;
-    box-shadow: none; /* Gölgeyi kaldırdık, header'ın gölgesi yeterli */
-    position: relative;
-    top: -8px; /* Body margin'ini compensate eder */
-}
-
-.control-panel {
-    display: flex;
-    flex-direction: column; /* Bölümleri dikey olarak sırala */
-    gap: 5px; /* Bölümler arası boşluk */
-    max-width: 1000px; /* Maksimum genişliği artırıldı */
-    width: 100%;
-    background: #ffffff; /* Ana panelin arkaplanı */
-    border-radius: 12px;
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
-    padding: 30px;
-}
-
-.section {
-    padding: 20px;
-    border: 1px solid #e0e0e0; /* Bölüm çerçevesi */
-    border-radius: 10px;
-    background: #fdfdfd; /* Bölüm içi arkaplan */
-    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.05);
-}
-
-/* Arama bölümü için stil (artık .main-systems içinde) */
-.search-section {
-    display: block; /* Flex etkisini kaldır */
-    padding: 0;
-}
-
-/* Yeni iframe konteyneri için stiller */
-.search-iframe-container {
-    width: 100%;
-    height: 160px; /* Bu değeri artırdık (iki katına çıkarmak için 160px iyi bir başlangıç) */
-    /* max-width: 600px; */ /* Grid il kontrol ediliyor */
-    border: 1px solid #ddd; /* Arama çubuğunun önceki çerçevesine benzer */
-    border-radius: 10px; /* Köşeleri yuvarla */
-    /* overflow: hidden; */ /* Dikey taşmayı engelleme kaldırıldı */
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05); /* Hafif bir gölge */
-    background-color: #ffffff; /* İframe yüklenirken görünen arka plan */
-}
-
-.search-iframe-container iframe {
-    display: block; /* Bazı tarayıcıların iframe altına eklediği boşluğu kaldırır */
-    height: 180px; /* Başlangıç yüksekliği */
-}
-
-.main-systems, .other-systems {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-    gap: 20px;
-}
-/* Sistem butonları için temel stil */
-.system-button {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 25px 15px;
-    border-radius: 10px;
-    background: #ffffff; /* Normal durumda beyaz arkaplan */
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
-    cursor: pointer;
-    transition: all 0.3s ease; /* Tüm özellikler için geçiş efekti */
-    text-align: center;
-    min-height: 120px;
-    border: 1px solid #e0e0e0; /* Hafif bir border ekledik */
-}
-
-/* Hover durumunda stil değişiklikleri */
-.system-button:hover {
-    transform: translateY(-8px); /* Yukarı hareket */
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
-    background-color: #e6f2ff; /* Açık mavi arkaplan */
-    border-color: #b3d1ff; /* Border rengini de uyumlu yapalım */
-}
-
-/* İkon container için hover efekti */
-.system-button:hover .icon {
-    background-color: #cce0ff; /* İkon arkaplanı biraz daha koyu */
-    transform: scale(1.1); /* İkonu biraz büyüt */
-}
-
-/* Metin rengi hover efekti */
-.system-button:hover span {
-    color: #0056b3;
-    font-weight: 700; /* Yazıyı biraz kalınlaştıralım */
-}
-
-/* Özel olarak generator-icon için ekstra stil */
-.generator-icon::before {
-    content: "⚡"; /* Şimşek ikonuna çevirdik */
-    font-size: 36px;
-    line-height: 1;
-    color: #FFC107;
-    transition: all 0.3s ease; /* İkon için de geçiş efekti */
-}
-
-/* Generator buton hover özel efekti */
-.system-button:hover .generator-icon::before {
-    color: #FF9800; /* Hover'da turuncuya dönsün */
-    transform: rotate(10deg); /* Hafif döndürme efekti */
-}
-
-.icon {
-    position: relative;
-    width: 60px;
-    height: 60px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: #e6f2ff; /* İkonların arkasındaki hafif renkli daire */
-    border-radius: 50%;
-    box-shadow: inset 0 0 5px rgba(0,0,0,0.05);
-    overflow: hidden; /* İçerik taşmasını engellemek için */
-}
-
-
-/* En üst taraf sitil başlangıç */
-    /* CSS'iniz buraya veya style.css dosyanıza ekleyin */
-        /* Kontrol panelini ve içindeki ana bölümleri başlangıçta gizli tut 
-      
-      js içinde bunu önüne çift salaş at // initializeAuthFlow(); ve html içinde ki   display: none;  de kapat o zaman login ekranından kurtulursun
-      */
-    
-        .control-panel .section {
-             /* altdakini silersen logini okumaz 
-           display: none; */
-          
-          /* Sistem butonlarını ve diğer bölümleri gizle */
-        /*   display: block !important; Tüm bölümleri göster */
-        }
-
-        /* Giriş ve profil alanları için stil (örnek, stil.css'inizde daha detaylı olabilir) */
-        .university-header {
-            background-color: #007bff;
-            color: white;
-            padding: 15px;
-            border-radius: 8px;
-            margin-bottom: 2px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            text-align: center;
-        }
-        .profile-info {
-            display: flex;
-            align-items: center;
-            justify-content: center; /* Ortalamak için */
-            gap: 15px;
-            padding: 10px;
-            border-top: 1px solid #eee;
-            margin-top: 15px;
-            flex-wrap: wrap; /* Küçük ekranlarda alt alta gelmesi için */
-        }
-        .profile-container {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        #profile-picture {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 2px solid #007bff;
-        }
-        .profile-text {
-            display: flex;
-            flex-direction: column;
-            text-align: left; /* Metni sola hizala */
-        }
-        #logout-button {
-            background-color: #dc3545;
-            color: white;
-            border: none;
-            padding: 8px 15px;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 0.9em;
-            transition: background-color 0.3s ease;
-        }
-        #logout-button:hover {
-            background-color: #c82333;
-        }
-        #access-denied {
-            color: red;
-            font-weight: bold;
-            margin-top: 15px;
-        }
-        /* Google giriş butonu ve One-Tap div'i için düzenleme */
-        .g_id_signin {
-            margin: 0 auto; /* Butonu ortalamak için */
-            display: inline-block; /* Ortalamak için gerekli */
-        }
-
-/* En üst taraf sitil bitiş */
-
-
-
-/* YENİ ARAMA ÇUBUĞU BUTONU STİLİ */
-.search-bar-wide {
-    /* Bu arama çubuğunun iki sütun kaplamasını sağlar */
-    grid-column: span 2; /* Burası anahtar kısım */
-    flex-direction: row; /* İçeriğin yatay hizalanması için */
-    justify-content: center; /* İç iframe'i ortala */
-    align-items: center;
-    padding: 10px; /* Biraz iç boşluk eklendi */
-    min-height: auto; /* Kendi yüksekliği iframe'den gelsin */
-    background: none; /* Arka planı kaldır, iframe konteyneri yönetsin */
-    box-shadow: none; /* Kendi gölgesi olmasın, iframe konteyneri yönetsin */
-    cursor: default; /* Hover efekti olmasın */
-    transition: none; /* Hover animasyonları olmasın */
-    border-radius: 10px; /* Köşeleri yuvarla (iframe konteyneri yerine burada da olabilir) */
-    border: 1px solid #ddd; /* Çerçeve (iframe konteyneri yerine burada da olabilir) */
-}
-
-/* .search-bar-wide üzerine gelindiğinde transform olmasın */
-.search-bar-wide:hover {
-    transform: none;
-    box-shadow: none;
-}
-
-/* YENİ İKON STİLLERİ (Basit CSS Çizimler/Temsiller) 🗺️ */
-
-.interaktifharita-icon::before {
-    content: "🗺️"; /* Bina ikonu */
-    font-size: 36px;
-    line-height: 1;
-    color: #8BC34A;
-}
-
-.project-icon::before {
-    content: "📋"; /* Pano veya belge ikonu gibi */
-    font-size: 36px;
-    line-height: 1;
-    color: #4CAF50;
-}
-
-.building-icon::before {
-    content: "🏢"; /* Bina ikonu */
-    font-size: 36px;
-    line-height: 1;
-    color: #8BC34A;
-}
-
-.ups-icon::before {
-    content: "🔋"; /* Şimşek veya pil ikonu */
-    font-size: 36px;
-    line-height: 1;
-    color: #FFC107;
-}
-
-.fire-icon::before {
-    content: "🔥"; /* Ateş ikonu */
-    font-size: 36px;
-    line-height: 1;
-    color: #FF5722;
-}
-.whatsapp-icon::before {
-    content: "🟩"; /* DUYURU ikonu */
-    font-size: 36px;
-    line-height: 1;
-    color: #00BCD4;
-}
-.duyuru-icon::before {
-    content: "📢"; /* DUYURU ikonu */
-    font-size: 36px;
-    line-height: 1;
-    color: #00BCD4;
-}
-.sliding-door-icon::before {
-    content: "↔️"; /* Oklar ile kayar kapı temsili */
-    font-size: 36px;
-    line-height: 1;
-    color: #607D8B;
-}
-
-.report-icon::before {
-    content: "📊"; /* Grafik veya rapor ikonu */
-    font-size: 36px;
-    line-height: 1;
-    color: #00BCD4;
-}
-
-.software-icon::before {
-    content: "💻"; /* Laptop veya kod ikonu */
-    font-size: 36px;
-    line-height: 1;
-    color: #3F51B5;
-}
-.email-icon::before {
-    content: "\f0e0"; /* Font Awesome e-posta ikonu */
-    font-family: 'Font Awesome 6 Free';
-    font-weight: 900;
-    font-size: 36px;
-    color: #9C27B0;
-}
-.contact-icon::before {
-    content: "☎️"; /* Telefon ikonu */
-    font-size: 36px;
-    line-height: 1;
-    color: #9C27B0;
-}
-
-
-
-.research-icon::before {
-    content: "🔍"; /* Büyüteç ikonu */
-    font-size: 36px;
-    line-height: 1;
-    color: #673AB7;
-}
-
-.person-icon::before {
-    content: "👨‍💼"; /* kişi ikonu */
-    font-size: 36px;
-    line-height: 1;
-    color: #673AB7;
-}
-
-
-.tag-icon::before {
-    content: "🏷️"; /* Etiket ikonu */
-    font-size: 36px;
-    line-height: 1;
-    color: #F44336;
-}
-
-.notes-icon::before {
-    content: "📝"; /* Not defteri ikonu */
-    font-size: 36px;
-    line-height: 1;
-    color: #FF9800;
-}
-
-.general-tech-icon::before {
-    content: "⚙️"; /* Dişli çark ikonu */
-    font-size: 36px;
-    line-height: 1;
-    color: #795548;
-}
-
-.meter-invoice-icon::before {
-    content: "🧾"; /* Fiş/fatura ikonu */
-    font-size: 36px;
-    line-height: 1;
-    color: #607D8B;
-}
-
-.others-icon::before {
-    content: "• • •"; /* Üç nokta ikonu */
-    font-size: 28px; /* Daha küçük yapıldı */
-    line-height: 1;
-    color: #9E9E9E;
-}
-
-.iletisim-icon::before {
-    content: "📞"; /* Telefon emojisi */
-    color: #25D366; /* WhatsApp yeşili */
-    font-size: 36px;
-}
-.yanginpanel-icon::before { content: "🧑‍🚒"; color: #FF5722;   font-size: 36px; }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/* KLİMA SANTRALİ STİLLERİ (Animasyon kaldırıldı) */
-.klima .fan-blade {
-    position: absolute;
-    width: 25px;
-    height: 8px;
-    background: #2196f3;
-    border-radius: 2px;
-    top: 50%;
-    left: 50%;
-    transform-origin: 0% 50%;
-    transform: translate(-50%, -50%) rotate(var(--angle));
-    opacity: 0.9;
-}
-
-/* ASANSÖR STİLLERİ (Animasyon kaldırıldı) */
-.elevator-shaft {
-    width: 40px;
-    height: 50px;
-    background: #cfd8dc;
-    border: 2px solid #78909c;
-    position: relative;
-    overflow: hidden;
-    border-radius: 3px;
-}
-
-.elevator-car {
-    width: 30px;
-    height: 20px;
-    background: #607d8b;
-    position: absolute;
-    bottom: 3px;
-    left: 5px;
-    border-radius: 2px;
-}
-
-/* VRF SİSTEMİ STİLLERİ (Animasyonlar kaldırıldı) */
-.vrf-system .heat-exchange {
-    width: 40px;
-    height: 40px;
-    background: radial-gradient(circle, #4caf50 30%, transparent 70%);
-    border-radius: 50%;
-    position: absolute;
-    top: 10px;
-    left: 10px;
-}
-
-.vrf-system .pipe {
-    position: absolute;
-    background: #8bc34a;
-    width: 6px;
-    border-radius: 3px;
-}
-
-.vrf-system .pipe-1 {
-    height: 25px;
-    top: 5px;
-    left: 5px;
-    transform: rotate(45deg);
-    transform-origin: top left;
-}
-
-.vrf-system .pipe-2 {
-    height: 25px;
-    bottom: 5px;
-    right: 5px;
-    transform: rotate(45deg);
-    transform-origin: bottom right;
-}
-
-/* CHILLER STİLLERİ (Animasyonlar kaldırıldı) */
-.chiller .compressor {
-    width: 35px;
-    height: 20px;
-    background: #0288d1;
-    position: absolute;
-    top: 10px;
-    left: 12px;
-    border-radius: 3px;
-}
-
-.chiller .coolant {
-    width: 50px;
-    height: 8px;
-    background: #4fc3f7;
-    position: absolute;
-    bottom: 10px;
-    left: 5px;
-    border-radius: 2px;
-}
-
-.chiller .fan {
-    position: absolute;
-    width: 25px;
-    height: 25px;
-    border-radius: 50%;
-    border: 3px solid #01579b;
-    top: 18px;
-    right: 5px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.chiller .fan::before {
-    content: "";
-    position: absolute;
-    width: 15px;
-    height: 3px;
-    background: #01579b;
-    border-radius: 1.5px;
-    transform-origin: center;
-}
-
-.university-header {
-    background-color: #003366;
-    color: white;
-    padding: 6px 0; /* Daha da daralttık */
-    text-align: center;
-    border-radius: 0;
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
-    width: 100%;
-}
-
-/* MALZEME/ENVANTER STİLLERİ (Animasyon kaldırıldı) */
-.inventory-box {
-    width: 45px;
-    height: 35px;
-    background: #81c784;
-    border-radius: 4px;
-    position: absolute;
-    top: 12px;
-    left: 8px;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-}
-
-.inventory-items {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-}
-
-.inventory-item {
-    width: 10px;
-    height: 10px;
-    background: #4caf50;
-    border-radius: 2px;
-    position: absolute;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.2);
-}
-
-.inventory-item:nth-child(1) { top: 10px; left: 10px; }
-.inventory-item:nth-child(2) { top: 25px; left: 30px; }
-.inventory-item:nth-child(3) { top: 15px; left: 40px; }
-
-/* JENERATÖR STİLLERİ (Animasyonlar kaldırıldı) */
-.generator-body {
-    width: 45px;
-    height: 30px;
-    background: #ffa000;
-    border-radius: 5px;
-    position: absolute;
-    top: 15px;
-    left: 8px;
-}
-
-.engine-piston {
-    width: 7px;
-    height: 15px;
-    background: #5d4037;
-    position: absolute;
-    top: 20px;
-    left: 28px;
-}
-
-.exhaust-pipe {
-    width: 12px;
-    height: 7px;
-    background: #6d4c41;
-    position: absolute;
-    top: 10px;
-    right: 8px;
-    border-radius: 0 4px 4px 0;
-}
-
-.engine-fan {
-    width: 20px;
-    height: 20px;
-    border-radius: 50%;
-    border: 2px solid #ffc107;
-    position: absolute;
-    top: 22px;
-    left: 35px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.engine-fan::before {
-    content: "";
-    position: absolute;
-    width: 12px;
-    height: 3px;
-    background: #ff8f00;
-    border-radius: 1.5px;
-    transform-origin: center;
-}
-
-/* ELEKTRİK YERLEŞKESİ STİLLERİ (Animasyonlar kaldırıldı) */
-.github-web-icon::before {
-    content: "🐙"; /* GitHub octopus */
-    font-size: 36px;
-    color: #333;
-}
-
-.electric-icon {
-    width: 60px;
-    height: 60px;
-}
-
-.tower {
-    stroke: #616161;
-    stroke-width: 3;
-    stroke-linecap: round;
-}
-
-.power-line {
-    stroke: #FFD600;
-    stroke-width: 2;
-    stroke-dasharray: 5 3;
-    filter: drop-shadow(0 0 3px #FFEB3B);
-}
-
-.spark {
-    fill: #FFC107;
-}
-
-/* Yeni ikon stilleri */
-.basis-drive-icon::before {
-    content: "🚀";
-    font-size: 36px;
-    line-height: 1;
-    color: #FF5722;
-}
-.map-icon::before {
-    content: "🗺️";  /* Harita emojisi */
-    font-size: 36px; /* Aynı boyut */
-    line-height: 1;  /* Aynı satır yüksekliği */
-    color: #4CAF50;  /* Harita temasına uygun yeşil */
-}
-.evrak-icon::before {
-    content: "📄"; /* Dosya ikonu */
-    font-size: 36px;
-    line-height: 1;
-    color: #795548;
-}
-
-.rehber-icon::before {
-    content: "📘";
-    font-size: 36px;
-    line-height: 1;
-    color: #2196F3;
-}
-
-.banu-icon::before {
-    content: "🏫";
-    font-size: 36px;
-    line-height: 1;
-    color: #673AB7;
-}
-
-.ubys-icon::before {
-    content: "💼";
-    font-size: 36px;
-    line-height: 1;
-    color: #009688;
-}
-
-.email-icon::before {
-    content: "✉️";
-    font-size: 36px;
-    line-height: 1;
-    color: #FF9800;
-}
-
-.talep-icon::before {
-    content: "📝";
-    font-size: 36px;
-    line-height: 1;
-    color: #E91E63;
-}
-
-.otomasyon-icon::before {
-    content: "💡";
-    font-size: 36px;
-    line-height: 1;
-    color: #FFC107;
-}
-
-.destek-icon::before {
-    content: "🛠️";
-    font-size: 36px;
-    line-height: 1;
-    color: #607D8B;
-}
-
-.kisisel-icon::before {
-    content: "👤";
-    font-size: 36px;
-    line-height: 1;
-    color: #4CAF50;
-}
-
-.egitim-icon::before {
-    content: "🎓";
-    font-size: 36px;
-    line-height: 1;
-    color: #3F51B5;
-}
-
-.teknik-icon::before {
-    content: "📚";
-    font-size: 36px;
-    line-height: 1;
-    color: #9C27B0;
-}
-
-/* YENİ İKON TANIMLARI */
-
-/* Özel Parçalar İkonu */
-.custom-parts-icon::before {
-       content: "🔌"; /* Fiş simgesi */
-    font-size: 36px;
-    line-height: 1;
-    color: #FF9800; /* Turuncu */
-}
-
-
-/* Harita İkonu */
-.map-icon::before {
-    content: "📍"; /* Harita işaretçisi */
-    font-size: 36px;
-    line-height: 1;
-    color: #F44336; /* Kırmızı */
-}
-
-
-
-
-
-/* Isıtma/Soğutma İkonu */
-.hvac-icon::before {
-    content: "❄️"; /* Kar tanesi ve güneş kombinasyonu */
-    font-size: 36px;
-    line-height: 1;
-    color: #2196F3; /* Mavi */
-}
-
-
-
-/* BASIS DRIVE BUTON STİLİ */
-.basis-drive-icon::before {
-    content: "📂";
-    font-size: 36px;
-    line-height: 1;
-    color: #4285F4; /* Google Drive mavisi */
-    position: relative;
-}
-.building-icon::before {
-    content: "👑";
-    font-size: 36px;
-    line-height: 1;
-    color: #3F51B5;
-}
-
-.sport-icon::before {
-    content: "⚽";
-    font-size: 36px;
-    line-height: 1;
-    color: #4CAF50;
-}
-/* Spor Akademisi için yeni ikon */
-.sport-academy-icon::before {
-    content: "🏋️";  /* Halter emojisi */
-    font-size: 36px;
-    line-height: 1;
-    color: #FF5722;  /* Turuncu renk */
-}
-
-.classroom-icon::before {
-    content: "🏫";
-    font-size: 36px;
-    line-height: 1;
-    color: #FF9800;
-}
-
-.office-icon::before {
-    content: "🏢";
-    font-size: 36px;
-    line-height: 1;
-    color: #607D8B;
-}
-
-.engineering-icon::before {
-    content: "⚙️";
-    font-size: 36px;
-    line-height: 1;
-    color: #795548;
-}
-
-.maritime-icon::before {
-    content: "⚓";
-    font-size: 36px;
-    line-height: 1;
-    color: #2196F3;
-}
-/* Jeneratör İkonu */
-.generator-icon::before {
-   content: "🏭"; /* Fabrika simgesi */ /* Şimşek ikonu (jeneratör enerji simgesi) */
-    font-size: 36px;
-    line-height: 1;
-    color: #FFC107; /* Sarı (enerji vurgusu) */
-}
-.religion-icon::before {
-    content: "🕌";
-    font-size: 36px;
-    line-height: 1;
-    color: #9C27B0;
-}
-
-.talep-yaz-icon::before { content: "✏️";     font-size: 36px;
-    line-height: 1; color: #FF9800; }
-
-.talepler-icon::before {
-    content: "📨"; /* Gelen mektup emojisi */
-      font-size: 36px;
-    line-height: 1;
-    color: #2196F3; /* Mavi */
-}
-
-/* ORTAK MYO İKON STİLİ */
-[class$="-myo-icon"]::before {
-    content: "🏛️"; /* Tüm MYO'lar için bina ikonu */
-    font-size: 36px;
-    line-height: 1;
-}
-
-/* Map Bölümü Stilleri */
-.map-section {
-    padding: 0; /* İç dolguyu kaldırın, iframe kendi dolgusunu yönetecek */
-    border: none; /* Harita bölümünün kendi çerçevesine ihtiyacı yok */
-    box-shadow: none; /* Gölgeye ihtiyacı yok */
-    background: none; /* Arkaplana ihtiyacı yok */
-    text-align: center; /* Başlığı ortalamak için */
-}
-
-.map-section h2 {
-    margin-bottom: 20px;
-    color: #333;
-    font-size: 1.5em;
-    font-weight: 600;
-}
-
-.map-container {
-    overflow: hidden; /* Iframe'in dışına taşmasını engellemek için */
-    border-radius: 10px; /* Köşeleri yuvarla */
-    box-shadow: 0 4px 15px rgba(0,0,0,0.1); /* Harita için hafif gölge */
-    background-color: #f5f5f5; /* Yüklenirken görünen arka plan */
-}
-
-.map-container iframe {
-    display: block; /* Tarayıcıların iframe altına eklediği boşluğu kaldırır */
-}
-
-/* Duyarlı Tasarım */
-@media (max-width: 992px) { /* Tablet boyutları için */
-    .control-panel {
-        max-width: 768px;
     }
-    .main-systems, .other-systems {
-        grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-        gap: 15px;
-    }
-    .system-button {
-        padding: 20px 10px;
-    }
-    .system-button span {
-        font-size: 0.95em;
-    }
-    .icon {
-        width: 50px;
-        height: 50px;
-    }
-    /* Arama çubuğu burada da 2 sütun kaplasın */
-    .search-bar-wide {
-        grid-column: span 2;
-    }
-    /* Yeni ikonların boyutunu responsive olarak ayarla */
-    .project-icon::before, .building-icon::before, .ups-icon::before,
-    .fire-icon::before, .sliding-door-icon::before, .report-icon::before,
-    .software-icon::before, .contact-icon::before, .light-automation-icon::before,
-    .research-icon::before, .tag-icon::before, .notes-icon::before,
-    .general-tech-icon::before, .meter-invoice-icon::before, .others-icon::before {
-        font-size: 30px;
-    }
+
+    button.addEventListener('click', () => {
+        seen = true;
+        counter.classList.remove('blinking-red', 'blinking-yellow');
+        counter.style.background = '#e6f2ff';
+    });
+
+    targetDate = getNextTargetDate();
+    setInterval(update, 1000);
+    update();
 }
 
-@media (max-width: 768px) { /* Küçük tabletler ve büyük telefonlar için */
-    .control-panel {
-        padding: 20px;
-        max-width: 90%;
-    }
-    .main-systems, .other-systems {
-        grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
-        gap: 12px;
-    }
-    .system-button span {
-        font-size: 0.9em;
-    }
-    .icon {
-        width: 45px;
-        height: 45px;
-    }
-    /* Mobil görünümde arama çubuğu tam genişlikte tek sütun kaplasın */
-    .search-bar-wide {
-        grid-column: span 1; /* Tek sütun */
-    }
-    /* Yeni ikonların boyutunu responsive olarak ayarla */
-    .project-icon::before, .building-icon::before, .ups-icon::before,
-    .fire-icon::before, .sliding-door-icon::before, .report-icon::before,
-    .software-icon::before, .contact-icon::before, .light-automation-icon::before,
-    .research-icon::before, .tag-icon::before, .notes-icon::before,
-    .general-tech-icon::before, .meter-invoice-icon::before, .others-icon::before {
-        font-size: 26px;
-    }
-    .others-icon::before { /* Özel ayar */
-        font-size: 22px;
-    }
-}
-
-@media (max-width: 480px) { /* Telefonlar için */
-    .control-panel {
-        padding: 15px;
-        gap: 20px;
-    }
-    .main-systems, .other-systems {
-        grid-template-columns: 1fr; /* Tek sütun */
-    }
-    /* Mobil görünümde arama çubuğu tam genişlikte tek sütun kaplasın */
-    .search-bar-wide {
-        grid-column: span 1; /* Tek sütun */
-    }
-    .system-button {
-        padding: 18px 10px;
-        min-height: 100px;
-    }
-    .system-button span {
-        font-size: 0.9em;
-    }
-    /* Yeni ikonların boyutunu responsive olarak ayarla */
-    .project-icon::before, .building-icon::before, .ups-icon::before,
-    .fire-icon::before, .sliding-door-icon::before, .report-icon::before,
-    .software-icon::before, .contact-icon::before, .light-automation-icon::before,
-    .research-icon::before, .tag-icon::before, .notes-icon::before,
-    .general-tech-icon::before, .meter-invoice-icon::before, .others-icon::before {
-        font-size: 24px;
-    }
-    .others-icon::before { /* Özel ayar */
-        font-size: 20px;
-    }
-}
-
-/* Google Login için ek CSS */
-.profile-info {
-    margin-top: 20px;
-    text-align: center;
-}
-
-.profile-container {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 15px;
-}
-
-.profile-text {
-    display: flex;
-    flex-direction: column;
-}
-
-.profile-info img {
-    border-radius: 50%;
-    width: 50px;
-    height: 50px;
-}
-
-#logout-button {
-    display: none;
-    margin-top: 10px;
-    background-color: #dc3545; /* Kırmızı renk */
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 0.9em;
-    transition: background-color 0.3s ease;
-}
-
-#logout-button:hover {
-    background-color: #c82333;
-}
-
-#access-denied {
-    display: none;
-    color: #dc3545;
-    margin-top: 20px;
-    font-weight: bold;
-}
-
-
-#copyright-footer {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    background-color: #333;
-    color: white;
-    text-align: center;
-    padding: 10px 0;
-    font-size: 14px;
-    z-index: 1000;
-}
-
-#author-name {
-    font-weight: bold;
-    color: #4CAF50;
-}
-
-
-
-
-
-
-
-
-
-
-
-/* sayaçlar YANIP SÖNME başlangıç*/
-.control-panel {
-    width: 100%;
-    max-width: 1000px;
-    background: white;
-    border-radius: 12px;
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
-    padding: 30px;
-}
-
-.counter-container {
-   display: flex; 
-  
-  
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-    gap: 10px;
-}
-
-.counter {
-    padding: 10px;
-    border: 2px solid #e0e0e0;
-    border-radius: 10px;
-    background: #fdfdfd;
-    text-align: center;
-    transition: all 0.3s;
-    min-height: 120px;
-}
-
-.counter p {
-    margin: 10px 0;
-    font-size: 1.1em;
-}
-
-.counter p:first-child {
-    font-weight: bold;
-    color: #003366;
-    font-size: 1.2em;
-}
-
-.counter button {
-    margin-top: 15px;
-    padding: 8px 20px;
-    background: #003366;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-}
-
-/* TAM KIRMIZI YANIP SÖNME */
-.blinking-red {
-    animation: blink-red 0.7s infinite;
-}
-
-@keyframes blink-red {
-    0% { background: #FF0000; border-color: #FF0000; color: white; }
-    50% { background: #FF6666; border-color: #FF6666; color: black; }
-    100% { background: #FF0000; border-color: #FF0000; color: white; }
-}
-
-/* Sarı efekt */
-/* YENİ HALİ (BUYLA DEĞİŞTİRİN) */
-.blinking-yellow {
-    animation: blink-yellow 0.7s infinite;
-}
-
-@keyframes blink-yellow {
-    0% { background: #FFFF00; border-color: #FFD700; color: black; } /* Tam sarı (#FFFF00) */
-    50% { background: #FFEA00; border-color: #FFC400; color: black; } /* Biraz koyu sarı */
-    100% { background: #FFFF00; border-color: #FFD700; color: black; } /* Tekrar tam sarı */
-}
-
-@media (max-width: 768px) {
-    .counter-container {
-        grid-template-columns: 1fr;
-    }
-}
-/* sayaçlar YANIP SÖNME bitiş*/
-
-
+// Tüm geri sayımları oluştur
+countdowns.forEach(c => createCountdown(c.date, c.hour, c.minute, c.text));
+// --- GERİ SAYIM KODLARI BİTİŞ ---
 
 
