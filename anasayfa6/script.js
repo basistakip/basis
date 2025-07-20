@@ -1,4 +1,4 @@
-  <script>
+
         document.addEventListener('DOMContentLoaded', () => {
             // HTML elementlerini seç
             const profileInfo = document.getElementById('profile-info');
@@ -165,4 +165,4 @@
                 logout: () => logoutButton.click()
             };
         });
-    </script>
+
