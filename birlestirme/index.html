@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistem Kontrol Paneli</title>
+    <link rel="shortcut icon" type="png" href="resimler/basis.png">
+    <link rel="stylesheet" href="style.css">
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <style>
+        /* Login System Styles */
+        .login-header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            padding: 10px 20px;
+            background-color: #f5f5f5;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        .university-title {
+            flex-grow: 1;
+            text-align: center;
+        }
+        
+        .login-section {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        #profile-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        #profile-picture {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: 2px solid #fff;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .profile-text {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        #profile-name {
+            font-weight: bold;
+            font-size: 14px;
+        }
+        
+        #profile-email {
+            font-size: 12px;
+            color: #666;
+        }
+        
+        #logout-button {
+            background-color: #f44336;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+            transition: background-color 0.3s;
+        }
+        
+        #logout-button:hover {
+            background-color: #d32f2f;
+        }
+        
+        #access-denied {
+            color: #f44336;
+            font-weight: bold;
+            padding: 10px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="control-panel">
+        <div class="login-header-container">
+            <div class="university-title">
+                <h2>BASİS ANASAYFA</h2>
+            </div>
+            
+            <div class="login-section">
+                <div id="g_id_onload"
+                     data-client_id="387277586108-8m32c8tdfb0oemnr5kuv2fao6rtm35c0.apps.googleusercontent.com" 
+                     data-context="signin"
+                     data-ux_mode="popup"
+                     data-callback="handleCredentialResponse"
+                     data-auto_prompt="false" 
+                     data-auto_select="true">
+                </div>
+                
+                <div id="google-signin-button" class="g_id_signin"
+                     data-type="standard"
+                     data-shape="rectangular"
+                     data-theme="outline"
+                     data-text="signin_with"
+                     data-size="medium"
+                     data-logo_alignment="left"
+                     style="display: none;">
+                </div>
+                
+                <div id="profile-info" style="display: none;">
+                    <img id="profile-picture" src="" alt="Profil Resmi">
+                    <div class="profile-text">
+                        <span id="profile-name"></span>
+                        <span id="profile-email"></span>
+                    </div>
+                    <button id="logout-button">Çıkış Yap</button>
+                </div>
+                
+                <div id="access-denied" style="display: none;">Erişim Reddedildi</div>
+            </div>
+        </div>
+
+        <!-- Rest of your existing content remains the same -->
+        <div class="section main-systems" id="main-systems-section">
+            <!-- ... existing content ... -->
+        </div>
+        
+        <!-- ... all other sections remain unchanged ... -->
+    </div>
+
+    <script>
+        // Google Sign-In Handling
+        function handleCredentialResponse(response) {
+            const data = jwt_decode(response.credential);
+            
+            // Check if email is authorized
+            const authorizedEmails = [
+                "example1@example.com",
+                "example2@example.com",
+                // Add your authorized emails here
+            ];
+            
+            if (authorizedEmails.includes(data.email)) {
+                // Show profile info and hide sign-in button
+                document.getElementById('google-signin-button').style.display = 'none';
+                document.getElementById('profile-info').style.display = 'flex';
+                document.getElementById('access-denied').style.display = 'none';
+                
+                // Set profile data
+                document.getElementById('profile-picture').src = data.picture;
+                document.getElementById('profile-name').textContent = data.name;
+                document.getElementById('profile-email').textContent = data.email;
+                
+                // Store login state
+                localStorage.setItem('isLoggedIn', 'true');
+                localStorage.setItem('userName', data.name);
+                localStorage.setItem('userEmail', data.email);
+                localStorage.setItem('userPicture', data.picture);
+            } else {
+                // Show access denied
+                document.getElementById('access-denied').style.display = 'block';
+                document.getElementById('google-signin-button').style.display = 'block';
+                document.getElementById('profile-info').style.display = 'none';
+                
+                // Clear any stored data
+                localStorage.removeItem('isLoggedIn');
+                localStorage.removeItem('userName');
+                localStorage.removeItem('userEmail');
+                localStorage.removeItem('userPicture');
+            }
+        }
+        
+        // Logout function
+        document.getElementById('logout-button').addEventListener('click', function() {
+            // Clear Google session
+            google.accounts.id.disableAutoSelect();
+            
+            // Clear local storage
+            localStorage.removeItem('isLoggedIn');
+            localStorage.removeItem('userName');
+            localStorage.removeItem('userEmail');
+            localStorage.removeItem('userPicture');
+            
+            // Reset UI
+            document.getElementById('google-signin-button').style.display = 'block';
+            document.getElementById('profile-info').style.display = 'none';
+            document.getElementById('access-denied').style.display = 'none';
+            
+            // Reload the page to reset state
+            window.location.reload();
+        });
+        
+        // Check if user is already logged in on page load
+        window.onload = function() {
+            if (localStorage.getItem('isLoggedIn') {
+                document.getElementById('google-signin-button').style.display = 'none';
+                document.getElementById('profile-info').style.display = 'flex';
+                document.getElementById('profile-picture').src = localStorage.getItem('userPicture');
+                document.getElementById('profile-name').textContent = localStorage.getItem('userName');
+                document.getElementById('profile-email').textContent = localStorage.getItem('userEmail');
+            } else {
+                document.getElementById('google-signin-button').style.display = 'block';
+                document.getElementById('profile-info').style.display = 'none';
+            }
+        };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/jwt-decode@3.1.2/build/jwt-decode.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
