@@ -1291,4 +1291,155 @@ body {
 /* sayaçlar YANIP SÖNME bitiş*/
 
 
+  body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: #f0f2f5;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .login-container {
+            background: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            padding: 40px;
+            text-align: center;
+            max-width: 400px;
+            width: 100%;
+        }
+
+        .login-header {
+            background-color: #003366;
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+        }
+
+        .login-header h2 {
+            margin: 0;
+            font-size: 1.5em;
+            font-weight: 600;
+        }
+
+        .google-signin-section {
+            background-color: #f0f2f5;
+            color: #333;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .profile-info {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background-color: #f9f9f9;
+        }
+
+        .profile-container {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        #profile-picture {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid #007bff;
+        }
+
+        .profile-text {
+            display: flex;
+            flex-direction: column;
+            text-align: left;
+        }
+
+        #profile-name {
+            font-weight: bold;
+            color: #333;
+        }
+
+        #profile-email {
+            font-size: 0.9em;
+            color: #555;
+        }
+
+        #logout-button {
+            background-color: #dc3545;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.9em;
+            transition: background-color 0.3s ease;
+        }
+
+        #logout-button:hover {
+            background-color: #c82333;
+        }
+
+        #access-denied {
+            color: #dc3545;
+            font-weight: bold;
+            margin-top: 20px;
+            padding: 15px;
+            border: 1px solid #dc3545;
+            border-radius: 5px;
+            background-color: #f8d7da;
+        }
+
+        .content-area {
+            margin-top: 30px;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background-color: #f9f9f9;
+            display: none;
+        }
+
+        .content-area h3 {
+            margin: 0 0 15px 0;
+            color: #333;
+        }
+
+        .content-area p {
+            color: #666;
+            line-height: 1.6;
+        }
+
+        .g_id_signin {
+            margin: 0 auto;
+            display: inline-block;
+        }
+
+        /* Responsive */
+        @media (max-width: 480px) {
+            .login-container {
+                padding: 20px;
+            }
+            
+            .profile-container {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .profile-text {
+                text-align: center;
+            }
+        }
+
+
 
