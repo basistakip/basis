@@ -1,776 +1,149 @@
-/* TEMEL STİLLER */
-body {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    background: #f0f2f5; /* Açık gri arkaplan */
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    margin: 0;
-    padding: 20px;
-    box-sizing: border-box;
-}
-
-/* Kontrol panelini ve içindeki ana bölümleri başlangıçta gizli tut */
-.control-panel .section {
-    display: none; /* Sistem butonlarını ve diğer bölümleri gizle */
-}
-
-/* Üniversite başlık stili */
-.university-header {
-    background-color: #003366;
-    color: white;
-    padding: 12px 0;
-    text-align: center;
-    width: 100%;
-    margin-bottom: 20px; /* Kontrol paneli ile arasına boşluk */
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-}
-
-.university-header h2 {
-    margin: 0;
-    padding: 0 15px;
-    font-size: 1.8em;
-    font-weight: 600;
-    line-height: 1.2;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-
-/* Kontrol paneli stili (eski margin/padding ayarlarını kaldırıyoruz) */
-.control-panel {
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
-    max-width: 1000px;
-    width: 100%;
-    background: #ffffff;
-    border-radius: 12px;
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
-    padding: 30px;
-    margin: 0 auto; /* Ortalamak için */
-}
-.card {
-    border: 1px solid #ccc;
-    border-top: none;
-    padding: 10px 15px 15px; /* Üst padding daha da azaltıldı */
-    margin: 0;
-    border-radius: 0 0 5px 5px;
-    box-shadow: none; /* Gölgeyi kaldırdık, header'ın gölgesi yeterli */
-    position: relative;
-    top: -8px; /* Body margin'ini compensate eder */
-}
-
-.section {
-    padding: 20px;
-    border: 1px solid #e0e0e0; /* Bölüm çerçevesi */
-    border-radius: 10px;
-    background: #fdfdfd; /* Bölüm içi arkaplan */
-    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.05);
-}
-
-/* Arama bölümü için stil (artık .main-systems içinde) */
-.search-section {
-    display: block; /* Flex etkisini kaldır */
-    padding: 0;
-}
-
-/* Yeni iframe konteyneri için stiller */
-.search-iframe-container {
-    width: 100%;
-    height: 160px; /* Bu değeri artırdık (iki katına çıkarmak için 160px iyi bir başlangıç) */
-    /* max-width: 600px; */ /* Grid il kontrol ediliyor */
-    border: 1px solid #ddd; /* Arama çubuğunun önceki çerçevesine benzer */
-    border-radius: 10px; /* Köşeleri yuvarla */
-    /* overflow: hidden; */ /* Dikey taşmayı engelleme kaldırıldı */
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05); /* Hafif bir gölge */
-    background-color: #ffffff; /* İframe yüklenirken görünen arka plan */
-}
-
-.search-iframe-container iframe {
-    display: block; /* Bazı tarayıcıların iframe altına eklediği boşluğu kaldırır */
-    height: 180px; /* Başlangıç yüksekliği */
-}
-
-.main-systems, .other-systems {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-    gap: 20px;
-}
-
-.system-button {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 25px 15px;
-    border-radius: 10px;
-    background: #ffffff; /* Tüm butonlar için beyaz arkaplan */
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08); /* Hafif gölge */
-    cursor: pointer;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-    text-align: center;
-    min-height: 120px; /* Minimum buton yüksekliği */
-}
-
-.system-button:hover {
-    transform: translateY(-8px); /* Yukarı doğru hareket */
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15); /* Daha belirgin gölge */
-}
-
-.system-button span {
-    margin-top: 15px;
-    font-size: 1.1em;
-    font-weight: 600;
-    color: #333;
-    transition: color 0.3s ease;
-}
-
-.system-button:hover span {
-    color: #0056b3; /* Hover'da metin rengi değişimi */
-}
-
-.icon {
-    position: relative;
-    width: 60px;
-    height: 60px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: #e6f2ff; /* İkonların arkasındaki hafif renkli daire */
-    border-radius: 50%;
-    box-shadow: inset 0 0 5px rgba(0,0,0,0.05);
-    overflow: hidden; /* İçerik taşmasını engellemek için */
-}
-
-/* YENİ ARAMA ÇUBUĞU BUTONU STİLİ */
-.search-bar-wide {
-    /* Bu arama çubuğunun iki sütun kaplamasını sağlar */
-    grid-column: span 2; /* Burası anahtar kısım */
-    flex-direction: row; /* İçeriğin yatay hizalanması için */
-    justify-content: center; /* İç iframe'i ortala */
-    align-items: center;
-    padding: 10px; /* Biraz iç boşluk eklendi */
-    min-height: auto; /* Kendi yüksekliği iframe'den gelsin */
-    background: none; /* Arka planı kaldır, iframe konteyneri yönetsin */
-    box-shadow: none; /* Kendi gölgesi olmasın, iframe konteyneri yönetsin */
-    cursor: default; /* Hover efekti olmasın */
-    transition: none; /* Hover animasyonları olmasın */
-    border-radius: 10px; /* Köşeleri yuvarla (iframe konteyneri yerine burada da olabilir) */
-    border: 1px solid #ddd; /* Çerçeve (iframe konteyneri yerine burada da olabilir) */
-}
-
-/* .search-bar-wide üzerine gelindiğinde transform olmasın */
-.search-bar-wide:hover {
-    transform: none;
-    box-shadow: none;
-}
-
-/* YENİ İKON STİLLERİ (Basit CSS Çizimler/Temsiller) */
-.project-icon::before {
-    content: "📋"; /* Pano veya belge ikonu gibi */
-    font-size: 36px;
-    line-height: 1;
-    color: #4CAF50;
-}
-
-.building-icon::before {
-    content: "🏢"; /* Bina ikonu */
-    font-size: 36px;
-    line-height: 1;
-    color: #8BC34A;
-}
-
-.ups-icon::before {
-    content: "⚡"; /* Şimşek veya pil ikonu */
-    font-size: 36px;
-    line-height: 1;
-    color: #FFC107;
-}
-
-.fire-icon::before {
-    content: "🔥"; /* Ateş ikonu */
-    font-size: 36px;
-    line-height: 1;
-    color: #FF5722;
-}
-
-.sliding-door-icon::before {
-    content: "↔️"; /* Oklar ile kayar kapı temsili */
-    font-size: 36px;
-    line-height: 1;
-    color: #607D8B;
-}
-
-.report-icon::before {
-    content: "📊"; /* Grafik veya rapor ikonu */
-    font-size: 36px;
-    line-height: 1;
-    color: #00BCD4;
-}
-
-.software-icon::before {
-    content: "💻"; /* Laptop veya kod ikonu */
-    font-size: 36px;
-    line-height: 1;
-    color: #3F51B5;
-}
-
-.contact-icon::before {
-    content: "📞"; /* Telefon ikonu */
-    font-size: 36px;
-    line-height: 1;
-    color: #9C27B0;
-}
-
-.light-automation-icon::before {
-    content: "💡"; /* Ampul ikonu */
-    font-size: 36px;
-    line-height: 1;
-    color: #FFEB3B;
-}
-
-.research-icon::before {
-    content: "🔍"; /* Büyüteç ikonu */
-    font-size: 36px;
-    line-height: 1;
-    color: #673AB7;
-}
-
-.tag-icon::before {
-    content: "🏷️"; /* Etiket ikonu */
-    font-size: 36px;
-    line-height: 1;
-    color: #F44336;
-}
-
-.notes-icon::before {
-    content: "📝"; /* Not defteri ikonu */
-    font-size: 36px;
-    line-height: 1;
-    color: #FF9800;
-}
-
-.general-tech-icon::before {
-    content: "⚙️"; /* Dişli çark ikonu */
-    font-size: 36px;
-    line-height: 1;
-    color: #795548;
-}
-
-.meter-invoice-icon::before {
-    content: "🧾"; /* Fiş/fatura ikonu */
-    font-size: 36px;
-    line-height: 1;
-    color: #607D8B;
-}
-
-.others-icon::before {
-    content: "• • •"; /* Üç nokta ikonu */
-    font-size: 28px; /* Daha küçük yapıldı */
-    line-height: 1;
-    color: #9E9E9E;
-}
-
-/* KLİMA SANTRALİ STİLLERİ (Animasyon kaldırıldı) */
-.klima .fan-blade {
-    position: absolute;
-    width: 25px;
-    height: 8px;
-    background: #2196f3;
-    border-radius: 2px;
-    top: 50%;
-    left: 50%;
-    transform-origin: 0% 50%;
-    transform: translate(-50%, -50%) rotate(var(--angle));
-    opacity: 0.9;
-}
-
-/* ASANSÖR STİLLERİ (Animasyon kaldırıldı) */
-.elevator-shaft {
-    width: 40px;
-    height: 50px;
-    background: #cfd8dc;
-    border: 2px solid #78909c;
-    position: relative;
-    overflow: hidden;
-    border-radius: 3px;
-}
-
-.elevator-car {
-    width: 30px;
-    height: 20px;
-    background: #607d8b;
-    position: absolute;
-    bottom: 3px;
-    left: 5px;
-    border-radius: 2px;
-}
-
-/* VRF SİSTEMİ STİLLERİ (Animasyonlar kaldırıldı) */
-.vrf-system .heat-exchange {
-    width: 40px;
-    height: 40px;
-    background: radial-gradient(circle, #4caf50 30%, transparent 70%);
-    border-radius: 50%;
-    position: absolute;
-    top: 10px;
-    left: 10px;
-}
-
-.vrf-system .pipe {
-    position: absolute;
-    background: #8bc34a;
-    width: 6px;
-    border-radius: 3px;
-}
-
-.vrf-system .pipe-1 {
-    height: 25px;
-    top: 5px;
-    left: 5px;
-    transform: rotate(45deg);
-    transform-origin: top left;
-}
-
-.vrf-system .pipe-2 {
-    height: 25px;
-    bottom: 5px;
-    right: 5px;
-    transform: rotate(45deg);
-    transform-origin: bottom right;
-}
-
-/* CHILLER STİLLERİ (Animasyonlar kaldırıldı) */
-.chiller .compressor {
-    width: 35px;
-    height: 20px;
-    background: #0288d1;
-    position: absolute;
-    top: 10px;
-    left: 12px;
-    border-radius: 3px;
-}
-
-.chiller .coolant {
-    width: 50px;
-    height: 8px;
-    background: #4fc3f7;
-    position: absolute;
-    bottom: 10px;
-    left: 5px;
-    border-radius: 2px;
-}
-
-.chiller .fan {
-    position: absolute;
-    width: 25px;
-    height: 25px;
-    border-radius: 50%;
-    border: 3px solid #01579b;
-    top: 18px;
-    right: 5px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.chiller .fan::before {
-    content: "";
-    position: absolute;
-    width: 15px;
-    height: 3px;
-    background: #01579b;
-    border-radius: 1.5px;
-    transform-origin: center;
-}
-
-.university-header {
-    background-color: #003366;
-    color: white;
-    padding: 6px 0; /* Daha da daralttık */
-    text-align: center;
-    border-radius: 0;
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
-    width: 100%;
-}
-
-/* MALZEME/ENVANTER STİLLERİ (Animasyon kaldırıldı) */
-.inventory-box {
-    width: 45px;
-    height: 35px;
-    background: #81c784;
-    border-radius: 4px;
-    position: absolute;
-    top: 12px;
-    left: 8px;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-}
-
-.inventory-items {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-}
-
-.inventory-item {
-    width: 10px;
-    height: 10px;
-    background: #4caf50;
-    border-radius: 2px;
-    position: absolute;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.2);
-}
-
-.inventory-item:nth-child(1) { top: 10px; left: 10px; }
-.inventory-item:nth-child(2) { top: 25px; left: 30px; }
-.inventory-item:nth-child(3) { top: 15px; left: 40px; }
-
-/* JENERATÖR STİLLERİ (Animasyonlar kaldırıldı) */
-.generator-body {
-    width: 45px;
-    height: 30px;
-    background: #ffa000;
-    border-radius: 5px;
-    position: absolute;
-    top: 15px;
-    left: 8px;
-}
-
-.engine-piston {
-    width: 7px;
-    height: 15px;
-    background: #5d4037;
-    position: absolute;
-    top: 20px;
-    left: 28px;
-}
-
-.exhaust-pipe {
-    width: 12px;
-    height: 7px;
-    background: #6d4c41;
-    position: absolute;
-    top: 10px;
-    right: 8px;
-    border-radius: 0 4px 4px 0;
-}
-
-.engine-fan {
-    width: 20px;
-    height: 20px;
-    border-radius: 50%;
-    border: 2px solid #ffc107;
-    position: absolute;
-    top: 22px;
-    left: 35px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.engine-fan::before {
-    content: "";
-    position: absolute;
-    width: 12px;
-    height: 3px;
-    background: #ff8f00;
-    border-radius: 1.5px;
-    transform-origin: center;
-}
-
-/* ELEKTRİK YERLEŞKESİ STİLLERİ (Animasyonlar kaldırıldı) */
-.github-web-icon::before {
-    content: "🐙"; /* GitHub octopus */
-    font-size: 36px;
-    color: #333;
-}
-
-.electric-icon {
-    width: 60px;
-    height: 60px;
-}
-
-.tower {
-    stroke: #616161;
-    stroke-width: 3;
-    stroke-linecap: round;
-}
-
-.power-line {
-    stroke: #FFD600;
-    stroke-width: 2;
-    stroke-dasharray: 5 3;
-    filter: drop-shadow(0 0 3px #FFEB3B);
-}
-
-.spark {
-    fill: #FFC107;
-}
-
-/* Yeni ikon stilleri */
-.basis-drive-icon::before {
-    content: "📂";
-    font-size: 36px;
-    line-height: 1;
-    color: #4285F4; /* Google Drive mavisi */
-    position: relative;
-}
-.building-icon::before {
-    content: "👑";
-    font-size: 36px;
-    line-height: 1;
-    color: #3F51B5;
-}
-
-.sport-icon::before {
-    content: "⚽";
-    font-size: 36px;
-    line-height: 1;
-    color: #4CAF50;
-}
-/* Spor Akademisi için yeni ikon */
-.sport-academy-icon::before {
-    content: "🏋️";  /* Halter emojisi */
-    font-size: 36px;
-    line-height: 1;
-    color: #FF5722;  /* Turuncu renk */
-}
-
-.classroom-icon::before {
-    content: "🏫";
-    font-size: 36px;
-    line-height: 1;
-    color: #FF9800;
-}
-
-.office-icon::before {
-    content: "🏢";
-    font-size: 36px;
-    line-height: 1;
-    color: #607D8B;
-}
-
-.engineering-icon::before {
-    content: "⚙️";
-    font-size: 36px;
-    line-height: 1;
-    color: #795548;
-}
-
-.maritime-icon::before {
-    content: "⚓";
-    font-size: 36px;
-    line-height: 1;
-    color: #2196F3;
-}
-
-.religion-icon::before {
-    content: "🕌";
-    font-size: 36px;
-    line-height: 1;
-    color: #9C27B0;
-}
-/* ORTAK MYO İKON STİLİ */
-[class$="-myo-icon"]::before {
-    content: "🏛️"; /* Tüm MYO'lar için bina ikonu */
-    font-size: 36px;
-    line-height: 1;
-}
-
-/* Map Bölümü Stilleri */
-.map-section {
-    padding: 0; /* İç dolguyu kaldırın, iframe kendi dolgusunu yönetecek */
-    border: none; /* Harita bölümünün kendi çerçevesine ihtiyacı yok */
-    box-shadow: none; /* Gölgeye ihtiyacı yok */
-    background: none; /* Arkaplana ihtiyacı yok */
-    text-align: center; /* Başlığı ortalamak için */
-}
-
-.map-section h2 {
-    margin-bottom: 20px;
-    color: #333;
-    font-size: 1.5em;
-    font-weight: 600;
-}
-
-.map-container {
-    overflow: hidden; /* Iframe'in dışına taşmasını engellemek için */
-    border-radius: 10px; /* Köşeleri yuvarla */
-    box-shadow: 0 4px 15px rgba(0,0,0,0.1); /* Harita için hafif gölge */
-    background-color: #f5f5f5; /* Yüklenirken görünen arka plan */
-}
-
-.map-container iframe {
-    display: block; /* Tarayıcıların iframe altına eklediği boşluğu kaldırır */
-}
-
-/* Giriş ve profil alanları için stil */
-.profile-info {
-    display: flex;
-    align-items: center;
-    justify-content: center; /* Ortalamak için */
-    gap: 15px;
-    padding: 10px;
-    border-top: 1px solid #eee;
-    margin-top: 15px;
-    flex-wrap: wrap; /* Küçük ekranlarda alt alta gelmesi için */
-    margin-top: 20px;
-    text-align: center;
-}
-
-.profile-container {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    justify-content: center;
-}
-
-#profile-picture {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    object-fit: cover;
-    border: 2px solid #007bff;
-    border-radius: 50%;
-    width: 50px;
-    height: 50px;
-}
-
-.profile-text {
-    display: flex;
-    flex-direction: column;
-    text-align: left; /* Metni sola hizala */
-}
-
-#logout-button {
-    background-color: #dc3545;
-    color: white;
-    border: none;
-    padding: 8px 15px;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 0.9em;
-    transition: background-color 0.3s ease;
-    display: none;
-    margin-top: 10px;
-    padding: 10px 20px;
-}
-
-#logout-button:hover {
-    background-color: #c82333;
-}
-
-#access-denied {
-    color: red;
-    font-weight: bold;
-    margin-top: 15px;
-    display: none;
-    color: #dc3545;
-    margin-top: 20px;
-}
-
-/* Google giriş butonu ve One-Tap div'i için düzenleme */
-.g_id_signin {
-    margin: 0 auto; /* Butonu ortalamak için */
-    display: inline-block; /* Ortalamak için gerekli */
-}
-
-/* Duyarlı Tasarım */
-@media (max-width: 992px) { /* Tablet boyutları için */
-    .control-panel {
-        max-width: 768px;
-    }
-    .main-systems, .other-systems {
-        grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-        gap: 15px;
-    }
-    .system-button {
-        padding: 20px 10px;
-    }
-    .system-button span {
-        font-size: 0.95em;
-    }
-    .icon {
-        width: 50px;
-        height: 50px;
-    }
-    /* Arama çubuğu burada da 2 sütun kaplasın */
-    .search-bar-wide {
-        grid-column: span 2;
-    }
-    /* Yeni ikonların boyutunu responsive olarak ayarla */
-    .project-icon::before, .building-icon::before, .ups-icon::before,
-    .fire-icon::before, .sliding-door-icon::before, .report-icon::before,
-    .software-icon::before, .contact-icon::before, .light-automation-icon::before,
-    .research-icon::before, .tag-icon::before, .notes-icon::before,
-    .general-tech-icon::before, .meter-invoice-icon::before, .others-icon::before {
-        font-size: 30px;
-    }
-}
-
-@media (max-width: 768px) { /* Küçük tabletler ve büyük telefonlar için */
-    .control-panel {
-        padding: 20px;
-        max-width: 90%;
-    }
-    .main-systems, .other-systems {
-        grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
-        gap: 12px;
-    }
-    .system-button span {
-        font-size: 0.9em;
-    }
-    .icon {
-        width: 45px;
-        height: 45px;
-    }
-    /* Mobil görünümde arama çubuğu tam genişlikte tek sütun kaplasın */
-    .search-bar-wide {
-        grid-column: span 1; /* Tek sütun */
-    }
-    /* Yeni ikonların boyutunu responsive olarak ayarla */
-    .project-icon::before, .building-icon::before, .ups-icon::before,
-    .fire-icon::before, .sliding-door-icon::before, .report-icon::before,
-    .software-icon::before, .contact-icon::before, .light-automation-icon::before,
-    .research-icon::before, .tag-icon::before, .notes-icon::before,
-    .general-tech-icon::before, .meter-invoice-icon::before, .others-icon::before {
-        font-size: 26px;
-    }
-    .others-icon::before { /* Özel ayar */
-        font-size: 22px;
-    }
-}
-
-@media (max-width: 480px) { /* Telefonlar için */
-    .control-panel {
-        padding: 15px;
-        gap: 20px;
-    }
-    .main-systems, .other-systems {
-        grid-template-columns: 1fr; /* Tek sütun */
-    }
-    /* Mobil görünümde arama çubuğu tam genişlikte tek sütun kaplasın */
-    .search-bar-wide {
-        grid-column: span 1; /* Tek sütun */
-    }
-    .system-button {
-        padding: 18px 10px;
-        min-height: 100px;
-    }
-    .system-button span {
-        font-size: 0.9em;
-    }
-    /* Yeni ikonların boyutunu responsive olarak ayarla */
-    .project-icon::before, .building-icon::before, .ups-icon::before,
-    .fire-icon::before, .sliding-door-icon::before, .report-icon::before,
-    .software-icon::before, .contact-icon::before, .light-automation-icon::before,
-    .research-icon::before, .tag-icon::before, .notes-icon::before,
-    .general-tech-icon::before, .meter-invoice-icon::before, .others-icon::before {
-        font-size: 24px;
-    }
-    .others-icon::before { /* Özel ayar */
-        font-size: 20px;
-    }
-}
+  body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: #f0f2f5;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .login-container {
+            background: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            padding: 40px;
+            text-align: center;
+            max-width: 400px;
+            width: 100%;
+        }
+
+        .login-header {
+            background-color: #003366;
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+        }
+
+        .login-header h2 {
+            margin: 0;
+            font-size: 1.5em;
+            font-weight: 600;
+        }
+
+        .google-signin-section {
+            background-color: #f0f2f5;
+            color: #333;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .profile-info {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background-color: #f9f9f9;
+        }
+
+        .profile-container {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        #profile-picture {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid #007bff;
+        }
+
+        .profile-text {
+            display: flex;
+            flex-direction: column;
+            text-align: left;
+        }
+
+        #profile-name {
+            font-weight: bold;
+            color: #333;
+        }
+
+        #profile-email {
+            font-size: 0.9em;
+            color: #555;
+        }
+
+        #logout-button {
+            background-color: #dc3545;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.9em;
+            transition: background-color 0.3s ease;
+        }
+
+        #logout-button:hover {
+            background-color: #c82333;
+        }
+
+        #access-denied {
+            color: #dc3545;
+            font-weight: bold;
+            margin-top: 20px;
+            padding: 15px;
+            border: 1px solid #dc3545;
+            border-radius: 5px;
+            background-color: #f8d7da;
+        }
+
+        .content-area {
+            margin-top: 30px;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background-color: #f9f9f9;
+            display: none;
+        }
+
+        .content-area h3 {
+            margin: 0 0 15px 0;
+            color: #333;
+        }
+
+        .content-area p {
+            color: #666;
+            line-height: 1.6;
+        }
+
+        .g_id_signin {
+            margin: 0 auto;
+            display: inline-block;
+        }
+
+        /* Responsive */
+        @media (max-width: 480px) {
+            .login-container {
+                padding: 20px;
+            }
+            
+            .profile-container {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .profile-text {
+                text-align: center;
+            }
+        }
