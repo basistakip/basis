@@ -1,4 +1,6 @@
-/* YATAY LOGIN FORMU STİLLERİ */
+body {
+    background: linear-gradient(135deg, #f0f2f5 0%, #dfe6e9 100%);
+}/* YATAY LOGIN FORMU STİLLERİ */
 .login-container {
     display: flex;
     flex-direction: row; /* Yatay düzen */
