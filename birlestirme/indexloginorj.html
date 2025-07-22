@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Sistemi</title>
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+     <link rel="shortcut icon" type="png" href="resimler/basis.png">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="login-container">
+        <div class="login-header">
+            <h2>Giriş Sistemi</h2>
+        </div>
+
+        <div class="google-signin-section">
+            <div id="g_id_onload"
+                 data-client_id="387277586108-8m32c8tdfb0oemnr5kuv2fao6rtm35c0.apps.googleusercontent.com" 
+                 data-context="signin"
+                 data-ux_mode="popup"
+                 data-callback="handleCredentialResponse"
+                 data-auto_prompt="false" 
+                 data-auto_select="true">
+            </div>
+            <div class="g_id_signin" id="google-signin-button"
+                 data-type="standard"
+                 data-shape="rectangular"
+                 data-theme="outline"
+                 data-text="signin_with"
+                 data-size="large"
+                 data-logo_alignment="left">
+            </div>
+
+            <div id="profile-info" class="profile-info" style="display: none;">
+                <div class="profile-container">
+                    <img id="profile-picture" src="" alt="Profil Resmi">
+                    <div class="profile-text">
+                        <span id="profile-name"></span>
+                     
+                        <span id="profile-email"></span>
+                    </div>
+                                 <button id="logout-button">en üstÇıkış Yap</button>
+                </div>
+                <button id="logout-button">Çıkış Yap</button>
+            </div>
+            
+            <div id="access-denied" style="display: none;">Bu içeriğe erişim izniniz yok.</div>
+        </div>
+
+        <!-- İçerik alanı - giriş yapıldığında gösterilir -->
+        <div class="content-area" id="content-area">
+            <h3>Hoş Geldiniz!</h3>
+            <p>sBaşarılı bir şekilde giriş yaptınız. Bu alan sadece yetkili kullanıcılar tarafından görülebilir.</p>
+                 <button id="logout-button">Çıkış Yap en alt</button>            <!-- Buraya kendi içeriğinizi ekleyebilirsiniz -->
+            <div id="user-content">
+                <!-- Dinamik içerik buraya gelecek -->
+            </div>
+        </div>
+    </div>
+
+      <script src="script.js"></script>
+</body>
+</html>
