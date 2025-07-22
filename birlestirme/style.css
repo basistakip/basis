@@ -1,7 +1,10 @@
+
+
 body {
     background: linear-gradient(135deg, #f0f2f5 0%, #dfe6e9 100%);
 }/* YATAY LOGIN FORMU STİLLERİ */
 .login-container {
+        transition: all 0.3s ease;
     display: flex;
     flex-direction: row; /* Yatay düzen */
     align-items: center;
@@ -13,7 +16,10 @@ body {
     max-width: 800px; /* Daha geniş bir container */
     width: 100%;
 }
-
+.login-container:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 25px rgba(0, 0, 0, 0.15);
+} 
 .login-header {
     background-color: #003366;
     color: white;
