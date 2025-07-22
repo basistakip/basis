@@ -11,7 +11,20 @@ body {
     padding: 20px;
     box-sizing: border-box;
 }
+#logout-button {
+    display: block !important;
+    padding: 8px 16px;
+    background-color: #f44336;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-top: 10px;
+}
 
+#logout-button:hover {
+    background-color: #d32f2f;
+}
 
  /* aşağısı sayaçlar ve yanıp sönme  */
 
