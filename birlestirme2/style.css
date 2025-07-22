@@ -1190,7 +1190,7 @@ body {
 }
 /* login talep sil veya devreye al display: none; */
 #access-denied {
-    
+    display: none;
     color: #dc3545;
     margin-top: 20px;
     font-weight: bold;
