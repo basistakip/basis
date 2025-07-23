@@ -1,3 +1,4 @@
+
 // --- BUTON TIKLAMA YÖNETİMİ BAŞLANGIÇ ---
 document.addEventListener('DOMContentLoaded', function() {
     // Event delegation kullanarak tüm document'e click eventi ekle
@@ -28,6 +29,8 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 // --- BUTON TIKLAMA YÖNETİMİ BİTİŞ ---
+
+
 // --- GERİ SAYIM KODLARI BAŞLANGIÇ ---
 const countdowns = [
     { date: 10, hour: 0, minute: 0, text: 'Sayaç Okuma' },
@@ -103,6 +106,11 @@ function createCountdown(date, hour, minute, text) {
 // Tüm geri sayımları oluştur
 countdowns.forEach(c => createCountdown(c.date, c.hour, c.minute, c.text));
 // --- GERİ SAYIM KODLARI BİTİŞ ---
+
+
+
+
+
         document.addEventListener('DOMContentLoaded', () => {
             // HTML elementlerini seç
             const profileInfo = document.getElementById('profile-info');
