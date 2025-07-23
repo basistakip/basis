@@ -985,6 +985,17 @@ body {
     line-height: 1;
     color: #795548;
 }
+.simsek-icon::before {
+    content: "⚡";
+    font-size: 36px;
+    line-height: 1;
+    color: #2196F3;
+}
+
+
+
+
+
 
 .maritime-icon::before {
     content: "⚓";
