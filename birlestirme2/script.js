@@ -1,3 +1,33 @@
+// --- BUTON TIKLAMA YÖNETİMİ BAŞLANGIÇ ---
+document.addEventListener('DOMContentLoaded', function() {
+    // Event delegation kullanarak tüm document'e click eventi ekle
+    document.addEventListener('click', function(e) {
+        // Tıklanan elementin veya ebeveynlerinden birinin system-button class'ı olup olmadığını kontrol et
+        const button = e.target.closest('.system-button');
+        
+        if (button) {
+            // Eğer bu bir arama butonuysa veya özel bir iframe içeriyorsa işlem yapma
+            if (button.classList.contains('search-bar-wide') || button.querySelector('iframe')) {
+                return;
+            }
+
+            // URL'yi data-url attribute'undan al
+            const url = button.getAttribute('data-url');
+            
+            if (url && url !== '#' && url !== '') {
+                // Kullanıcı giriş yapmış mı kontrol et
+                const isLoggedIn = !!sessionStorage.getItem('google_id_token');
+                
+                if (isLoggedIn) {
+                    window.open(url, '_blank', 'noopener,noreferrer');
+                } else {
+                    alert("Lütfen önce Google hesabınızla giriş yapın!");
+                }
+            }
+        }
+    });
+});
+// --- BUTON TIKLAMA YÖNETİMİ BİTİŞ ---
 // --- GERİ SAYIM KODLARI BAŞLANGIÇ ---
 const countdowns = [
     { date: 10, hour: 0, minute: 0, text: 'Sayaç Okuma' },
