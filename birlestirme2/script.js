@@ -32,25 +32,28 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
 // --- GERİ SAYIM KODLARI BAŞLANGIÇ ---
+// --- GERİ SAYIM KODLARI BAŞLANGIÇ ---
 const countdowns = [
-    { date: 10, hour: 0, minute: 0, text: 'Sayaç Okuma' },
-    { date: 15, hour: 0, minute: 0, text: 'Sayaç Gönderme' },
-    { date: 24, hour: 0, minute: 0, text: 'Rapor Hazırlama' },
-    { date: 13, hour: 0, minute: 0, text: 'YEDEK 1' },
-    { date: 14, hour: 0, minute: 0, text: 'YEDEK 2' },
-    { date: 15, hour: 0, minute: 0, text: 'YEDEK 3' },
+    // Mevcut aylık geri sayımlar (URL ekleme isteğe bağlıdır, boş bırakılırsa eski gibi çalışır)
+    { date: 10, hour: 0, minute: 0, text: 'Sayaç Okuma', url: 'https://www.ornekurl.com/sayac-okuma' },
+    { date: 15, hour: 0, minute: 0, text: 'Sayaç Gönderme', url: '' }, // URL boş bırakıldı
+    { date: 24, hour: 0, minute: 0, text: 'Rapor Hazırlama', url: 'https://www.ornekurl.com/raporlar' },
+    { date: 13, hour: 0, minute: 0, text: 'YEDEK 1', url: '' },
+    { date: 14, hour: 0, minute: 0, text: 'YEDEK 2', url: '' },
+    { date: 15, hour: 0, minute: 0, text: 'YEDEK 3', url: '' },
     // Yıllık geri sayım - Haziran 12
-    { type: 'annual', month: 5, date: 12, hour: 9, minute: 0, text: 'Yıllık Bakım Tarihi' }, // Haziran ayı 5'tir (Ocak 0'dan başlar)
+    { type: 'annual', month: 5, date: 12, hour: 9, minute: 0, text: 'Yıllık Bakım Tarihi', url: 'https://www.ornekurl.com/yillik-bakim' },
     // Yıllık geri sayım - Ağustos 15
-    { type: 'annual', month: 7, date: 15, hour: 10, minute: 0, text: 'Yıllık Kontrol Tarihi' }, // Ağustos ayı 7'dir (Ocak 0'dan başlar)
+    { type: 'annual', month: 7, date: 15, hour: 10, minute: 0, text: 'Yıllık Kontrol Tarihi', url: 'https://www.ornekurl.com/yillik-kontrol' },
     // Tek seferlik geri sayım - 2028 Haziran 1
-    { type: 'one-time', year: 2028, month: 5, date: 1, hour: 0, minute: 0, text: 'Proje Bitiş Tarihi' }, // Haziran ayı 5'tir
+    { type: 'one-time', year: 2028, month: 5, date: 1, hour: 0, minute: 0, text: 'İşletme İh. Bitiş Tarihi', url: 'https://www.ornekurl.com/proje-bitis' },
     // Tek seferlik geri sayım - 2030 Ocak 1
-    { type: 'one-time', year: 2030, month: 0, date: 1, hour: 0, minute: 0, text: 'Yeni Yıl Kutlaması' } // Ocak ayı 0'dır
+    { type: 'one-time', year: 2030, month: 0, date: 1, hour: 0, minute: 0, text: 'Jen Yakıt tarihi Yeni Yıl Kutlaması', url: 'https://www.ornekurl.com/yeni-yil' }
 ];
 
 function createCountdown(countdownConfig) {
-    const { type, year, date, month, hour, minute, text } = countdownConfig; // 'year' parametresini de ekledik
+    // URL parametresini de konfigürasyondan alıyoruz
+    const { type, year, date, month, hour, minute, text, url } = countdownConfig;
 
     const counter = document.createElement('div');
     counter.className = 'counter';
@@ -76,12 +79,9 @@ function createCountdown(countdownConfig) {
             if (now > target) {
                 target.setFullYear(target.getFullYear() + 1);
             }
-        } else if (type === 'one-time') { // Tek seferlik geri sayım için koşul
+        } else if (type === 'one-time') {
             target = new Date(year, month, date, hour, minute, 0);
-            // Tek seferlik olduğu için geçmişse ileriye sarmıyoruz, olduğu gibi kalıyor
-        }
-        else {
-            // Mevcut aylık/günlük geri sayım mantığı
+        } else {
             target = new Date(now.getFullYear(), now.getMonth(), date, hour, minute, 0);
             if (now > target) {
                 target.setMonth(target.getMonth() + 1);
@@ -111,21 +111,25 @@ function createCountdown(countdownConfig) {
         counter.classList.remove('blinking-red', 'blinking-yellow');
         if (!seen) {
             if (type === 'annual') {
-                // Yıllık sayaçlar için eşikler
-                if (days <= 5) counter.classList.add('blinking-red');     // 5 gün veya daha az kala kırmızı
-                else if (days <= 15) counter.classList.add('blinking-yellow'); // 15 gün veya daha az kala sarı
+                if (days <= 5) counter.classList.add('blinking-red');
+                else if (days <= 15) counter.classList.add('blinking-yellow');
             } else {
-                // Diğer (aylık ve tek seferlik) sayaçlar için orijinal eşikler
-                if (days <= 2) counter.classList.add('blinking-red');     // 2 gün veya daha az kala kırmızı
-                else if (days <= 4) counter.classList.add('blinking-yellow'); // 4 gün veya daha az kala sarı
+                if (days <= 2) counter.classList.add('blinking-red');
+                else if (days <= 4) counter.classList.add('blinking-yellow');
             }
         }
     }
 
+    // "Gördüm" butonuna tıklama olayını güncelliyoruz
     button.addEventListener('click', () => {
         seen = true;
         counter.classList.remove('blinking-red', 'blinking-yellow');
         counter.style.background = '#e6f2ff';
+
+        // URL varsa yeni sekmede aç
+        if (url && url !== '') { // URL'nin boş veya tanımsız olup olmadığını kontrol ediyoruz
+            window.open(url, '_blank'); // '_blank' yeni sekmede açılmasını sağlar
+        }
     });
 
     targetDate = getNextTargetDate();
@@ -135,6 +139,7 @@ function createCountdown(countdownConfig) {
 
 // Tüm geri sayımları oluştur
 countdowns.forEach(c => createCountdown(c));
+// --- GERİ SAYIM KODLARI BİTİŞ ---
 // --- GERİ SAYIM KODLARI BİTİŞ ---
 
 
