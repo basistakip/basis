@@ -472,6 +472,17 @@ body {
     color: #607D8B;
 }
 
+
+.otomasyonpanel-icon::before {
+    content: "🎛️"; /* Oklar ile kayar kapı temsili */
+    font-size: 36px;
+    line-height: 1;
+    color: #607D8B;
+}
+
+
+
+
 .report-icon::before {
     content: "📊"; /* Grafik veya rapor ikonu */
     font-size: 36px;
