@@ -271,34 +271,24 @@ countdowns.forEach(c => createCountdown(c));
             });
 
             // Sayfa yüklendiğinde oturum kontrolü
-            function initializeAuthFlow() {
-                const savedToken = sessionStorage.getItem('google_id_token');
-                const savedEmail = sessionStorage.getItem('user_email');
-                
-                if (savedToken && savedEmail) {
-                    const decodedToken = parseJwt(savedToken);
-                    const isTokenExpired = decodedToken && decodedToken.exp * 1000 < Date.now();
-
-                    if (decodedToken && !isTokenExpired && allowedEmails.includes(savedEmail)) {
-                        console.log("Kayıtlı ve geçerli oturum bulundu.");
-                        profilePicture.src = decodedToken.picture;
-                        profileName.textContent = decodedToken.name;
-                        profileEmail.textContent = savedEmail;
-                        displayAuthorizedUI(decodedToken);
-                    } else {
-                        console.warn("Kayıtlı oturum geçersiz veya süresi dolmuş.");
-                        sessionStorage.removeItem('google_id_token');
-                        sessionStorage.removeItem('user_email');
-                        resetUI();
-                        google.accounts.id.prompt();
-                    }
-                } else {
-                    console.log("Kayıtlı oturum bulunamadı.");
-                    resetUI();
-                    google.accounts.id.prompt();
-                }
-            }
-
+             function initializeAuthFlow() {
+    const savedToken = localStorage.getItem('google_id_token'); // sessionStorage yerine localStorage
+    const savedEmail = localStorage.getItem('user_email');
+    
+    if (savedToken && savedEmail && isTokenValid(savedToken) && allowedEmails.includes(savedEmail)) {
+        // Geçerli oturum varsa UI'yı güncelle
+        const decodedToken = parseJwt(savedToken);
+        displayAuthorizedUI(decodedToken);
+    } else {
+        // Oturum yoksa veya geçersizse temizle
+        localStorage.removeItem('google_id_token');
+        localStorage.removeItem('user_email');
+        resetUI();
+        
+        // Kullanıcı etkileşimi olmadan otomatik prompt açma
+        // google.accounts.id.prompt(); // BU SATIRI KALDIRIN VEYA YORUM YAPIN
+    }
+}
             // Uygulamayı başlat
             initializeAuthFlow();
 
