@@ -426,6 +426,17 @@ body {
     color: #8BC34A;
 }
 
+
+.deepseek-icon::before {
+    content: "🧠"; /* Bina ikonu */
+    font-size: 36px;
+    line-height: 1;
+    color: #8BC34A;
+}
+
+
+
+
 .project-icon::before {
     content: "📋"; /* Pano veya belge ikonu gibi */
     font-size: 36px;
