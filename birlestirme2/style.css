@@ -440,6 +440,13 @@ body {
     color: #8BC34A;
 }
 
+
+
+
+
+
+
+
 .ups-icon::before {
     content: "🔋"; /* Şimşek veya pil ikonu */
     font-size: 36px;
@@ -510,7 +517,12 @@ body {
     color: #9C27B0;
 }
 
-
+.elektrikizleme-icon::before {
+    content: "⚡"; /* Büyüteç ikonu */
+    font-size: 36px;
+    line-height: 1;
+    color: #673AB7;
+}
 
 .research-icon::before {
     content: "🔍"; /* Büyüteç ikonu */
@@ -519,12 +531,23 @@ body {
     color: #673AB7;
 }
 
-.person-icon::before {
-    content: "👨‍💼"; /* kişi ikonu */
+.yanginizleme-icon::before {
+    content: "🧯"; /* yangın panel yangin */
     font-size: 36px;
     line-height: 1;
     color: #673AB7;
 }
+
+.building-icon::before {
+    content: "🏢"; /* Bina ikonu */
+    font-size: 36px;
+    line-height: 1;
+    color: #8BC34A;
+}
+
+
+
+
 
 
 .tag-icon::before {
