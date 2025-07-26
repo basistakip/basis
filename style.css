@@ -2,9 +2,11 @@
 /* TEMEL STİLLER */
 
    /* Google Sign-in Button Centering */
-      .g_id_signin {
-        margin: 0 auto;
-        display: block;
+         .google-signin-section {
+        display: flex;
+        justify-content: center;
+        width: 100%;
+        margin: 10px 0;
     }
 
 
