@@ -261,14 +261,15 @@ countdowns.forEach(c => createCountdown(c));
             }
 
             // Çıkış yap butonu
-            logoutButton.addEventListener('click', () => {
-                google.accounts.id.disableAutoSelect();
-                sessionStorage.removeItem('google_id_token');
-                sessionStorage.removeItem('user_email');
-                resetUI();
-                alert("Başarıyla çıkış yaptınız.");
-                google.accounts.id.prompt();
-            });
+        // Çıkış yap butonu
+logoutButton.addEventListener('click', () => {
+    google.accounts.id.disableAutoSelect();
+    localStorage.removeItem('google_id_token'); // localStorage kullanıyoruz
+    localStorage.removeItem('user_email');
+    resetUI();
+    alert("Başarıyla çıkış yaptınız.");
+    google.accounts.id.prompt();
+});
 
             // Sayfa yüklendiğinde oturum kontrolü
 // initializeAuthFlow fonksiyonunu şu şekilde güncelleyin:
