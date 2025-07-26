@@ -271,8 +271,9 @@ countdowns.forEach(c => createCountdown(c));
             });
 
             // Sayfa yüklendiğinde oturum kontrolü
-             function initializeAuthFlow() {
-    const savedToken = localStorage.getItem('google_id_token'); // sessionStorage yerine localStorage
+// initializeAuthFlow fonksiyonunu şu şekilde güncelleyin:
+function initializeAuthFlow() {
+    const savedToken = localStorage.getItem('google_id_token'); // localStorage kullanıyoruz
     const savedEmail = localStorage.getItem('user_email');
     
     if (savedToken && savedEmail && isTokenValid(savedToken) && allowedEmails.includes(savedEmail)) {
@@ -284,9 +285,6 @@ countdowns.forEach(c => createCountdown(c));
         localStorage.removeItem('google_id_token');
         localStorage.removeItem('user_email');
         resetUI();
-        
-        // Kullanıcı etkileşimi olmadan otomatik prompt açma
-        // google.accounts.id.prompt(); // BU SATIRI KALDIRIN VEYA YORUM YAPIN
     }
 }
             // Uygulamayı başlat
