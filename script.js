@@ -15,12 +15,11 @@ function handleCredentialResponse(response) {
     const profile = decodeJwtResponse(response.credential);
     console.log("ID Token Payload:", profile);
 
-    // Kullanıcı bilgilerini oturum depolamasına kaydet
-    // Bu, sayfa yenilendiğinde giriş durumunu korumamızı sağlar.
-    sessionStorage.setItem('google_id_token', response.credential);
-    sessionStorage.setItem('profile_name', profile.name);
-    sessionStorage.setItem('profile_email', profile.email);
-    sessionStorage.setItem('profile_picture', profile.picture);
+    // Kullanıcı bilgilerini localStorage'a kaydet (sessionStorage yerine)
+    localStorage.setItem('google_id_token', response.credential);
+    localStorage.setItem('profile_name', profile.name);
+    localStorage.setItem('profile_email', profile.email);
+    localStorage.setItem('profile_picture', profile.picture);
 
     // Giriş yapıldıktan sonra UI'ı güncelle
     updateUIForLoggedInUser();
@@ -37,10 +36,10 @@ function updateUIForLoggedInUser() {
     const profileEmail = document.getElementById('profile-email');
     const accessDenied = document.getElementById('access-denied'); // Erişim reddedildi mesajı
 
-    const idToken = sessionStorage.getItem('google_id_token');
-    const storedName = sessionStorage.getItem('profile_name');
-    const storedEmail = sessionStorage.getItem('profile_email');
-    const storedPicture = sessionStorage.getItem('profile_picture');
+    const idToken = localStorage.getItem('google_id_token');
+    const storedName = localStorage.getItem('profile_name');
+    const storedEmail = localStorage.getItem('profile_email');
+    const storedPicture = localStorage.getItem('profile_picture');
 
     // Yetkilendirilmiş e-posta adreslerini tanımlayın
     const allowedEmails = [
@@ -68,7 +67,7 @@ function updateUIForLoggedInUser() {
             accessDenied.style.display = 'block'; // Erişim reddedildi mesajını göster
             alert("Bu içeriğe erişim izniniz yok. Lütfen yetkili bir hesapla giriş yapın.");
             // Yetkisiz kullanıcı için oturumu kapat
-            sessionStorage.clear(); // Tüm oturum verilerini temizle
+            localStorage.clear(); // Tüm oturum verilerini temizle
             // Sayfayı yenileyerek giriş ekranına dön (isteğe bağlı)
             // location.reload();
         }
@@ -87,7 +86,7 @@ document.addEventListener('DOMContentLoaded', function() {
     if (logoutButton) {
         logoutButton.addEventListener('click', () => {
             // Sadece uygulamanın oturum verilerini temizle ve sayfayı yenile
-            sessionStorage.clear(); // Tüm oturum verilerini temizle
+            localStorage.clear(); // Tüm oturum verilerini temizle
             // Sayfayı yenileyerek giriş ekranına dön
             location.reload();
         });
@@ -117,7 +116,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
             if (url && url !== '#' && url !== '') {
                 // Kullanıcı giriş yapmış mı kontrol et
-                const isLoggedIn = !!sessionStorage.getItem('google_id_token');
+                const isLoggedIn = !!localStorage.getItem('google_id_token');
 
                 if (isLoggedIn) {
                     window.open(url, '_blank', 'noopener,noreferrer');
@@ -129,114 +128,3 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 // --- BUTON TIKLAMA YÖNETİMİ BİTİŞ ---
-
-
-// --- GERİ SAYIM KODLARI BAŞLANGIÇ ---
-// --- GERİ SAYIM KODLARI BAŞLANGIÇ ---
-const countdowns = [
-    // Mevcut aylık geri sayımlar (URL ekleme isteğe bağlıdır, boş bırakılırsa eski gibi çalışır)
-    { date: 10, hour: 0, minute: 0, text: 'Sayaç Okuma', url: 'https://www.ornekurl.com/sayac-okuma' },
-    { date: 15, hour: 0, minute: 0, text: 'Sayaç Gönderme', url: '' }, // URL boş bırakıldı
-    { date: 24, hour: 0, minute: 0, text: 'Rapor Hazırlama', url: 'https://www.ornekurl.com/raporlar' },
-    { date: 13, hour: 0, minute: 0, text: 'YEDEK 1', url: '' },
-    { date: 14, hour: 0, minute: 0, text: 'YEDEK 2', url: '' },
-    { date: 15, hour: 0, minute: 0, text: 'YEDEK 3', url: '' },
-    // Yıllık geri sayım - Haziran 12
-    { type: 'annual', month: 5, date: 12, hour: 9, minute: 0, text: 'Yıllık Bakım Tarihi', url: 'https://www.ornekurl.com/yillik-bakim' },
-    // Yıllık geri sayım - Ağustos 15
-    { type: 'annual', month: 7, date: 15, hour: 10, minute: 0, text: 'Yıllık Kontrol Tarihi', url: 'https://www.ornekurl.com/yillik-kontrol' },
-    // Tek seferlik geri sayım - 2028 Haziran 1
-    { type: 'one-time', year: 2028, month: 5, date: 1, hour: 0, minute: 0, text: 'İşletme İh. Bitiş Tarihi', url: 'https://www.ornekurl.com/proje-bitis' },
-    // Tek seferlik geri sayım - 2030 Ocak 1
-    { type: 'one-time', year: 2030, month: 0, date: 1, hour: 0, minute: 0, text: 'Jen Yakıt tarihi Yeni Yıl Kutlaması', url: 'https://www.ornekurl.com/yeni-yil' }
-];
-
-function createCountdown(countdownConfig) {
-    // URL parametresini de konfigürasyondan alıyoruz
-    const { type, year, date, month, hour, minute, text, url } = countdownConfig;
-
-    const counter = document.createElement('div');
-    counter.className = 'counter';
-    counter.innerHTML = `
-        <p>${text}</p>
-        <p id="timer-${text.replace(/\s+/g, '-').replace(/[^\w-]/g, '')}"></p>
-        <button>Gördüm</button>
-    `;
-
-    document.getElementById('counters').appendChild(counter);
-    const timer = counter.querySelector('p:nth-child(2)');
-    const button = counter.querySelector('button');
-
-    let targetDate;
-    let seen = false;
-
-    function getNextTargetDate() {
-        const now = new Date();
-        let target;
-
-        if (type === 'annual') {
-            target = new Date(now.getFullYear(), month, date, hour, minute, 0);
-            if (now > target) {
-                target.setFullYear(target.getFullYear() + 1);
-            }
-        } else if (type === 'one-time') {
-            target = new Date(year, month, date, hour, minute, 0);
-        } else {
-            target = new Date(now.getFullYear(), now.getMonth(), date, hour, minute, 0);
-            if (now > target) {
-                target.setMonth(target.getMonth() + 1);
-            }
-        }
-        return target;
-    }
-
-    function update() {
-        const now = new Date();
-        const diff = targetDate - now;
-
-        if (diff <= 0) {
-            timer.textContent = "SÜRE DOLDU!";
-            if (!seen) counter.classList.add('blinking-red');
-            return;
-        }
-
-        const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-        const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-        const mins = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-        const secs = Math.floor((diff % (1000 * 60)) / 1000);
-
-        timer.textContent = `${days}g ${Math.floor(hours)}s ${mins}d ${secs}sn`;
-
-        // Efektleri yönet
-        counter.classList.remove('blinking-red', 'blinking-yellow');
-        if (!seen) {
-            if (type === 'annual') {
-                if (days <= 5) counter.classList.add('blinking-red');
-                else if (days <= 15) counter.classList.add('blinking-yellow');
-            } else {
-                if (days <= 2) counter.classList.add('blinking-red');
-                else if (days <= 4) counter.classList.add('blinking-yellow');
-            }
-        }
-    }
-
-    // "Gördüm" butonuna tıklama olayını güncelliyoruz
-    button.addEventListener('click', () => {
-        seen = true;
-        counter.classList.remove('blinking-red', 'blinking-yellow');
-        counter.style.background = '#e6f2ff';
-
-        // URL varsa yeni sekmede aç
-        if (url && url !== '') { // URL'nin boş veya tanımsız olup olmadığını kontrol ediyoruz
-            window.open(url, '_blank'); // '_blank' yeni sekmede açılmasını sağlar
-        }
-    });
-
-    targetDate = getNextTargetDate();
-    setInterval(update, 1000);
-    update();
-}
-
-// Tüm geri sayımları oluştur
-countdowns.forEach(createCountdown);
-// --- GERİ SAYIM KODLARI BİTİŞ ---
