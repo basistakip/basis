@@ -289,7 +289,57 @@ function initializeAuthFlow() {
 }
             // Uygulamayı başlat
             initializeAuthFlow();
+// Token geçerlilik kontrol fonksiyonu ekleyin
+function isTokenValid(token) {
+    try {
+        const decoded = parseJwt(token);
+        if (!decoded || !decoded.exp) return false;
+        
+        // Token süresi dolmuş mu kontrol et (saniye cinsinden)
+        return decoded.exp * 1000 > Date.now();
+    } catch (e) {
+        return false;
+    }
+}
+window.handleCredentialResponse = (response) => {
+    const idToken = response.credential;
+    const decodedToken = parseJwt(idToken);
 
+    if (decodedToken && decodedToken.email) {
+        const userEmail = decodedToken.email.toLowerCase().trim();
+
+        if (allowedEmails.includes(userEmail)) {
+            // Yetkili kullanıcı
+            profilePicture.src = decodedToken.picture;
+            profileName.textContent = decodedToken.name;
+            profileEmail.textContent = userEmail;
+
+            // localStorage kullanıyoruz
+            localStorage.setItem('google_id_token', idToken);
+            localStorage.setItem('user_email', userEmail);
+
+            displayAuthorizedUI(decodedToken);
+            google.accounts.id.cancel();
+        } else {
+            // Yetkisiz kullanıcı
+            console.warn("Yetkisiz e-posta: " + userEmail);
+            showAccessDenied("'" + userEmail + "' ile bu içeriğe erişim izniniz yok. Lütfen yetkili bir hesapla giriş yapın.");
+            
+            googleSignInButton.style.display = 'none';
+            profileInfo.style.display = 'none';
+            contentArea.style.display = 'none';
+            
+            localStorage.removeItem('google_id_token');
+            localStorage.removeItem('user_email');
+            google.accounts.id.cancel();
+        }
+    } else {
+        console.error("Kimlik doğrulama başarısız.");
+        showAccessDenied("Giriş başarısız oldu. Lütfen tekrar deneyin.");
+        resetUI();
+    }
+};
+            
             // Global erişim için fonksiyonları dışa aktar (isteğe bağlı)
             window.loginSystem = {
                 isLoggedIn: () => !!sessionStorage.getItem('google_id_token'),
