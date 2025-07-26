@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <link rel="shortcut icon" type="png" href="resimler/basis.png"> 
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Elektrik Akışı Animasyonu</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: start;
+      height: 100vh;
+      width: 100%;
+      overflow: hidden;
+    }
+
+    .container {
+      position: relative;
+      width: 100%;
+      height: 100vh;
+    }
+
+    img {
+      width: 100%;
+      height: 100vh;
+      display: block;
+    }
+
+    svg {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <img src="https://i.hizliresim.com/9m0ki92.png" alt="Kroki" id="krokiImage">
+    <svg id="mapSvg">
+      <defs>
+        <!-- Gradyan Tanımı -->
+        <linearGradient id="electricGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" style="stop-color:#00ffff;stop-opacity:1" /> <!-- Parlak mavi -->
+          <stop offset="100%" style="stop-color:#00bfff;stop-opacity:1" /> <!-- Daha koyu mavi -->
+        </linearGradient>
+        <!-- Parlaklık Filtresi -->
+        <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+          <feGaussianBlur in="SourceAlpha" stdDeviation="2.5" result="blur" />
+          <feMerge>
+            <feMergeNode in="blur" />
+            <feMergeNode in="SourceGraphic" />
+          </feMerge>
+        </filter>
+      </defs>
+    </svg>
+  </div>
+
+  <script>
+    // Yolun geçeceği koordinatlar (3 farklı yol için 3 farklı liste)
+    const pathCoords1 = [
+      [1540, 1000], // TURKUAZ Başlangıç noktası
+      [1519, 368]
+    ];
+
+    const pathCoords2 = [
+      [1519, 368], // Bordo  Başlangıç noktası
+
+      [533, 321],   // 8 DM
+      [673, 927]    // 9 DM
+    ];
+    const pathCoords3 = [
+      [1519, 368], //sarı  Başlangıç noktası
+      [1519, 168],  // 1 DM
+    
+      [673, 977]    // 9 DM
+    ];
+
+    function createPath(pathCoords, color, delay) {
+      const image = document.getElementById('krokiImage');
+      const svg = document.getElementById('mapSvg');
+
+      const originalWidth = image.naturalWidth;
+      const originalHeight = image.naturalHeight;
+      const currentWidth = image.clientWidth;
+      const currentHeight = image.clientHeight;
+
+      // Yol verisini oluştur
+      let pathData = "";
+      pathCoords.forEach((coord, i) => {
+        const x = (coord[0] / originalWidth) * currentWidth;
+        const y = (coord[1] / originalHeight) * currentHeight;
+        if (i === 0) {
+          pathData += `M ${x},${y} `;
+        } else {
+          pathData += `L ${x},${y} `;
+        }
+      });
+
+      // Yolu SVG'ye ekle (görünür çizgi)
+      const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
+      path.setAttribute("d", pathData);
+      path.setAttribute("fill", "none");
+      path.setAttribute("stroke", color); // Renk parametresi
+      path.setAttribute("stroke-width", "2");
+      svg.appendChild(path);
+
+      // Animasyon dairesini ekle
+      const circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+      circle.setAttribute("r", "5");
+      circle.setAttribute("fill", color); // Dairenin içini doldur (renk parametresi)
+      circle.setAttribute("fill-opacity", "0.8"); // Dolgu opaklığı
+      circle.setAttribute("stroke", "#ffffff"); // Beyaz kenar çizgisi
+      circle.setAttribute("stroke-width", "1"); // Kenar çizgisi kalınlığı
+      circle.setAttribute("filter", "url(#glow)"); // Parlaklık efekti
+      svg.appendChild(circle);
+
+      // Animasyonu başlat
+      const animateMotion = document.createElementNS("http://www.w3.org/2000/svg", "animateMotion");
+      animateMotion.setAttribute("dur", "8s"); // Animasyon hızı
+      animateMotion.setAttribute("repeatCount", "indefinite");
+      animateMotion.setAttribute("path", pathData);
+      animateMotion.setAttribute("begin", `${delay}s`); // Gecikme süresi
+      circle.appendChild(animateMotion);
+
+      // Daireye büyüyüp küçülme animasyonu ekle
+      const animateSize = document.createElementNS("http://www.w3.org/2000/svg", "animate");
+      animateSize.setAttribute("attributeName", "r");
+      animateSize.setAttribute("values", "5;8;5"); // Büyüyüp küçülme değerleri
+      animateSize.setAttribute("dur", "0.5s"); // Animasyon süresi
+      animateSize.setAttribute("repeatCount", "indefinite");
+      circle.appendChild(animateSize);
+    }
+
+    window.addEventListener('load', () => {
+      createPath(pathCoords1, "#00ffff", 0); // Birinci yol (mavi), gecikme yok
+      createPath(pathCoords2, "#ff00ff", 2); // İkinci yol (pembe), 2 saniye gecikme
+      createPath(pathCoords3, "#ffff00", 3); // Üçüncü yol (sarı), 3 saniye gecikme
+    });
+    window.addEventListener('resize', () => {
+      const svg = document.getElementById('mapSvg');
+      svg.innerHTML = ''; // SVG'yi temizle
+      createPath(pathCoords1, "#00ffff", 0); // Birinci yol (mavi), gecikme yok
+      createPath(pathCoords2, "#ff00ff", 2); // İkinci yol (pembe), 2 saniye gecikme
+      createPath(pathCoords3, "#ffff00", 3); // Üçüncü yol (sarı), 3 saniye gecikme
+    });
+  </script>
+</body>
+</html>
