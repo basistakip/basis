@@ -86,23 +86,10 @@ document.addEventListener('DOMContentLoaded', function() {
     const logoutButton = document.getElementById('logout-button');
     if (logoutButton) {
         logoutButton.addEventListener('click', () => {
-            // Google One Tap oturumunu kapat (isteğe bağlı, API'ya bağlı)
-            if (google.accounts.id) {
-                google.accounts.id.disableAutoSelect(); // Otomatik seçimi kapat
-                google.accounts.id.prompt((notification) => {
-                    if (notification.isNotDisplayed() || notification.isSkippedMoment()) {
-                        // Oturum kapatma işlemi tamamlandı, oturum verilerini temizle
-                        sessionStorage.clear(); // Tüm oturum verilerini temizle
-                        updateUIForLoggedInUser(); // UI'ı güncelle
-                        location.reload(); // Sayfayı yenile (isteğe bağlı)
-                    }
-                });
-            } else {
-                // Google API'si yüklenmemişse bile oturum verilerini temizle
-                sessionStorage.clear(); // Tüm oturum verilerini temizle
-                updateUIForLoggedInUser(); // UI'ı güncelle
-                location.reload(); // Sayfayı yenile (isteğe bağlı)
-            }
+            // Sadece uygulamanın oturum verilerini temizle ve sayfayı yenile
+            sessionStorage.clear(); // Tüm oturum verilerini temizle
+            // Sayfayı yenileyerek giriş ekranına dön
+            location.reload();
         });
     }
 
