@@ -310,34 +310,25 @@ window.handleCredentialResponse = (response) => {
         const userEmail = decodedToken.email.toLowerCase().trim();
 
         if (allowedEmails.includes(userEmail)) {
-            // Yetkili kullanıcı
-            profilePicture.src = decodedToken.picture;
-            profileName.textContent = decodedToken.name;
-            profileEmail.textContent = userEmail;
-
-            // localStorage kullanıyoruz
+            // Tüm kullanıcı bilgilerini localStorage'a kaydet
             localStorage.setItem('google_id_token', idToken);
-            localStorage.setItem('user_email', userEmail);
+            localStorage.setItem('user_profile', JSON.stringify({
+                name: decodedToken.name,
+                email: userEmail,
+                picture: decodedToken.picture
+            }));
 
-            displayAuthorizedUI(decodedToken);
+            // UI'yı güncelle
+            updateProfileUI(JSON.parse(localStorage.getItem('user_profile')));
+            
+            // Google One Tap'i kapat
             google.accounts.id.cancel();
         } else {
-            // Yetkisiz kullanıcı
-            console.warn("Yetkisiz e-posta: " + userEmail);
-            showAccessDenied("'" + userEmail + "' ile bu içeriğe erişim izniniz yok. Lütfen yetkili bir hesapla giriş yapın.");
-            
-            googleSignInButton.style.display = 'none';
-            profileInfo.style.display = 'none';
-            contentArea.style.display = 'none';
-            
-            localStorage.removeItem('google_id_token');
-            localStorage.removeItem('user_email');
-            google.accounts.id.cancel();
+            // Yetkisiz kullanıcı işlemleri
+            handleUnauthorizedUser(userEmail);
         }
     } else {
-        console.error("Kimlik doğrulama başarısız.");
-        showAccessDenied("Giriş başarısız oldu. Lütfen tekrar deneyin.");
-        resetUI();
+        handleAuthError();
     }
 };
             
