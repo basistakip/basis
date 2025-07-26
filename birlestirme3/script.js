@@ -1,3 +1,116 @@
+// --- Google Sign-In Yönetimi BAŞLANGIÇ ---
+
+// Bu fonksiyon, Google kimlik bilgileri döndüğünde otomatik olarak çağrılır.
+function handleCredentialResponse(response) {
+    // Google ID token'ını decode etmek için bir yardımcı fonksiyon (isteğe bağlı ama iyi pratik)
+    const decodeJwtResponse = (token) => {
+        let base64Url = token.split('.')[1];
+        let base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+        let jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
+            return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+        }).join(''));
+        return JSON.parse(jsonPayload);
+    };
+
+    const profile = decodeJwtResponse(response.credential);
+    console.log("ID Token Payload:", profile);
+
+    // Kullanıcı bilgilerini oturum depolamasına kaydet
+    // Bu, sayfa yenilendiğinde giriş durumunu korumamızı sağlar.
+    sessionStorage.setItem('google_id_token', response.credential);
+    sessionStorage.setItem('profile_name', profile.name);
+    sessionStorage.setItem('profile_email', profile.email);
+    sessionStorage.setItem('profile_picture', profile.picture);
+
+    // Giriş yapıldıktan sonra UI'ı güncelle
+    updateUIForLoggedInUser();
+}
+
+// UI'ı giriş durumuna göre güncelleyen fonksiyon
+function updateUIForLoggedInUser() {
+    const googleSigninSection = document.querySelector('.google-signin-section');
+    const profileInfo = document.getElementById('profile-info');
+    const googleSigninButton = document.getElementById('google-signin-button');
+    const contentArea = document.getElementById('content-area');
+    const profilePicture = document.getElementById('profile-picture');
+    const profileName = document.getElementById('profile-name');
+    const profileEmail = document.getElementById('profile-email');
+    const accessDenied = document.getElementById('access-denied'); // Erişim reddedildi mesajı
+
+    const idToken = sessionStorage.getItem('google_id_token');
+    const storedName = sessionStorage.getItem('profile_name');
+    const storedEmail = sessionStorage.getItem('profile_email');
+    const storedPicture = sessionStorage.getItem('profile_picture');
+
+    // Yetkilendirilmiş e-posta adreslerini tanımlayın
+    const allowedEmails = [
+        "eren.b.cetin@gmail.com",
+        "ygtcan10@gmail.com",
+        // Ek yetkili e-postaları buraya ekleyin
+    ];
+
+    if (idToken && storedEmail) {
+        // Kullanıcının e-postası yetkili listede mi kontrol et
+        if (allowedEmails.includes(storedEmail)) {
+            googleSigninButton.style.display = 'none'; // Google giriş butonunu gizle
+            profileInfo.style.display = 'flex'; // Profil bilgisini göster
+            contentArea.style.display = 'block'; // İçerik alanını göster
+
+            profilePicture.src = storedPicture;
+            profileName.textContent = storedName;
+            profileEmail.textContent = storedEmail;
+            accessDenied.style.display = 'none'; // Erişim reddedildi mesajını gizle
+        } else {
+            // Yetkisiz kullanıcı
+            googleSigninButton.style.display = 'none'; // Giriş butonunu gizle
+            profileInfo.style.display = 'none'; // Profil bilgisini gizle
+            contentArea.style.display = 'none'; // İçerik alanını gizle
+            accessDenied.style.display = 'block'; // Erişim reddedildi mesajını göster
+            alert("Bu içeriğe erişim izniniz yok. Lütfen yetkili bir hesapla giriş yapın.");
+            // Yetkisiz kullanıcı için oturumu kapat
+            sessionStorage.clear(); // Tüm oturum verilerini temizle
+            // Sayfayı yenileyerek giriş ekranına dön (isteğe bağlı)
+            // location.reload();
+        }
+    } else {
+        // Giriş yapılmamışsa veya token yoksa
+        googleSigninButton.style.display = 'block'; // Google giriş butonunu göster
+        profileInfo.style.display = 'none'; // Profil bilgisini gizle
+        contentArea.style.display = 'none'; // İçerik alanını gizle
+        accessDenied.style.display = 'none'; // Erişim reddedildi mesajını gizle
+    }
+}
+
+// Çıkış yap butonu işlevselliği
+document.addEventListener('DOMContentLoaded', function() {
+    const logoutButton = document.getElementById('logout-button');
+    if (logoutButton) {
+        logoutButton.addEventListener('click', () => {
+            // Google One Tap oturumunu kapat (isteğe bağlı, API'ya bağlı)
+            if (google.accounts.id) {
+                google.accounts.id.disableAutoSelect(); // Otomatik seçimi kapat
+                google.accounts.id.prompt((notification) => {
+                    if (notification.isNotDisplayed() || notification.isSkippedMoment()) {
+                        // Oturum kapatma işlemi tamamlandı, oturum verilerini temizle
+                        sessionStorage.clear(); // Tüm oturum verilerini temizle
+                        updateUIForLoggedInUser(); // UI'ı güncelle
+                        location.reload(); // Sayfayı yenile (isteğe bağlı)
+                    }
+                });
+            } else {
+                // Google API'si yüklenmemişse bile oturum verilerini temizle
+                sessionStorage.clear(); // Tüm oturum verilerini temizle
+                updateUIForLoggedInUser(); // UI'ı güncelle
+                location.reload(); // Sayfayı yenile (isteğe bağlı)
+            }
+        });
+    }
+
+    // Sayfa yüklendiğinde giriş durumunu kontrol et ve UI'ı güncelle
+    updateUIForLoggedInUser();
+});
+// --- Google Sign-In Yönetimi BİTİŞ ---
+
 
 // --- BUTON TIKLAMA YÖNETİMİ BAŞLANGIÇ ---
 document.addEventListener('DOMContentLoaded', function() {
@@ -5,7 +118,7 @@ document.addEventListener('DOMContentLoaded', function() {
     document.addEventListener('click', function(e) {
         // Tıklanan elementin veya ebeveynlerinden birinin system-button class'ı olup olmadığını kontrol et
         const button = e.target.closest('.system-button');
-        
+
         if (button) {
             // Eğer bu bir arama butonuysa veya özel bir iframe içeriyorsa işlem yapma
             if (button.classList.contains('search-bar-wide') || button.querySelector('iframe')) {
@@ -14,11 +127,11 @@ document.addEventListener('DOMContentLoaded', function() {
 
             // URL'yi data-url attribute'undan al
             const url = button.getAttribute('data-url');
-            
+
             if (url && url !== '#' && url !== '') {
                 // Kullanıcı giriş yapmış mı kontrol et
                 const isLoggedIn = !!sessionStorage.getItem('google_id_token');
-                
+
                 if (isLoggedIn) {
                     window.open(url, '_blank', 'noopener,noreferrer');
                 } else {
@@ -138,207 +251,5 @@ function createCountdown(countdownConfig) {
 }
 
 // Tüm geri sayımları oluştur
-countdowns.forEach(c => createCountdown(c));
+countdowns.forEach(createCountdown);
 // --- GERİ SAYIM KODLARI BİTİŞ ---
-// --- GERİ SAYIM KODLARI BİTİŞ ---
-
-
-
-
-
-        document.addEventListener('DOMContentLoaded', () => {
-            // HTML elementlerini seç
-            const profileInfo = document.getElementById('profile-info');
-            const profilePicture = document.getElementById('profile-picture');
-            const profileName = document.getElementById('profile-name');
-            const profileEmail = document.getElementById('profile-email');
-            const logoutButton = document.getElementById('logout-button');
-            const accessDeniedMessage = document.getElementById('access-denied');
-            const googleSignInButton = document.querySelector('.g_id_signin');
-            const contentArea = document.getElementById('content-area');
-
-            // --- İZİN VERİLEN E-POSTA ADRESLERİ LİSTESİ ---
-            const allowedEmails = [
-                "mahmutkilicankara@gmail.com",
-                "ikinci.izinli.kullanici@example.com",
-                "ucuncu.kullanici@gmail.com"
-            ];
-            // --------------------------------------------------------
-
-            // Global fonksiyon: Google kimlik bilgileri yanıtını işler
-            window.handleCredentialResponse = (response) => {
-                const idToken = response.credential;
-                const decodedToken = parseJwt(idToken);
-
-                if (decodedToken && decodedToken.email) {
-                    const userEmail = decodedToken.email.toLowerCase().trim();
-
-                    if (allowedEmails.includes(userEmail)) {
-                        // Yetkili kullanıcı
-                        profilePicture.src = decodedToken.picture;
-                        profileName.textContent = decodedToken.name;
-                        profileEmail.textContent = userEmail;
-
-                        // localStorage yerine sessionStorage kullanabiliriz
-                        sessionStorage.setItem('google_id_token', idToken);
-                        sessionStorage.setItem('user_email', userEmail);
-
-                        displayAuthorizedUI(decodedToken);
-                        google.accounts.id.cancel();
-                    } else {
-                        // Yetkisiz kullanıcı
-                        console.warn("Yetkisiz e-posta: " + userEmail);
-                        showAccessDenied("'" + userEmail + "' ile bu içeriğe erişim izniniz yok. Lütfen yetkili bir hesapla giriş yapın.");
-                        
-                        // Sadece giriş butonunu gizle, erişim reddi mesajını göster
-                        googleSignInButton.style.display = 'none';
-                        profileInfo.style.display = 'none';
-                        contentArea.style.display = 'none';
-                        
-                        sessionStorage.removeItem('google_id_token');
-                        sessionStorage.removeItem('user_email');
-                        google.accounts.id.cancel();
-                    }
-                } else {
-                    console.error("Kimlik doğrulama başarısız.");
-                    showAccessDenied("Giriş başarısız oldu. Lütfen tekrar deneyin.");
-                    resetUI();
-                }
-            };
-
-            // JWT çözümleme fonksiyonu
-            function parseJwt(token) {
-                try {
-                    const base64Url = token.split('.')[1];
-                    const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-                    const jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
-                        return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
-                    }).join(''));
-                    return JSON.parse(jsonPayload);
-                } catch (e) {
-                    console.error("JWT çözümleme hatası:", e);
-                    return null;
-                }
-            }
-
-            // Erişim engellendi mesajını göster
-            function showAccessDenied(message) {
-                accessDeniedMessage.textContent = message;
-                accessDeniedMessage.style.display = 'block';
-                if (window.accessDeniedTimeout) {
-                    clearTimeout(window.accessDeniedTimeout);
-                }
-                window.accessDeniedTimeout = setTimeout(() => {
-                    accessDeniedMessage.style.display = 'none';
-                    window.accessDeniedTimeout = null;
-                    // Mesaj gizlendikten sonra giriş butonunu tekrar göster
-                    googleSignInButton.style.display = 'block';
-                }, 8000);
-            }
-
-            // Yetkili kullanıcı UI'ını göster
-            function displayAuthorizedUI(decodedToken) {
-                profileInfo.style.display = 'flex';
-                googleSignInButton.style.display = 'none';
-                accessDeniedMessage.style.display = 'none';
-                contentArea.style.display = 'block';
-
-                // Burada özel içerik ekleyebilirsiniz
-                document.getElementById('user-content').innerHTML = `
-                    <p><strong>Kullanıcı Bilgileri:</strong></p>
-                    <p>Ad: ${decodedToken.name}</p>
-                    <p>E-posta: ${decodedToken.email}</p>
-                    <p>Giriş Zamanı: ${new Date().toLocaleString('tr-TR')}</p>
-                `;
-            }
-
-            // UI'ı başlangıç durumuna sıfırla
-            function resetUI() {
-                profileInfo.style.display = 'none';
-                googleSignInButton.style.display = 'block';
-                accessDeniedMessage.style.display = 'none';
-                contentArea.style.display = 'none';
-            }
-
-            // Çıkış yap butonu
-        // Çıkış yap butonu
-logoutButton.addEventListener('click', () => {
-    google.accounts.id.disableAutoSelect();
-    localStorage.removeItem('google_id_token'); // localStorage kullanıyoruz
-    localStorage.removeItem('user_email');
-    resetUI();
-    alert("Başarıyla çıkış yaptınız.");
-    google.accounts.id.prompt();
-});
-
-            // Sayfa yüklendiğinde oturum kontrolü
-// initializeAuthFlow fonksiyonunu şu şekilde güncelleyin:
-function initializeAuthFlow() {
-    const savedToken = localStorage.getItem('google_id_token'); // localStorage kullanıyoruz
-    const savedEmail = localStorage.getItem('user_email');
-    
-    if (savedToken && savedEmail && isTokenValid(savedToken) && allowedEmails.includes(savedEmail)) {
-        // Geçerli oturum varsa UI'yı güncelle
-        const decodedToken = parseJwt(savedToken);
-        displayAuthorizedUI(decodedToken);
-    } else {
-        // Oturum yoksa veya geçersizse temizle
-        localStorage.removeItem('google_id_token');
-        localStorage.removeItem('user_email');
-        resetUI();
-    }
-}
-            // Uygulamayı başlat
-            initializeAuthFlow();
-// Token geçerlilik kontrol fonksiyonu ekleyin
-function isTokenValid(token) {
-    try {
-        const decoded = parseJwt(token);
-        if (!decoded || !decoded.exp) return false;
-        
-        // Token süresi dolmuş mu kontrol et (saniye cinsinden)
-        return decoded.exp * 1000 > Date.now();
-    } catch (e) {
-        return false;
-    }
-}
-window.handleCredentialResponse = (response) => {
-    const idToken = response.credential;
-    const decodedToken = parseJwt(idToken);
-
-    if (decodedToken && decodedToken.email) {
-        const userEmail = decodedToken.email.toLowerCase().trim();
-
-        if (allowedEmails.includes(userEmail)) {
-            // Tüm kullanıcı bilgilerini localStorage'a kaydet
-            localStorage.setItem('google_id_token', idToken);
-            localStorage.setItem('user_profile', JSON.stringify({
-                name: decodedToken.name,
-                email: userEmail,
-                picture: decodedToken.picture
-            }));
-
-            // UI'yı güncelle
-            updateProfileUI(JSON.parse(localStorage.getItem('user_profile')));
-            
-            // Google One Tap'i kapat
-            google.accounts.id.cancel();
-        } else {
-            // Yetkisiz kullanıcı işlemleri
-            handleUnauthorizedUser(userEmail);
-        }
-    } else {
-        handleAuthError();
-    }
-};
-            
-            // Global erişim için fonksiyonları dışa aktar (isteğe bağlı)
-            window.loginSystem = {
-                isLoggedIn: () => !!sessionStorage.getItem('google_id_token'),
-                getCurrentUser: () => {
-                    const token = sessionStorage.getItem('google_id_token');
-                    return token ? parseJwt(token) : null;
-                },
-                logout: () => logoutButton.click()
-            };
-        });
