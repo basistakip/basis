@@ -1,5 +1,12 @@
 
 /* TEMEL STİLLER */
+
+.g_id_signin {
+        margin: 0 auto;
+        display: block;
+    }
+
+
 body {
     display: flex;
     justify-content: center;
