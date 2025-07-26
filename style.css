@@ -3,10 +3,8 @@
 
    /* Google Sign-in Button Centering */
          .google-signin-section {
-        display: flex;
-        justify-content: center;
-        width: 100%;
-        margin: 10px 0;
+             justify-content: center;
+     
     }
 
 
