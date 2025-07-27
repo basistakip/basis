@@ -1,6 +1,13 @@
 
-
 /* TEMEL STİLLER */
+
+   /* Google Sign-in Button Centering */
+         .google-signin-section {
+             justify-content: center;
+        display: flex;
+    }
+
+
 body {
     display: flex;
     justify-content: center;
@@ -1420,5 +1427,3 @@ body {
     }
 }
 /* sayaçlar YANIP SÖNME bitiş*/
-
-
