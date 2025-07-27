@@ -23,13 +23,51 @@ body {
 
 
 /* ====== RESIMLI BUTON STILLERI başlangıç ====== */
+/* RESİMLİ BUTON STİLLERİ */
+.system-button {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 25px 15px;
+    border-radius: 10px;
+    background: #ffffff;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-align: center;
+    min-height: 120px;
+    border: 1px solid #e0e0e0;
+    text-decoration: none; /* Link alt çizgisini kaldırır */
+}
+
+.system-button:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+    background-color: #e6f2ff;
+    border-color: #b3d1ff;
+}
+
+.system-button span {
+    font-size: 0.95em;
+    font-weight: 600;
+    color: #333;
+    transition: all 0.3s ease;
+    margin-top: 10px;
+}
+
+.system-button:hover span {
+    color: #0056b3;
+    font-weight: 700;
+}
+
+/* Özel resimli buton için ek stiller */
 .icon-image-container {
-    width: 80px;  /* Container boyutu */
-    height: 80px;
+    width: 60px;
+    height: 60px;
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-bottom: 12px;
     background-color: #e6f2ff;
     border-radius: 50%;
     transition: all 0.3s ease;
@@ -37,8 +75,8 @@ body {
 }
 
 .button-image-large {
-    width: 75px;  /* Resim boyutu */
-    height: 75px;
+    width: 55px;
+    height: 55px;
     object-fit: contain;
     transition: all 0.3s ease;
 }
@@ -46,31 +84,12 @@ body {
 /* Hover efektleri */
 .system-button:hover .icon-image-container {
     background-color: #cce0ff;
-    transform: scale(1.05);
+    transform: scale(1.1);
 }
 
 .system-button:hover .button-image-large {
     transform: scale(1.1);
     filter: brightness(1.1);
-}
-
-/* Buton yüksekliği ayarı */
-.other-systems .system-button {
-    min-height: 140px;
-    padding: 20px 15px;
-}
-
-/* Sistem butonları için metin stili */
-.other-systems .system-button span {
-    font-size: 0.95em;
-    font-weight: 600;
-    color: #333;
-    transition: all 0.3s ease;
-}
-
-.other-systems .system-button:hover span {
-    color: #0056b3;
-    transform: translateY(2px);
 }
 /* ====== RESIMLI BUTON STILLERI bitiş====== */
 
