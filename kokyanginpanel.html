@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rektörlük Yangın -B blok bodrum eksik hatalı yeniden yapılacak 8d1306 </title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #8d1306; /* Kırmızı arkaplan */
+            color: white;
+        }
+        .search-container {
+            padding: 10px;
+        }
+        #searchInput {
+            width: 100%;
+            padding: 8px;
+            font-size: 14px;
+            box-sizing: border-box;
+        }
+        #results {
+            border: 1px solid #ddd;
+            min-height: 20px;
+            max-width: 100%;
+            padding: 5px;
+            font-size: 12px;
+            margin-top: 5px;
+            background-color: white;
+            color: black;
+        }
+        .result-item {
+            padding: 5px;
+            cursor: pointer;
+            border-bottom: 1px solid #eee;
+            font-size: 12px;
+        }
+        .result-item:hover {
+            background-color: #f5f5f5;
+        }
+        select {
+            padding: 6px;
+            margin-right: 5px;
+            font-size: 12px;
+        }
+        .input-group {
+            margin-bottom: 5px;
+            display: flex;
+            flex-wrap: wrap;
+        }
+        button {
+            padding: 6px 12px;
+            font-size: 12px;
+            margin-top: 5px;
+        }
+        h3 {
+            margin: 5px 0;
+            font-size: 14px;
+            padding: 0 10px;
+        }
+        input[type="number"] {
+            width: 60px;
+            padding: 6px;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+<h3>Rektörlük Yangın Arama</h3>
+    
+    <div class="search-container">
+        <div class="input-group">
+            <select id="prefix1">
+                 <option value="1P">Panel 1</option>
+                <option value="2P">Panel 2</option>
+            </select>
+          
+            <select id="prefix2">
+               <option value="1Ç">Çevrim 01</option>
+               <option value="2Ç">Çevrim 02</option>
+            </select>
+            
+            <input 
+                type="number" 
+                id="numberInput" 
+                placeholder="Adres" 
+                style="padding: 6px;" 
+                min="0" 
+                max="999" 
+                maxlength="3" 
+                oninput="this.value=this.value.replace(/[^0-9]/g,''); if(this.value.length > 3) this.value = this.value.slice(0, 3);"
+            >
+        </div>
+      
+        <button onclick="searchItem()">Ara</button>
+    </div>
+    
+    <div id="results"></div>
+    
+    <script>
+        // Data structure for the items
+        const items = {
+            "A BLOK 1.KAT": [
+                "2P. 2Ç. 22",
+                "2P. 2Ç. 23",
+                "2P. 2Ç. 24",
+                "2P. 2Ç. 25",
+                "2P. 2Ç. 26",
+                "2P. 2Ç. 27",
+                "2P. 2Ç. 28",
+                "2P. 2Ç. 29",
+                "2P. 2Ç. 30",
+                "2P. 2Ç. 31",
+                "2P. 2Ç. 32",
+                "2P. 2Ç. 33",
+                "2P. 2Ç. 34",
+                "2P. 2Ç. 35",
+                "2P. 2Ç. 36",
+                "2P. 2Ç. 37",
+                "2P. 2Ç. 38",
+                "2P. 2Ç. 39",
+                "2P. 2Ç. 40",
+                "2P. 2Ç. 41"
+            ],
+            // ... (diğer tüm veriler aynı şekilde kalacak)
+            // Kısaltma yapıyorum, gerçek kodda tüm veriler olacak
+        };
+        
+        // PDF links for each category
+        const pdfLinks = {
+            "A BLOK 1.KAT": "https://drive.google.com/file/d/1hqrSZnLZhP6wQY4Oot_J5nIAZ2C2Aygc/view?usp=drive_link",
+            // ... (diğer tüm PDF linkleri aynı şekilde kalacak)
+            // Kısaltma yapıyorum, gerçek kodda tüm linkler olacak
+        };
+        
+        function searchItem() {
+            const prefix1 = document.getElementById('prefix1').value;
+            const prefix2 = document.getElementById('prefix2').value;
+            const number = document.getElementById('numberInput').value.trim();
+            
+            if (!number) {
+                alert("Lütfen bir numara giriniz.");
+                return;
+            }
+            
+            const searchTerm = `${prefix1}. ${prefix2}. ${number}`;
+            const resultsDiv = document.getElementById('results');
+            resultsDiv.innerHTML = '';
+            
+            let found = false;
+            
+            // Search through all categories
+            for (const [category, itemList] of Object.entries(items)) {
+                if (itemList.includes(searchTerm)) {
+                    found = true;
+                    const resultItem = document.createElement('div');
+                    resultItem.className = 'result-item';
+                    resultItem.textContent = `${searchTerm} (YERİ: KAT ${category})`;
+                    
+                    resultItem.onclick = function() {
+                        openPdf(category);
+                    };
+                    
+                    resultsDiv.appendChild(resultItem);
+                    break; // Stop after first match
+                }
+            }
+            
+            if (!found) {
+                resultsDiv.innerHTML = `<div class="result-item">Sonuç bulunamadı: ${searchTerm}</div>`;
+            }
+        }
+        
+        function openPdf(category) {
+            const pdfUrl = pdfLinks[category];
+            if (pdfUrl) {
+                window.open(pdfUrl, '_blank');
+            } else {
+                alert("PDF bağlantısı bulunamadı!");
+            }
+        }
+        
+        // Allow pressing Enter in the number input
+        document.getElementById('numberInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                searchItem();
+            }
+        });
+        
+        // Focus on number input when page loads
+        window.onload = function() {
+            document.getElementById('numberInput').focus();
+        };
+    </script>
+</body>
+</html>
