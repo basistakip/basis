@@ -1,8 +1,7 @@
-// --- Google Sign-In Yönetimi BAŞLANGIÇ ---
-
+// --- GOOGLE SIGN-IN YÖNETİMİ BAŞLANGIÇ ---
 // Bu fonksiyon, Google kimlik bilgileri döndüğünde otomatik olarak çağrılır.
 function handleCredentialResponse(response) {
-    // Google ID token'ını decode etmek için bir yardımcı fonksiyon (isteğe bağlı ama iyi pratik)
+    // JWT token'ını decode etmek için yardımcı fonksiyon
     const decodeJwtResponse = (token) => {
         let base64Url = token.split('.')[1];
         let base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
@@ -15,7 +14,7 @@ function handleCredentialResponse(response) {
     const profile = decodeJwtResponse(response.credential);
     console.log("ID Token Payload:", profile);
 
-    // Kullanıcı bilgilerini localStorage'a kaydet (sessionStorage yerine)
+    // Kullanıcı bilgilerini localStorage'a kaydet
     localStorage.setItem('google_id_token', response.credential);
     localStorage.setItem('profile_name', profile.name);
     localStorage.setItem('profile_email', profile.email);
@@ -27,56 +26,38 @@ function handleCredentialResponse(response) {
 
 // UI'ı giriş durumuna göre güncelleyen fonksiyon
 function updateUIForLoggedInUser() {
-    const googleSigninSection = document.querySelector('.google-signin-section');
-    const profileInfo = document.getElementById('profile-info');
     const googleSigninButton = document.getElementById('google-signin-button');
+    const profileInfo = document.getElementById('profile-info');
     const contentArea = document.getElementById('content-area');
-    const profilePicture = document.getElementById('profile-picture');
-    const profileName = document.getElementById('profile-name');
-    const profileEmail = document.getElementById('profile-email');
-    const accessDenied = document.getElementById('access-denied'); // Erişim reddedildi mesajı
+    const accessDenied = document.getElementById('access-denied');
 
     const idToken = localStorage.getItem('google_id_token');
-    const storedName = localStorage.getItem('profile_name');
     const storedEmail = localStorage.getItem('profile_email');
-    const storedPicture = localStorage.getItem('profile_picture');
 
-    // Yetkilendirilmiş e-posta adreslerini tanımlayın
+    // Yetkilendirilmiş e-posta adresleri
     const allowedEmails = [
         "mahmutkilicankara@gmail.com",
         "ygtcan10@gmail.com",
-        // Ek yetkili e-postaları buraya ekleyin
     ];
 
     if (idToken && storedEmail) {
-        // Kullanıcının e-postası yetkili listede mi kontrol et
         if (allowedEmails.includes(storedEmail)) {
-            googleSigninButton.style.display = 'none'; // Google giriş butonunu gizle
-            profileInfo.style.display = 'flex'; // Profil bilgisini göster
-            contentArea.style.display = 'block'; // İçerik alanını göster
-
-            profilePicture.src = storedPicture;
-            profileName.textContent = storedName;
-            profileEmail.textContent = storedEmail;
-            accessDenied.style.display = 'none'; // Erişim reddedildi mesajını gizle
+            googleSigninButton.style.display = 'none';
+            profileInfo.style.display = 'flex';
+            contentArea.style.display = 'block';
+            accessDenied.style.display = 'none';
         } else {
-            // Yetkisiz kullanıcı
-            googleSigninButton.style.display = 'none'; // Giriş butonunu gizle
-            profileInfo.style.display = 'none'; // Profil bilgisini gizle
-            contentArea.style.display = 'none'; // İçerik alanını gizle
-            accessDenied.style.display = 'block'; // Erişim reddedildi mesajını göster
-            alert("Bu içeriğe erişim izniniz yok. Lütfen yetkili bir hesapla giriş yapın.");
-            // Yetkisiz kullanıcı için oturumu kapat
-            localStorage.clear(); // Tüm oturum verilerini temizle
-            // Sayfayı yenileyerek giriş ekranına dön (isteğe bağlı)
-            // location.reload();
+            googleSigninButton.style.display = 'none';
+            profileInfo.style.display = 'none';
+            contentArea.style.display = 'none';
+            accessDenied.style.display = 'block';
+            localStorage.clear();
         }
     } else {
-        // Giriş yapılmamışsa veya token yoksa
-        googleSigninButton.style.display = 'block'; // Google giriş butonunu göster
-        profileInfo.style.display = 'none'; // Profil bilgisini gizle
-        contentArea.style.display = 'none'; // İçerik alanını gizle
-        accessDenied.style.display = 'none'; // Erişim reddedildi mesajını gizle
+        googleSigninButton.style.display = 'block';
+        profileInfo.style.display = 'none';
+        contentArea.style.display = 'none';
+        accessDenied.style.display = 'none';
     }
 }
 
@@ -85,39 +66,22 @@ document.addEventListener('DOMContentLoaded', function() {
     const logoutButton = document.getElementById('logout-button');
     if (logoutButton) {
         logoutButton.addEventListener('click', () => {
-            // Sadece uygulamanın oturum verilerini temizle ve sayfayı yenile
-            localStorage.clear(); // Tüm oturum verilerini temizle
-            // Sayfayı yenileyerek giriş ekranına dön
+            localStorage.clear();
             location.reload();
         });
     }
-
-    // Sayfa yüklendiğinde giriş durumunu kontrol et ve UI'ı güncelle
     updateUIForLoggedInUser();
 });
-// --- Google Sign-In Yönetimi BİTİŞ ---
-
+// --- GOOGLE SIGN-IN YÖNETİMİ BİTİŞ ---
 
 // --- BUTON TIKLAMA YÖNETİMİ BAŞLANGIÇ ---
 document.addEventListener('DOMContentLoaded', function() {
-    // Event delegation kullanarak tüm document'e click eventi ekle
     document.addEventListener('click', function(e) {
-        // Tıklanan elementin veya ebeveynlerinden birinin system-button class'ı olup olmadığını kontrol et
         const button = e.target.closest('.system-button');
-
-        if (button) {
-            // Eğer bu bir arama butonuysa veya özel bir iframe içeriyorsa işlem yapma
-            if (button.classList.contains('search-bar-wide') || button.querySelector('iframe')) {
-                return;
-            }
-
-            // URL'yi data-url attribute'undan al
+        if (button && !button.classList.contains('search-bar-wide') && !button.querySelector('iframe')) {
             const url = button.getAttribute('data-url');
-
             if (url && url !== '#' && url !== '') {
-                // Kullanıcı giriş yapmış mı kontrol et
                 const isLoggedIn = !!localStorage.getItem('google_id_token');
-
                 if (isLoggedIn) {
                     window.open(url, '_blank', 'noopener,noreferrer');
                 } else {
@@ -131,20 +95,24 @@ document.addEventListener('DOMContentLoaded', function() {
 
 // --- GERİ SAYIM KODLARI BAŞLANGIÇ ---
 const countdowns = [
-    { date: 1, hour: 0, minute: 0, text: 'Sayaç Okuma' },
-    { date: 15, hour: 0, minute: 0, text: 'Fatura Hesaplama' },
-    { date: 24, hour: 0, minute: 0, text: 'Rapor Hazırlama' },
-    { date: 13, hour: 0, minute: 0, text: 'YEDEK 1' },
-    { date: 14, hour: 0, minute: 0, text: 'YEDEK 2' },
-    { date: 15, hour: 0, minute: 0, text: 'YEDEK 3' }
+    // AYLIK GERİ SAYIMLAR
+    { date: 1, hour: 0, minute: 0, text: 'Sayaç Okuma', type: 'monthly' },
+    { date: 15, hour: 0, minute: 0, text: 'Fatura Hesaplama', type: 'monthly' },
+    { date: 24, hour: 0, minute: 0, text: 'Rapor Hazırlama', type: 'monthly' },
+    
+    // YILLIK GERİ SAYIM (HER YIL 1 HAZİRAN)
+    { date: 1, month: 5, hour: 0, minute: 0, text: 'Yıllık Bakım', type: 'yearly' }, // month: 5 = Haziran (0-11 arası)
+    
+    // HAFTALIK GERİ SAYIM (HER PAZAR)
+    { day: 0, hour: 0, minute: 0, text: 'Haftalık Toplantı', type: 'weekly' } // day: 0 = Pazar (0-6 arası)
 ];
 
-function createCountdown(date, hour, minute, text) {
+function createCountdown(config) {
     const counter = document.createElement('div');
     counter.className = 'counter';
     counter.innerHTML = `
-        <p>${text}</p>
-        <p id="timer-${text.replace(/\s+/g, '-')}"></p>
+        <p>${config.text}</p>
+        <p id="timer-${config.text.replace(/\s+/g, '-')}"></p>
         <button>Gördüm</button>
     `;
 
@@ -157,11 +125,32 @@ function createCountdown(date, hour, minute, text) {
 
     function getNextTargetDate() {
         const now = new Date();
-        let target = new Date(now.getFullYear(), now.getMonth(), date, hour, minute, 0);
+        let target;
         
-        if (now > target) {
-            target.setMonth(target.getMonth() + 1);
+        if (config.type === 'yearly') {
+            // YILLIK: Her yıl belirtilen ay ve güne (1 Haziran)
+            target = new Date(now.getFullYear(), config.month, config.date, config.hour, config.minute, 0);
+            if (now > target) {
+                target.setFullYear(target.getFullYear() + 1);
+            }
+        } 
+        else if (config.type === 'weekly') {
+            // HAFTALIK: Her hafta belirtilen güne (Pazar)
+            target = new Date(now);
+            target.setDate(now.getDate() + (config.day + 7 - now.getDay()) % 7);
+            target.setHours(config.hour, config.minute, 0, 0);
+            if (now > target) {
+                target.setDate(target.getDate() + 7);
+            }
+        } 
+        else {
+            // AYLIK (varsayılan): Her ay belirtilen güne
+            target = new Date(now.getFullYear(), now.getMonth(), config.date, config.hour, config.minute, 0);
+            if (now > target) {
+                target.setMonth(target.getMonth() + 1);
+            }
         }
+        
         return target;
     }
 
@@ -182,7 +171,7 @@ function createCountdown(date, hour, minute, text) {
 
         timer.textContent = `${days}g ${Math.floor(hours)}s ${mins}d ${secs}sn`;
 
-        // Efektleri yönet
+        // Efektleri yönet (2 gün kırmızı, 4 gün sarı)
         counter.classList.remove('blinking-red', 'blinking-yellow');
         if (!seen) {
             if (days <= 2) counter.classList.add('blinking-red');
@@ -202,5 +191,5 @@ function createCountdown(date, hour, minute, text) {
 }
 
 // Tüm geri sayımları oluştur
-countdowns.forEach(c => createCountdown(c.date, c.hour, c.minute, c.text));
+countdowns.forEach(c => createCountdown(c));
 // --- GERİ SAYIM KODLARI BİTİŞ ---
