@@ -131,8 +131,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
 // --- GERİ SAYIM KODLARI BAŞLANGIÇ ---
 const countdowns = [
-    { date: 10, hour: 0, minute: 0, text: 'Sayaç Okuma' },
-    { date: 15, hour: 0, minute: 0, text: 'Sayaç Gönderme' },
+    { date: 1, hour: 0, minute: 0, text: 'Sayaç Okuma' },
+    { date: 15, hour: 0, minute: 0, text: 'Fatura Hesaplama' },
     { date: 24, hour: 0, minute: 0, text: 'Rapor Hazırlama' },
     { date: 13, hour: 0, minute: 0, text: 'YEDEK 1' },
     { date: 14, hour: 0, minute: 0, text: 'YEDEK 2' },
