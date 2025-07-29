@@ -44,7 +44,7 @@ function updateUIForLoggedInUser() {
     // Yetkilendirilmiş e-posta adreslerini tanımlayın
     const allowedEmails = [
         "mahmutkilicankara@gmail.com",
-        "ygtcan10@gmail.com",
+        "yapiisleribanu@gmail.com",
         // Ek yetkili e-postaları buraya ekleyin
     ];
 
