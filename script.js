@@ -1,273 +1,206 @@
-/**
- * GOOGLE GİRİŞ SİSTEMİ
- * Kullanıcı Google ile giriş yaptığında çalışan fonksiyon
- * @param {object} response - Google'dan gelen giriş yanıtı
- */
+// --- Google Sign-In Yönetimi BAŞLANGIÇ ---
+
+// Bu fonksiyon, Google kimlik bilgileri döndüğünde otomatik olarak çağrılır.
 function handleCredentialResponse(response) {
-    // JWT token'ını decode eden yardımcı fonksiyon
+    // Google ID token'ını decode etmek için bir yardımcı fonksiyon (isteğe bağlı ama iyi pratik)
     const decodeJwtResponse = (token) => {
-        try {
-            // Token'ı parçalara ayır (header.payload.signature)
-            const base64Url = token.split('.')[1];
-            
-            // Base64URL'yi standart Base64'e çevir
-            const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-            
-            // Base64'ü string'e çevir (UTF-8 desteği ile)
-            const jsonPayload = decodeURIComponent(
-                atob(base64).split('').map(c => 
-                    '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2)
-                ).join('')
-            );
-            
-            return JSON.parse(jsonPayload); // JSON objesine dönüştür
-        } catch (e) {
-            console.error("Token decode hatası:", e);
-            return null;
-        }
+        let base64Url = token.split('.')[1];
+        let base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+        let jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
+            return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+        }).join(''));
+        return JSON.parse(jsonPayload);
     };
 
-    // Token'dan kullanıcı bilgilerini al
     const profile = decodeJwtResponse(response.credential);
-    if (!profile) return; // Hata durumunda fonksiyondan çık
+    console.log("ID Token Payload:", profile);
 
-    // Kullanıcı bilgilerini konsola yaz (debug için)
-    console.log("Giriş Yapan Kullanıcı:", profile);
-    
-    // Bilgileri tarayıcıda sakla
-    localStorage.setItem('google_id_token', response.credential); // Kimlik tokenı
-    localStorage.setItem('profile_name', profile.name); // Kullanıcı adı
-    localStorage.setItem('profile_email', profile.email); // E-posta
-    localStorage.setItem('profile_picture', profile.picture); // Profil resmi
+    // Kullanıcı bilgilerini localStorage'a kaydet (sessionStorage yerine)
+    localStorage.setItem('google_id_token', response.credential);
+    localStorage.setItem('profile_name', profile.name);
+    localStorage.setItem('profile_email', profile.email);
+    localStorage.setItem('profile_picture', profile.picture);
 
-    // Arayüzü güncelle
+    // Giriş yapıldıktan sonra UI'ı güncelle
     updateUIForLoggedInUser();
 }
 
-/**
- * GİRİŞ DURUMUNA GÖRE ARAYÜZÜ GÜNCELLE
- * Kullanıcının giriş yapıp yapmadığını kontrol eder
- */
+// UI'ı giriş durumuna göre güncelleyen fonksiyon
 function updateUIForLoggedInUser() {
-    // HTML elementlerini seç
-    const googleSigninButton = document.getElementById('google-signin-button');
+    const googleSigninSection = document.querySelector('.google-signin-section');
     const profileInfo = document.getElementById('profile-info');
+    const googleSigninButton = document.getElementById('google-signin-button');
     const contentArea = document.getElementById('content-area');
-    const accessDenied = document.getElementById('access-denied');
+    const profilePicture = document.getElementById('profile-picture');
+    const profileName = document.getElementById('profile-name');
+    const profileEmail = document.getElementById('profile-email');
+    const accessDenied = document.getElementById('access-denied'); // Erişim reddedildi mesajı
 
-    // LocalStorage'dan kullanıcı bilgilerini al
     const idToken = localStorage.getItem('google_id_token');
+    const storedName = localStorage.getItem('profile_name');
     const storedEmail = localStorage.getItem('profile_email');
+    const storedPicture = localStorage.getItem('profile_picture');
 
-    // Yetkili e-posta listesi (whitelist)
+    // Yetkilendirilmiş e-posta adreslerini tanımlayın
     const allowedEmails = [
         "mahmutkilicankara@gmail.com",
-        "ygtcan10@gmail.com"
+        "ygtcan10@gmail.com",
+        // Ek yetkili e-postaları buraya ekleyin
     ];
 
-    // Kullanıcı giriş yapmışsa
     if (idToken && storedEmail) {
-        // E-posta yetkili listede mi kontrol et
+        // Kullanıcının e-postası yetkili listede mi kontrol et
         if (allowedEmails.includes(storedEmail)) {
-            // YETKİLİ KULLANICI
-            googleSigninButton.style.display = 'none'; // Giriş butonunu gizle
+            googleSigninButton.style.display = 'none'; // Google giriş butonunu gizle
             profileInfo.style.display = 'flex'; // Profil bilgisini göster
             contentArea.style.display = 'block'; // İçerik alanını göster
-            accessDenied.style.display = 'none'; // Erişim reddi mesajını gizle
+
+            profilePicture.src = storedPicture;
+            profileName.textContent = storedName;
+            profileEmail.textContent = storedEmail;
+            accessDenied.style.display = 'none'; // Erişim reddedildi mesajını gizle
         } else {
-            // YETKİSİZ KULLANICI
-            googleSigninButton.style.display = 'none';
-            profileInfo.style.display = 'none';
-            contentArea.style.display = 'none';
-            accessDenied.style.display = 'block'; // Erişim reddi mesajını göster
-            localStorage.clear(); // Kullanıcı verilerini temizle
+            // Yetkisiz kullanıcı
+            googleSigninButton.style.display = 'none'; // Giriş butonunu gizle
+            profileInfo.style.display = 'none'; // Profil bilgisini gizle
+            contentArea.style.display = 'none'; // İçerik alanını gizle
+            accessDenied.style.display = 'block'; // Erişim reddedildi mesajını göster
+            alert("Bu içeriğe erişim izniniz yok. Lütfen yetkili bir hesapla giriş yapın.");
+            // Yetkisiz kullanıcı için oturumu kapat
+            localStorage.clear(); // Tüm oturum verilerini temizle
+            // Sayfayı yenileyerek giriş ekranına dön (isteğe bağlı)
+            // location.reload();
         }
     } else {
-        // GİRİŞ YAPILMAMIŞSA
-        googleSigninButton.style.display = 'block'; // Giriş butonunu göster
-        profileInfo.style.display = 'none';
-        contentArea.style.display = 'none';
-        accessDenied.style.display = 'none';
+        // Giriş yapılmamışsa veya token yoksa
+        googleSigninButton.style.display = 'block'; // Google giriş butonunu göster
+        profileInfo.style.display = 'none'; // Profil bilgisini gizle
+        contentArea.style.display = 'none'; // İçerik alanını gizle
+        accessDenied.style.display = 'none'; // Erişim reddedildi mesajını gizle
     }
 }
 
-/**
- * SAYFA YÜKLENDİĞİNDE ÇALIŞACAK KODLAR
- */
+// Çıkış yap butonu işlevselliği
 document.addEventListener('DOMContentLoaded', function() {
-    // ÇIKIŞ BUTONU AYARLARI
     const logoutButton = document.getElementById('logout-button');
     if (logoutButton) {
         logoutButton.addEventListener('click', () => {
-            localStorage.clear(); // Tüm kullanıcı verilerini sil
-            location.reload(); // Sayfayı yenile
+            // Sadece uygulamanın oturum verilerini temizle ve sayfayı yenile
+            localStorage.clear(); // Tüm oturum verilerini temizle
+            // Sayfayı yenileyerek giriş ekranına dön
+            location.reload();
         });
     }
 
-    // Giriş durumunu kontrol et
+    // Sayfa yüklendiğinde giriş durumunu kontrol et ve UI'ı güncelle
     updateUIForLoggedInUser();
+});
+// --- Google Sign-In Yönetimi BİTİŞ ---
 
-    // GERİ SAYIM KONFİGÜRASYONLARI
-    const countdowns = [
-        // AYLIK SAYAÇLAR
-        { 
-            date: 1, 
-            hour: 0, 
-            minute: 0, 
-            text: 'Sayaç Okuma', 
-            type: 'monthly',
-            desc: 'Elektrik sayaç okumalarının yapılacağı tarih',
-            url: 'https://ornek.com/sayac-okuma'
-        },
-        { 
-            date: 15, 
-            hour: 0, 
-            minute: 0, 
-            text: 'Fatura Hesaplama', 
-            type: 'monthly',
-            desc: 'Aylık faturaların kesileceği tarih',
-            url: 'https://ornek.com/fatura'
-        },
-        
-        // YILLIK SAYAÇLAR
-        { 
-            date: 1, 
-            month: 5, // Haziran (0-11)
-            hour: 0, 
-            minute: 0, 
-            text: 'Yıllık Bakım', 
-            type: 'yearly',
-            desc: 'Yıllık sistem bakım tarihi',
-            url: 'https://ornek.com/yillik-bakim'
-        },
-        
-        // YENİ EKLENEN SAYAÇLAR
-        { 
-            date: 13, 
-            hour: 10, 
-            minute: 0, 
-            text: 'Aylık Yedek1 Sayaç', 
-            type: 'monthly',
-            desc: 'Aylık veri yedekleme tarihi',
-            url: 'https://ornek.com/aylik-yedek'
-        },
-        { 
-            date: 15, 
-            month: 7, // Ağustos
-            hour: 14, 
-            minute: 30, 
-            text: 'Yıllık Yedek2 Sayaç', 
-            type: 'yearly',
-            desc: 'Yıllık full yedek alma tarihi',
-            url: 'https://ornek.com/yillik-yedek'
-        }
-    ];
 
-    // GERİ SAYIMLARI OLUŞTUR
-    countdowns.forEach(config => {
-        const counter = document.createElement('div');
-        counter.className = 'counter';
-        
-        // HTML yapısını oluştur
-        counter.innerHTML = `
-            <p>${config.text}</p>
-            <p id="timer-${config.text.replace(/\s+/g, '-')}"></p>
-            <button class="gordum-button">Gördüm</button>
-            <small>${config.desc}</small>
-        `;
+// --- BUTON TIKLAMA YÖNETİMİ BAŞLANGIÇ ---
+document.addEventListener('DOMContentLoaded', function() {
+    // Event delegation kullanarak tüm document'e click eventi ekle
+    document.addEventListener('click', function(e) {
+        // Tıklanan elementin veya ebeveynlerinden birinin system-button class'ı olup olmadığını kontrol et
+        const button = e.target.closest('.system-button');
 
-        // Sayaca özel elementleri seç
-        const timer = counter.querySelector(`#timer-${config.text.replace(/\s+/g, '-')}`);
-        const button = counter.querySelector('.gordum-button');
-
-        // GÖRDÜM BUTONU EVENTİ
-        button.addEventListener('click', () => {
-            // 1. Uyarı efektlerini kapat
-            counter.classList.remove('blinking-red', 'blinking-yellow');
-            counter.style.background = '#e6f2ff';
-            
-            // 2. URL'yi yeni sekmede aç
-            if (config.url) {
-                window.open(config.url, '_blank', 'noopener,noreferrer');
+        if (button) {
+            // Eğer bu bir arama butonuysa veya özel bir iframe içeriyorsa işlem yapma
+            if (button.classList.contains('search-bar-wide') || button.querySelector('iframe')) {
+                return;
             }
-            
-            // 3. Buton metnini geçici değiştir
-            button.textContent = 'Yönlendirildi ✓';
-            setTimeout(() => button.textContent = 'Gördüm', 2000);
-        });
 
-        // SAYACI BAŞLAT
-        startCountdown(config, timer, counter);
+            // URL'yi data-url attribute'undan al
+            const url = button.getAttribute('data-url');
+
+            if (url && url !== '#' && url !== '') {
+                // Kullanıcı giriş yapmış mı kontrol et
+                const isLoggedIn = !!localStorage.getItem('google_id_token');
+
+                if (isLoggedIn) {
+                    window.open(url, '_blank', 'noopener,noreferrer');
+                } else {
+                    alert("Lütfen önce Google hesabınızla giriş yapın!");
+                }
+            }
+        }
     });
 });
+// --- BUTON TIKLAMA YÖNETİMİ BİTİŞ ---
 
-/**
- * GERİ SAYIMI BAŞLATAN FONKSİYON
- * @param {object} config - Sayaç ayarları
- * @param {HTMLElement} timerElement - Zamanı gösterecek element
- * @param {HTMLElement} counterElement - Ana sayaç div'i
- */
-function startCountdown(config, timerElement, counterElement) {
-    let targetDate = getNextTargetDate(config);
+// --- GERİ SAYIM KODLARI BAŞLANGIÇ ---
+const countdowns = [
+    { date: 1, hour: 0, minute: 0, text: 'Sayaç Okuma' },
+    { date: 15, hour: 0, minute: 0, text: 'Fatura Hesaplama' },
+    { date: 24, hour: 0, minute: 0, text: 'Rapor Hazırlama' },
+    { date: 13, hour: 0, minute: 0, text: 'YEDEK 1' },
+    { date: 14, hour: 0, minute: 0, text: 'YEDEK 2' },
+    { date: 15, hour: 0, minute: 0, text: 'YEDEK 3' }
+];
+
+function createCountdown(date, hour, minute, text) {
+    const counter = document.createElement('div');
+    counter.className = 'counter';
+    counter.innerHTML = `
+        <p>${text}</p>
+        <p id="timer-${text.replace(/\s+/g, '-')}"></p>
+        <button>Gördüm</button>
+    `;
+
+    document.getElementById('counters').appendChild(counter);
+    const timer = counter.querySelector('p:nth-child(2)');
+    const button = counter.querySelector('button');
+
+    let targetDate;
     let seen = false;
 
-    // Her saniye güncelle
-    const interval = setInterval(updateCountdown, 1000);
-    updateCountdown(); // İlk güncelleme
-
-    /** Sonraki hedef tarihi hesapla */
     function getNextTargetDate() {
         const now = new Date();
-        let target;
+        let target = new Date(now.getFullYear(), now.getMonth(), date, hour, minute, 0);
         
-        if (config.type === 'yearly') {
-            // YILLIK: Belirtilen ay/gün (örn. 1 Haziran)
-            target = new Date(now.getFullYear(), config.month, config.date, config.hour, config.minute);
-            if (now > target) target.setFullYear(target.getFullYear() + 1);
-        } 
-        else if (config.type === 'weekly') {
-            // HAFTALIK: Belirtilen gün (örn. Pazar)
-            target = new Date(now);
-            target.setDate(now.getDate() + (config.day + 7 - now.getDay()) % 7);
-            target.setHours(config.hour, config.minute, 0, 0);
-            if (now > target) target.setDate(target.getDate() + 7);
-        } 
-        else {
-            // AYLIK (varsayılan): Belirtilen gün (örn. ayın 15'i)
-            target = new Date(now.getFullYear(), now.getMonth(), config.date, config.hour, config.minute);
-            if (now > target) target.setMonth(target.getMonth() + 1);
+        if (now > target) {
+            target.setMonth(target.getMonth() + 1);
         }
-        
         return target;
     }
 
-    /** Geri sayımı güncelle */
-    function updateCountdown() {
+    function update() {
         const now = new Date();
         const diff = targetDate - now;
 
-        // SÜRE DOLDUYSA
         if (diff <= 0) {
-            timerElement.textContent = "SÜRE DOLDU!";
-            if (!seen) counterElement.classList.add('blinking-red');
-            clearInterval(interval);
+            timer.textContent = "SÜRE DOLDU!";
+            if (!seen) counter.classList.add('blinking-red');
             return;
         }
 
-        // KALAN SÜREYİ HESAPLA
         const days = Math.floor(diff / (1000 * 60 * 60 * 24));
         const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
         const mins = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
         const secs = Math.floor((diff % (1000 * 60)) / 1000);
 
-        // EKRANA YAZDIR
-        timerElement.textContent = `${days}g ${Math.floor(hours)}s ${mins}d ${secs}sn`;
+        timer.textContent = `${days}g ${Math.floor(hours)}s ${mins}d ${secs}sn`;
 
-        // UYARI EFEKTLERİ
-        counterElement.classList.remove('blinking-red', 'blinking-yellow');
+        // Efektleri yönet
+        counter.classList.remove('blinking-red', 'blinking-yellow');
         if (!seen) {
-            if (days <= 2) counterElement.classList.add('blinking-red');
-            else if (days <= 4) counterElement.classList.add('blinking-yellow');
+            if (days <= 2) counter.classList.add('blinking-red');
+            else if (days <= 4) counter.classList.add('blinking-yellow');
         }
     }
+
+    button.addEventListener('click', () => {
+        seen = true;
+        counter.classList.remove('blinking-red', 'blinking-yellow');
+        counter.style.background = '#e6f2ff';
+    });
+
+    targetDate = getNextTargetDate();
+    setInterval(update, 1000);
+    update();
 }
+
+// Tüm geri sayımları oluştur
+countdowns.forEach(c => createCountdown(c.date, c.hour, c.minute, c.text));
+// --- GERİ SAYIM KODLARI BİTİŞ ---
