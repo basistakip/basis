@@ -44,7 +44,8 @@ function updateUIForLoggedInUser() {
     // Yetkilendirilmiş e-posta adreslerini tanımlayın
     const allowedEmails = [
         "mahmutkilicankara@gmail.com",
-        "ygtcan10@gmail.com",
+        "yapiisleribanu@gmail.com",
+        "mahmutkilic@bandirma.edu.tr"
         // Ek yetkili e-postaları buraya ekleyin
     ];
 
@@ -131,36 +132,46 @@ document.addEventListener('DOMContentLoaded', function() {
 
 // --- GERİ SAYIM KODLARI BAŞLANGIÇ ---
 const countdowns = [
-    { date: 1, hour: 0, minute: 0, text: 'Sayaç Okuma' },
-    { date: 15, hour: 0, minute: 0, text: 'Fatura Hesaplama' },
-    { date: 24, hour: 0, minute: 0, text: 'Rapor Hazırlama' },
-    { date: 13, hour: 0, minute: 0, text: 'YEDEK 1' },
-    { date: 14, hour: 0, minute: 0, text: 'YEDEK 2' },
-    { date: 15, hour: 0, minute: 0, text: 'YEDEK 3' }
+    { type: 'monthly', date: 1, hour: 0, minute: 0, text: 'Sayaç Okuma', url: 'https://example.com/sayac-okuma' },
+    { type: 'monthly', date: 15, hour: 0, minute: 0, text: 'Fatura Hesaplama', url: 'https://example.com/fatura-hesaplama' },
+    { type: 'monthly', date: 24, hour: 0, minute: 0, text: 'Rapor Hazırlama', url: 'https://example.com/rapor-hazirlama' },
+    { type: 'monthly', date: 13, hour: 0, minute: 0, text: 'YEDEK 1', url: 'https://example.com/yedek1' },
+    { type: 'monthly', date: 15, hour: 0, minute: 0, text: 'YEDEK 3', url: 'https://example.com/yedek3' },
+    { type: 'yearly', month: 5, date: 14, hour: 0, minute: 0, text: 'Yazılım Yıl Dönümü', url: 'https://example.com/yazilim-yildonumu' } // Haziran ayı 0'dan başladığı için 5
 ];
 
-function createCountdown(date, hour, minute, text) {
+function createCountdown(countdownConfig) {
+    const { type, date, month, hour, minute, text, url } = countdownConfig;
+
     const counter = document.createElement('div');
     counter.className = 'counter';
     counter.innerHTML = `
         <p>${text}</p>
         <p id="timer-${text.replace(/\s+/g, '-')}"></p>
-        <button>Gördüm</button>
+        <button class="seen-button" data-url="${url}">Gördüm</button>
     `;
 
     document.getElementById('counters').appendChild(counter);
     const timer = counter.querySelector('p:nth-child(2)');
-    const button = counter.querySelector('button');
+    const button = counter.querySelector('.seen-button');
 
     let targetDate;
     let seen = false;
 
     function getNextTargetDate() {
         const now = new Date();
-        let target = new Date(now.getFullYear(), now.getMonth(), date, hour, minute, 0);
-        
-        if (now > target) {
-            target.setMonth(target.getMonth() + 1);
+        let target;
+
+        if (type === 'monthly') {
+            target = new Date(now.getFullYear(), now.getMonth(), date, hour, minute, 0);
+            if (now > target) {
+                target.setMonth(target.getMonth() + 1);
+            }
+        } else if (type === 'yearly') {
+            target = new Date(now.getFullYear(), month, date, hour, minute, 0);
+            if (now > target) {
+                target.setFullYear(target.getFullYear() + 1);
+            }
         }
         return target;
     }
@@ -194,6 +205,12 @@ function createCountdown(date, hour, minute, text) {
         seen = true;
         counter.classList.remove('blinking-red', 'blinking-yellow');
         counter.style.background = '#e6f2ff';
+
+        // URL'ye yönlendirme
+        const targetUrl = button.getAttribute('data-url');
+        if (targetUrl && targetUrl !== '#' && targetUrl !== '') {
+            window.open(targetUrl, '_blank', 'noopener,noreferrer');
+        }
     });
 
     targetDate = getNextTargetDate();
@@ -202,5 +219,5 @@ function createCountdown(date, hour, minute, text) {
 }
 
 // Tüm geri sayımları oluştur
-countdowns.forEach(c => createCountdown(c.date, c.hour, c.minute, c.text));
+countdowns.forEach(c => createCountdown(c));
 // --- GERİ SAYIM KODLARI BİTİŞ ---
