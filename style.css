@@ -541,7 +541,12 @@ body {
 
 
 
-
+.malzeme-icon::before {
+    content: "🛍️"; /* malzeme ikonu */
+    font-size: 36px;
+    line-height: 1;
+    color: #FFC107;
+}
 
 
 .ups-icon::before {
