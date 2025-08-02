@@ -6,87 +6,95 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Responsive Interaktif Harita</title>
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 0;
-      padding: 0;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: start;
-      height: 100vh;
-      width: 100%;
-      overflow: hidden;
-    }
+/* Tüm sayfanın temel stil ayarları */
+body {
+  font-family: Arial, sans-serif; /* Yazı tipi olarak Arial kullan */
+  margin: 0; /* Sayfa kenar boşluklarını sıfırla */
+  padding: 0; /* Sayfa iç boşluklarını sıfırla */
+  display: flex; /* Esnek kutu modeli kullan */
+  flex-direction: column; /* Öğeleri dikey olarak hizala */
+  align-items: center; /* Öğeleri yatayda ortala */
+  justify-content: start; /* Öğeleri dikeyde üstten başlat */
+  height: 100vh; /* Sayfa yüksekliği viewport yüksekliği kadar */
+  width: 100%; /* Sayfa genişliği %100 */
+  overflow: hidden; /* Taşan içeriği gizle */
+}
 
-    #tooltip-container {
-      position: fixed;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      background: white;
-      border: 1px solid #ccc;
-      padding: 10px;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-      z-index: 1000;
-      display: none;
-    }
+/* Tooltip (açıklama balonu) kutusu stil ayarları */
+#tooltip-container {
+  position: fixed; /* Sayfaya göre sabit konumlandır */
+  top: 50%; /* Yukarıdan %50 */
+  left: 50%; /* Soldan %50 */
+  transform: translate(-50%, -50%); /* Kendi boyutunun yarısı kadar kaydırarak tam ortala */
+  background: white; /* Arka plan rengi beyaz */
+  border: 1px solid #ccc; /* 1px gri kenarlık */
+  padding: 10px; /* İç boşluk 10px */
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Hafif gölge efekti */
+  z-index: 1000; /* Diğer öğelerin üzerinde görünsün */
+  display: none; /* Başlangıçta gizli */
+}
 
-    .container {
-      position: relative;
-      width: 100%;
-      height: 100vh;
-    }
+/* Ana içerik konteyneri */
+.container {
+  position: relative; /* Göreceli konumlandırma */
+  width: 100%; /* Genişlik %100 */
+  height: 100vh; /* Yükseklik viewport yüksekliği kadar */
+}
 
-    img {
-      width: 100%;
-      height: 100vh;
-      display: block;
-    }
+/* Resim elementleri için stil ayarları */
+img {
+  width: 100%; /* Genişlik %100 */
+  height: 100vh; /* Yükseklik viewport yüksekliği kadar */
+  display: block; /* Blok seviyesinde göster */
+}
 
-    svg {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      pointer-events: none;
-    }
+/* SVG elementleri için stil ayarları */
+svg {
+  position: absolute; /* Mutlak konumlandırma */
+  top: 0; /* Yukarıdan 0 */
+  left: 0; /* Soldan 0 */
+  width: 100%; /* Genişlik %100 */
+  height: 100%; /* Yükseklik %100 */
+  pointer-events: none; /* Fare olaylarını engelle */
+}
 
-    polygon {
-      fill: rgba(255, 0, 0, 0.3);
-      stroke: rgba(255, 0, 0, 0.5);
-      stroke-width: 2;
-      cursor: pointer;
-      pointer-events: all;
-    }
+/* Çokgen (polygon) elementleri için stil ayarları - MAVİ VERSİYON */
+polygon {
+  fill: rgba(0, 100, 255, 0.3); /* Açık mavi yarı saydam dolgu rengi (eskiden kırmızı) */
+  stroke: rgba(0, 80, 220, 0.5); /* Daha belirgin mavi yarı saydam kenarlık rengi (eskiden kırmızı) */
+  stroke-width: 2; /* Kenarlık kalınlığı 2px */
+  cursor: pointer; /* Fare imleci pointer olsun */
+  pointer-events: all; /* Fare olaylarını etkinleştir */
+}
 
-    polygon:hover {
-      fill: rgba(0, 255, 0, 0.3);
-    }
+/* Çokgenlerin hover (üzerine gelme) durumu - MAVİ VERSİYON */
+polygon:hover {
+  fill: rgba(100, 180, 255, 0.4); /* Daha açık mavi hover rengi (eskiden yeşil) */
+}
 
-    text {
-      font-size: 14px;
-      fill: rgb(255, 253, 253);
-      font-weight: bold;
-      text-anchor: middle;
-      pointer-events: none;
-    }
+/* Metin elementleri için stil ayarları */
+text {
+  font-size: 14px; /* Yazı boyutu 14px */
+  fill: rgb(255, 253, 253); /* Yazı rengi beyaz */
+  font-weight: bold; /* Yazı kalın */
+  text-anchor: middle; /* Metin ortalanmış */
+  pointer-events: none; /* Fare olaylarını engelle */
+}
 
-    /* Mobil cihazlar için stiller */
-    @media (max-width: 768px) {
-      .container {
-        height: auto;
-      }
+/* Mobil cihazlar için özel stiller (768px ve altı) */
+@media (max-width: 768px) {
+  .container {
+    height: auto; /* Yükseklik otomatik */
+  }
 
-      img {
-        height: auto;
-      }
+  img {
+    height: auto; /* Yükseklik otomatik */
+  }
 
-      text {
-        font-size: 12px;
-      }
-    }
+  text {
+    font-size: 12px; /* Yazı boyutu 12px */
+  }
+}
   </style>
 </head>
 <body>
@@ -171,6 +179,21 @@
       { name: "MÜHENDİSLİK LAB", coords: [1741, 43, 1754, 98, 1673, 110, 1674, 86, 1712, 78, 1709, 47, 1727, 45], href: "https://drive.google.com/drive/folders/1bgWYCbNqtLbAUy-SE_2JB9aDyMXZDY2cvJg09xjuKJZpIpLhuRzsv3BvE6j3dnWCoJensB0B" },
       { name: "NİZAMİYELER", coords: [1460, 793, 1465, 835, 1573, 830, 1566, 788], href: "https://drive.google.com/drive/folders/1zqqeHVUV7rTb8tQ_8n7ZbG10Y4idNLPV6FYvkbli4a2KYmyp3rV1tT8rGM59pSGHjvyhuMk-" },
       { name: "YENİ DENİZCİLİK", coords: [673, 783, 675, 863, 789, 866, 789, 785], href: "https://drive.google.com/drive/folders/1ZYsVVhI4hydIBoVo1W_J-VoJa5fo7XQ_3jV6TsN7XfM1cWRnRysoUkenNsRLjsUfauAmDerP", image: "https://i.hizliresim.com/llnxe6j.png" },
+
+
+        
+        
+  {"name": "ERDEK MYO", "coords": [400, 60,         270, 60,  270, 160,           400,160],"href":"https://drive.google.com/drive/folders/1czb0F-Hx6homzZM5uf6eUkX9oh_uXvn2qOeUMB6C-GYtaBDhv_w6EvxOTwp3jmCxe8vKhP9T?usp=sharingl",  "image": ""},
+  {"name": "MANYAS MYO", "coords": [550, 60,         420, 60,  420, 160,          550,160],"href":"https://drive.google.com/drive/folders/1aPAoVuyzc14TVujADHvOrtoHV__sQ5UNDh9hbAHr9W6WaOXUCvWInSLpG-QCslAO9LUWeUJo?usp=sharing",  "image": ""},
+  {"name": "GÖNEN MYO", "coords": [700, 60,         570, 60,  570, 160,           700,160],"href":"https://drive.google.com/drive/folders/16zvos9NdCSDx-YZF1egTdB9wBByS7ygK51BA-IOzKHzsCXaVKHYlG4D9xj14MhbzyNmFpuMX?usp=sharing",  "image": ""},
+  {"name": "SUSURLUK MYO", "coords": [850, 60,         720, 60,  720, 160,         850,160],"href":"https://drive.google.com/drive/folders/1QMpzrWtSivxm7S9Mk0dLTTo7d9NMq_KfRSGBHpG8EDnmH-Z-9SVbvHcRfZu_hgqtEn3KE8d0?usp=sharing", "image":""},
+  {"name": "BANDIRMA MYO", "coords": [1000,60,         870, 60,  870, 160,         1000,160],"href":"https://drive.google.com/drive/folders/1D26Pcmer3vCRwHtgjMyDLMiyXppXBVyMjzf2-fnLAHggiPEje5OqyQh7xNw5w69wlMFjVWbE?usp=sharing",  "image":""},
+  {"name": "DENİZCİLİK MYO", "coords": [1150,60,      1020, 60,  1020, 160,        1150,160],"href":"https://drive.google.com/drive/folders/1aPAoVuyzc14TVujADHvOrtoHV__sQ5UNDh9hbAHr9W6WaOXUCvWInSLpG-QCslAO9LUWeUJo?usp=sharing",  "image":""},          
+                
+        
+    
+    
+        
       { name: "CAMİ", coords: [], href: "" }
     ];
 
@@ -207,7 +230,8 @@
           }
         });
 
-        // Mouse üzerinden çıkınca resmi gizle
+        // Mouse üzerinden çıkınca resmi gizle {"name": "ÖLÇÜLER 1 ERDEK MYO", "coords": [400, 60,         270, 60,  270, 160,        400,160],"href":"https://olcur.html",  "image": ""},
+  
         polygon.addEventListener('mouseout', () => {
           tooltipContainer.style.display = 'none';
         });
