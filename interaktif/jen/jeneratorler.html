@@ -54,19 +54,28 @@
       pointer-events: none;
     }
 
-    polygon {
-      fill: rgba(255, 0, 0, 0.3);
-      stroke: rgba(255, 0, 0, 0.5);
-      stroke-width: 2;
-      cursor: pointer;
-      pointer-events: all;
-      transition: fill 0.3s ease, stroke 0.3s ease;
-    }
 
-    polygon:hover {
-      fill: rgba(0, 255, 0, 0.3);
-    }
+/* Çokgen (polygon) elementleri için stil ayarları - MAVİ VERSİYON */
+polygon {
+  fill: rgba(0, 100, 255, 0.3); /* Açık mavi yarı saydam dolgu rengi (eskiden kırmızı) */
+  stroke: rgba(0, 80, 220, 0.5); /* Daha belirgin mavi yarı saydam kenarlık rengi (eskiden kırmızı) */
+  stroke-width: 2; /* Kenarlık kalınlığı 2px */
+  cursor: pointer; /* Fare imleci pointer olsun */
+  pointer-events: all; /* Fare olaylarını etkinleştir */
+}
 
+/* Çokgenlerin hover (üzerine gelme) durumu - MAVİ VERSİYON */
+polygon:hover {
+  fill: rgba(100, 180, 255, 0.4); /* Daha açık mavi hover rengi (eskiden yeşil) */
+}
+
+
+
+
+
+
+
+    
     text {
       font-size: 14px;
       fill: white; /* Beyaz renk */
