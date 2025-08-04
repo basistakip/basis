@@ -149,7 +149,7 @@ const hotspots = [
 
    {"name": "TM5-ADP5(EY9)", "coords": [583.8, 505, 682.2, 505, 682.2, 528.1, 583.8, 528.1]
 
-, "href": "https://drive.google.com/drive/folders/18AK77dJK-2J81nhikS9L7ZWsYIdZn88TPZN-vrCrq7pGVorNpcf2HWk7KCz018KUw1-MZtaG?usp=drive_link", "image":"yerleske/ey9.jpg"},
+, "href": "https://drive.google.com/drive/folders/18AK77dJK-2J81nhikS9L7ZWsYIdZn88TPZN-vrCrq7pGVorNpcf2HWk7KCz018KUw1-MZtaG?usp=drive_link", "image":"ey9.jpg"},
     {"name": "° 1)Yük Ayırıcılı Giriş Hücresi", "coords": [579, 532, 618.67, 532, 618.67, 601, 579, 601], "href": "", "image": "https://i.hizliresim.com/74p9dkk.jpeg"},
     {"name": "° 2)Trafo Koruma 1250kVA", "coords": [618.67, 532, 658.34, 532, 658.34, 601, 618.67, 601], "href": "", "image": "https://i.hizliresim.com/74p9dkk.jpeg"},
     {"name": "° T5-TRAFO 1250kVA", "coords": [658.34, 532, 698, 532, 698, 601, 658.34, 601], "href": "", "image": "https://i.hizliresim.com/74p9dkk.jpeg"},
