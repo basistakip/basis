@@ -62,7 +62,7 @@ polygon:hover {
 
 text {
   font-size: 14px;
-  fill: black;
+  fill: white;
   font-weight: bold;
   text-anchor: end;
   pointer-events: none;
