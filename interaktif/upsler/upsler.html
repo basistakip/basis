@@ -53,18 +53,20 @@
       pointer-events: none;
     }
 
+    /* Yuvarlak (circle) elementleri için MAVİ VERSİYON */
     circle {
-      fill: rgba(255, 0, 0, 0.3);
-      stroke: rgba(255, 0, 0, 0.5);
+      fill: rgba(0, 100, 255, 0.3); /* Açık mavi yarı saydam dolgu rengi */
+      stroke: rgba(0, 80, 220, 0.5); /* Daha belirgin mavi yarı saydam kenarlık rengi */
       stroke-width: 2;
       cursor: pointer;
       pointer-events: all;
       transition: fill 0.3s ease, stroke 0.3s ease;
     }
 
+    /* Yuvarlakların hover (üzerine gelme) durumu - MAVİ VERSİYON */
     circle:hover {
-      fill: rgba(0, 255, 0, 0.3);
-      stroke: rgba(0, 255, 0, 0.5);
+      fill: rgba(100, 180, 255, 0.4); /* Daha açık mavi hover rengi */
+      stroke: rgba(0, 120, 255, 0.7); /* Daha belirgin mavi hover kenarlık rengi */
     }
 
     text {
@@ -243,7 +245,6 @@
       }
     ];
 
-      // Mouse    "image": "https://i.hizliresim.com/74p9dkk.jpeg" }];
     function createHotspots() {
       const image = document.getElementById('krokiImage');
       const svg = document.getElementById('mapSvg');
@@ -276,20 +277,10 @@
         const text = document.createElementNS("http://www.w3.org/2000/svg", "text");
         text.setAttribute("x", scaledCoords[0]);
         text.setAttribute("y", scaledCoords[1] + 20);
-        
-             
-        
-        
-        
         text.setAttribute("text-anchor", "middle");
         text.setAttribute("transform", `rotate(-45, ${scaledCoords[0]}, ${scaledCoords[1] + 20})`);
         text.textContent = hotspot.name;
 
-        
-        
-        
-        
-        
         // Mouse üzerine gelince resmi göster
         circle.addEventListener('mouseover', () => {
           if (hotspot.image) {
