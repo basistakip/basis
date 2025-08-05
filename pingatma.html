@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>URL Ping Kontrolü</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 20px;
+      text-align: center;
+    }
+    input {
+      width: 80%;
+      padding: 10px;
+      margin: 10px 0;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+    button {
+      background: #0078d4;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #005a9e;
+    }
+    #result {
+      margin-top: 20px;
+      padding: 10px;
+      border-radius: 4px;
+    }
+    .success {
+      background: #d4edda;
+      color: #155724;
+    }
+    .error {
+      background: #f8d7da;
+      color: #721c24;
+    }
+  </style>
+</head>
+<body>
+  <h1>URL Ping Kontrolü</h1>
+  <p>Bir web adresinin erişilebilir olup olmadığını kontrol edin.</p>
+  
+  <input type="url" id="urlInput" placeholder="http://10.11.115.51/" required>
+  <button onclick="pingURL()">Kontrol Et</button>
+  
+  <div id="result"></div>
+
+  <script>
+    async function pingURL() {
+      const url = document.getElementById("urlInput").value.trim();
+      const resultDiv = document.getElementById("result");
+      
+      if (!url) {
+        resultDiv.textContent = "Lütfen bir URL girin!";
+        resultDiv.className = "error";
+        return;
+      }
+
+      try {
+        resultDiv.textContent = "Kontrol ediliyor...";
+        resultDiv.className = "";
+
+        // Önce URL'nin geçerli olduğunu kontrol et
+        if (!url.startsWith("http://") && !url.startsWith("https://")) {
+          throw new Error("Geçersiz URL! 'http://' veya 'https://' ile başlamalı.");
+        }
+
+        // Tarayıcı fetch API ile HTTP isteği gönder
+        const startTime = Date.now();
+        const response = await fetch(url, { 
+          method: 'HEAD', // Sunucu kaynak tüketmemek için HEAD isteği
+          mode: 'no-cors', // CORS hatasını önlemek için (ancak yanıt detayını göremezsiniz)
+          cache: 'no-store' // Önbelleği bypass et
+        });
+        const endTime = Date.now();
+        const duration = endTime - startTime;
+
+        if (response.ok || response.status === 0) { // CORS olmadığında status=0 olur
+          resultDiv.innerHTML = `✅ <strong>${url}</strong> erişilebilir!<br>Yanıt süresi: ${duration}ms`;
+          resultDiv.className = "success";
+        } else {
+          throw new Error(`HTTP ${response.status}`);
+        }
+      } catch (error) {
+        resultDiv.innerHTML = `❌ <strong>${url}</strong> erişilemiyor!<br>Hata: ${error.message}`;
+        resultDiv.className = "error";
+      }
+    }
+  </script>
+</body>
+</html>
