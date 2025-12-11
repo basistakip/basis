@@ -47,7 +47,9 @@ function updateUIForLoggedInUser() {
         "yapiisleribanu@gmail.com",
         "mahmutkilic@bandirma.edu.tr",
         "yercek@bandirma.edu.tr",
+        "korhanmuhammetkivrak@gmail.com",
         "yercek@banu.edu.tr"
+        
         // Ek yetkili e-postaları buraya ekleyin
     ];
 
