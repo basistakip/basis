@@ -49,6 +49,7 @@ function updateUIForLoggedInUser() {
         "yercek@bandirma.edu.tr",
         "korhanmuhammetkivrak@gmail.com",
         "kkivrak@bandirma.edu.tr",
+        "kkivrak@banu.edu.tr",
         "yercek@banu.edu.tr"
         
         // Ek yetkili e-postaları buraya ekleyin
