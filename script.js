@@ -45,12 +45,12 @@ function updateUIForLoggedInUser() {
     const allowedEmails = [
         "mahmutkilicankara@gmail.com",
         "yapiisleribanu@gmail.com",
-        "mahmutkilic@bandirma.edu.tr",
-        "yercek@bandirma.edu.tr",
-        "korhanmuhammetkivrak@gmail.com",
-        "kkivrak@bandirma.edu.tr",
-        "kkivrak@banu.edu.tr",
-        "yercek@banu.edu.tr"
+        "mahmutkilic@bandirma.edu.tr"
+        //, "yercek@bandirma.edu.tr",
+        //"korhanmuhammetkivrak@gmail.com",
+        //"kkivrak@bandirma.edu.tr",
+        //"kkivrak@banu.edu.tr",
+       // "yercek@banu.edu.tr"
         
         // Ek yetkili e-postaları buraya ekleyin
     ];
